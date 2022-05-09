@@ -10,8 +10,8 @@
         <p>userName</p>
         <p>userAccount</p>
         <p>userDescription</p>
-        <router-link to="">userFollowerCount</router-link> //
-        <router-link to="">userFollowingCount</router-link>
+        <router-link to="/user/1/followers">userFollowersCount</router-link> //
+        <router-link to="/user/1/followings">userFollowingsCount</router-link>
       </div>
       <UserTabs/>
       <div>
