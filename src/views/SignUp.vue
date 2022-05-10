@@ -169,7 +169,7 @@ form {
 }
 
 .signUpBtn {
-  margin-top: 42px;
+  margin-top: 10px;
   margin-bottom: 20px;
   width: 100%;
   height: 46px;
