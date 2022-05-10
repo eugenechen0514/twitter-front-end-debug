@@ -2,7 +2,6 @@
   <div>
     <Navbar/>
     
-    <h1>帳戶設定</h1>
   </div>
 </template>
 

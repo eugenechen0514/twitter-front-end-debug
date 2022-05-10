@@ -138,8 +138,9 @@ table {
 * {
   box-sizing: border-box;
 }
-html {
+html, * {
   font-family: 'Noto Sans TC', sans-serif;
 }
+
 
 </style>
