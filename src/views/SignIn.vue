@@ -39,7 +39,7 @@ export default {
   },
   methods: {
     handleSubmit() {
-      if(!this.account || !this.password) {
+      if(!this.account | !this.password) {
         Toast.fire({
           icon: 'warning',
           title: '請輸入帳號密碼'
@@ -123,6 +123,10 @@ form {
   font-size: 18px;
   font-weight: 700;
   color: #ffffff;
+}
+
+.signInBtn:hover {
+  cursor: pointer;
 }
 
 .linkGroup {
