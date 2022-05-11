@@ -2,7 +2,7 @@
   <div class="Setting">
     <Navbar id="Navbar" />
 
-    <div class="settingWrapper">
+    <div class="settingSection">
       <div class="settingTitle">
         <h1 class="settingTitleText">帳戶設定</h1>
       </div>
@@ -101,11 +101,13 @@ export default {
 
 #Navbar {
   position: fixed;
-  margin-left: 113px;
+  left: 100px;
 }
 
-.settingWrapper {
-  margin-left: 413px;
+.settingSection {
+  position: absolute;
+  left: 400px;
+  right: 0px;
   border-left: 1px solid #e6ecf0;
   height: 100vh;
 }
