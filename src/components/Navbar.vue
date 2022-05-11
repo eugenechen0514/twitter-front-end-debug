@@ -109,7 +109,7 @@ export default {
 .Navbar {
   border: 1px solid black;
   background-color: #fff;
-  width: 235px;
+  width: 210px;
   height: 100vh;
   display: flex;
   flex-direction: column;

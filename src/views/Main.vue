@@ -2,13 +2,15 @@
   <div class="main">
     <Navbar id="Navbar" />
     <div class="mainSection">
-      <MainPostTweet :currentUser="currentUser"/>
-      <MainTweets :currentTweets="currentTweets" />
-      <MainTweets :currentTweets="currentTweets" />
-      <MainTweets :currentTweets="currentTweets" />
-      <MainTweets :currentTweets="currentTweets" />
+      <div class="mainSectionContent">
+        <div class="mainTitle">
+          <h1>首頁</h1>
+        </div>
+        <MainPostTweet :currentUser="currentUser" />
+        <MainTweets :currentTweets="currentTweets" />
+      </div>
     </div>
-    <PopularUsers id="PopularUsers"/>
+    <PopularUsers id="PopularUsers" />
   </div>
 </template>
 
@@ -28,6 +30,7 @@ const dummyData = {
         createAt: "2022/5/9 12:00",
         commentsCount: 1,
         likesCount: 1,
+        isLiked: true
       },
       user: {
         id: 1,
@@ -44,6 +47,7 @@ const dummyData = {
         createAt: "2022/5/9 12:00",
         commentsCount: 1,
         likesCount: 1,
+        isLiked: false
       },
       user: {
         id: 2,
@@ -74,7 +78,7 @@ export default {
   data() {
     return {
       currentTweets: [],
-      currentUser: dummyUser.currentUser
+      currentUser: dummyUser.currentUser,
     };
   },
   methods: {
@@ -91,34 +95,44 @@ export default {
 <style scoped>
 .main {
   width: 100%;
+  display: grid;
 }
 
 #Navbar {
+  justify-self: start;
   position: fixed;
-  top: 0;
-  left: 100px;
-  /* width: 235px; */
+  margin-left: 113px;
+  /* width: 210px; */
 }
 
 #PopularUsers {
   position: fixed;
-  right: 100px;
-  top: 15px;
+  justify-self: end;
+  margin-right: 82px;
+  margin-top: 15px;
   /* width: 350px; */
 }
 
 .mainSection {
-  border: 1px solid blue;
-  position: absolute;
-  left: 335px;
-  right: 450px;
+  width: 600px;
+  margin-left: 378px;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-.mainPostTweet {
-  margin-bottom: 10px;
+
+.mainSectionContent {
+  border-left: 1px solid #E6ECF0;
+  border-right: 1px solid #E6ECF0;
 }
 
-
+.mainTitle {
+  width: 600px;
+  height: 55px;
+  border-bottom: 1px solid #E6ECF0;
+  padding: 15px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #1c1c1c;
+}
 </style>

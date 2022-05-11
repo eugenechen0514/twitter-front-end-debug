@@ -97,22 +97,24 @@ export default {
 <style scoped>
 .Setting {
   width: 100%;
+  height: 100vh;
+  display: grid;
+  grid-auto-flow: column;
 }
 
 #Navbar {
+  justify-self: start;
   position: fixed;
-  left: 100px;
+  margin-left: 113px;
 }
 
 .settingSection {
-  position: absolute;
-  left: 400px;
-  right: 0px;
+  margin-left: 378px;
   border-left: 1px solid #e6ecf0;
-  height: 100vh;
 }
 
 .settingTitle {
+  width: 100%;
   border-bottom: 1px solid #e6ecf0;
   padding: 13px 20px;
   font-size: 19px;

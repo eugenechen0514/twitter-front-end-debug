@@ -60,7 +60,7 @@ export default {
   height: 765px;
   border: 1px solid black;
   background-color: #fff;
-  z-index: 100;
+  z-index: 50;
 }
 .user {
   width: 350px;
