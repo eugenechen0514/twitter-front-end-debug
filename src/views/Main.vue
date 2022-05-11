@@ -1,9 +1,11 @@
 <template>
   <div class="main">
-    <h1>主頁</h1>
     <Navbar />
     <div>
       <MainPostTweet :currentUser="currentUser"/>
+      <MainTweets :currentTweets="currentTweets" />
+      <MainTweets :currentTweets="currentTweets" />
+      <MainTweets :currentTweets="currentTweets" />
       <MainTweets :currentTweets="currentTweets" />
     </div>
     <PopularUsers/>
@@ -88,9 +90,9 @@ export default {
 
 <style scoped>
 .main {
+  border: 1px solid red;
   display: flex;
-  justify-content: center;
-  gap: 10px;
+  width: 100%;
 }
 .mainPostTweet {
   margin-bottom: 10px;

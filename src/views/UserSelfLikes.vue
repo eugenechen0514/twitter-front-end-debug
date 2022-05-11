@@ -1,6 +1,5 @@
 <template>
   <div class="UserSelfContainer">
-    <h1>個人資料</h1>
     <Navbar />
     <div class="UserSelfMain">
       <div class="userCard">
@@ -39,7 +38,6 @@ export default {
 <style scoped>
 .UserSelfContainer {
   display: flex;
-  justify-content: center;
   gap: 10px;
 }
 

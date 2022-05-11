@@ -107,11 +107,15 @@ export default {
 
 <style scoped>
 .Navbar {
+  border: 1px solid black;
+  background-color: #fff;
   width: 235px;
   height: 100vh;
   display: flex;
   flex-direction: column;
+  position: fixed;
   margin-left: 113px;
+  z-index: 100;
 }
 
 .navbarLogo {

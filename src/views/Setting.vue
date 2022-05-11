@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="Setting">
     <Navbar/>
     
   </div>
@@ -15,3 +15,10 @@ export default {
   
 }
 </script>
+
+<style scoped>
+.Setting {
+  width: 100%;
+  border: 1px solid red;
+}
+</style>
