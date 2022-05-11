@@ -142,10 +142,4 @@ html, * {
   font-family: 'Noto Sans TC', sans-serif;
 }
 
-#app {
- width: 1440px;
- margin: 0 auto;
-}
-
-
 </style>

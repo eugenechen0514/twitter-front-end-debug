@@ -59,6 +59,8 @@ export default {
   width: 350px;
   height: 765px;
   border: 1px solid black;
+  background-color: #fff;
+  z-index: 100;
 }
 .user {
   width: 350px;

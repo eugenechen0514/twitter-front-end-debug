@@ -1,14 +1,14 @@
 <template>
   <div class="main">
-    <Navbar />
-    <div>
+    <Navbar id="Navbar" />
+    <div class="mainSection">
       <MainPostTweet :currentUser="currentUser"/>
       <MainTweets :currentTweets="currentTweets" />
       <MainTweets :currentTweets="currentTweets" />
       <MainTweets :currentTweets="currentTweets" />
       <MainTweets :currentTweets="currentTweets" />
     </div>
-    <PopularUsers/>
+    <PopularUsers id="PopularUsers"/>
   </div>
 </template>
 
@@ -90,11 +90,35 @@ export default {
 
 <style scoped>
 .main {
-  border: 1px solid red;
-  display: flex;
   width: 100%;
+}
+
+#Navbar {
+  position: fixed;
+  top: 0;
+  left: 100px;
+  /* width: 235px; */
+}
+
+#PopularUsers {
+  position: fixed;
+  right: 100px;
+  top: 15px;
+  /* width: 350px; */
+}
+
+.mainSection {
+  border: 1px solid blue;
+  position: absolute;
+  left: 335px;
+  right: 450px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .mainPostTweet {
   margin-bottom: 10px;
 }
+
+
 </style>

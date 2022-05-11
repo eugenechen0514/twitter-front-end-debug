@@ -113,8 +113,6 @@ export default {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  position: fixed;
-  margin-left: 113px;
   z-index: 100;
 }
 
@@ -217,7 +215,7 @@ export default {
   resize: none;
   font-size: 18px;
   font-weight: 500;
-  /* border: 0; */
+  border: 0;
 }
 
 .postTweetModalText:focus {
