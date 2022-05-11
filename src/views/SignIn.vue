@@ -11,11 +11,29 @@
       <h1 class="title">登入 Alphitter</h1>
       <div class="labelInputGroup">
         <label for="account" class="formLabel">帳號</label>
-        <input v-model="account" type="text" name="account" class="formInput" id="account" required />
+        <input
+          v-model="account"
+          type="text"
+          name="account"
+          class="formInput"
+          :class="{error: !isFirstTry && !account}"
+          id="account"
+          required
+        />
+        <div class="errorMessage" v-if="!isFirstTry && !account">
+          <p class="errorText">{{accountErrorMessage}}</p>
+        </div>
       </div>
       <div class="labelInputGroup">
         <label for="password" class="formLabel">密碼</label>
-        <input v-model="password" type="password" name="password" class="formInput" id="password" required />
+        <input
+          v-model="password"
+          type="password"
+          name="password"
+          class="formInput"
+          id="password"
+          required
+        />
       </div>
       <button type="submit" class="signInBtn">登入</button>
       <div class="linkGroup">
@@ -28,33 +46,34 @@
 </template>
 
 <script>
-import {Toast} from '../utility/helpers'
+import { Toast } from "../utility/helpers";
 
 export default {
   data() {
     return {
-      account: '',
-      password: '',
-    }
+      account: "",
+      password: "",
+      isFirstTry: 'true',
+      accountErrorMessage: '帳號不存在'
+    };
   },
   methods: {
     handleSubmit() {
-      if(!this.account | !this.password) {
+      if (!this.account | !this.password) {
         Toast.fire({
-          icon: 'warning',
-          title: '請輸入帳號密碼'
-        })
-        return
+          icon: "warning",
+          title: "請輸入帳號密碼",
+        });
+        return;
       }
       console.log({
         account: this.account,
-        password: this.password
-      })
-      this.$router.push({name:'main'})
-    }
-  }
-  
-}
+        password: this.password,
+      });
+      this.$router.push({ name: "main" });
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -90,26 +109,49 @@ form {
   margin-bottom: 32px;
   display: flex;
   flex-direction: column;
-  border-bottom: 2px solid #657786;
-  padding: 5px 10px 0px 10px;
+  position: relative;
 }
 
 .formLabel {
   font-size: 15px;
   font-weight: 500;
   color: #657786;
+  margin-top: 5px;
+  margin-left: 10px;
 }
 
 .formInput {
   border: 0;
   background-color: #f5f8fa;
+  width: 100%;
   height: 30px;
+  padding: 0 10px;
   line-height: 30;
   font-size: 15px;
+  border-bottom: 2px solid #657786;
+  font-size: 19px;
+  font-weight: 500;
 }
 
-.formInput:focus {
+.formInput:focus,
+.formInput:hover {
   outline: 0;
+  border-bottom: 2px solid #50b5ff;
+}
+
+.errorMessage {
+  position: absolute;
+  width: 100%;
+  top: 100%;
+  display: flex;
+  justify-content: space-between;
+  font-size: 15px;
+  font-weight: 500;
+  color: #657786;
+}
+
+.errorText {
+  color: #fc5a5a;
 }
 
 .signInBtn {
@@ -134,10 +176,10 @@ form {
   text-align: right;
   font-size: 18px;
   font-weight: 700;
-  color: #0099FF;
+  color: #0099ff;
 }
 
 .link {
-  color: #0099FF;
+  color: #0099ff;
 }
 </style>

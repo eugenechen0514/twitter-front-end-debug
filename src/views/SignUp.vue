@@ -1,13 +1,15 @@
 <template>
   <div class="SignUp">
     <form @submit.stop.prevent="handleSubmit">
-      <img
-        class="logo"
-        src="../assets/Icon.png"
-        height="40px"
-        width="40px"
-        alt=""
-      />
+      <router-link to="/signin">
+        <img
+          class="logo"
+          src="../assets/Icon.png"
+          height="40px"
+          width="40px"
+          alt=""
+        />
+      </router-link>
       <h1 class="title">建立你的帳號</h1>
       <div class="labelInputGroup">
         <label for="account" class="formLabel">帳號</label>
@@ -25,11 +27,16 @@
         <input
           v-model="name"
           type="text"
-          name="account"
+          name="name"
           class="formInput"
+          :class="{error: name.length>50}"
           id="name"
           required
         />
+        <div class="errorMessage" v-if="name.length>50">
+          <p class="errorText">字數超出上限!</p>
+          <p>{{name.length}}/50</p>
+        </div>
       </div>
       <div class="labelInputGroup">
         <label for="email" class="formLabel">Email</label>
@@ -78,37 +85,49 @@ export default {
   data() {
     return {
       account: "",
-      name: '',
-      email: '',
+      name: "",
+      email: "",
       password: "",
-      passwordCheck: '',
+      passwordCheck: "",
     };
   },
   methods: {
     handleSubmit() {
-      if (!this.account | !this.password | !this.name | !this.email | this.passwordCheck) {
+      if (
+        !this.account |
+        !this.password |
+        !this.name |
+        !this.email |
+        this.passwordCheck
+      ) {
         Toast.fire({
           icon: "warning",
           title: "請輸入帳號密碼",
         });
         return;
       }
+      if(this.name.length > 50) {
+        Toast.fire({
+          icon: 'warning',
+          title: '名稱超出字數'
+        })
+      }
       console.log({
         account: this.account,
         name: this.name,
         email: this.email,
         password: this.password,
-        passwordCheck: this.passwordCheck
+        passwordCheck: this.passwordCheck,
       });
       this.$router.push({ name: "sign-in" });
     },
     clearForm() {
-      this.account = ''
-      this.name = ''
-      this.email = ''
-      this.password = ''
-      this.passwordCheck = ''
-    }
+      this.account = "";
+      this.name = "";
+      this.email = "";
+      this.password = "";
+      this.passwordCheck = "";
+    },
   },
 };
 </script>
@@ -146,26 +165,52 @@ form {
   margin-bottom: 32px;
   display: flex;
   flex-direction: column;
-  border-bottom: 2px solid #657786;
-  padding: 5px 10px 0px 10px;
+  position: relative;
 }
 
 .formLabel {
   font-size: 15px;
   font-weight: 500;
   color: #657786;
+  margin-top: 5px;
+  margin-left: 10px;
 }
 
 .formInput {
   border: 0;
   background-color: #f5f8fa;
+  width: 100%;
   height: 30px;
+  padding: 0 10px;
   line-height: 30;
   font-size: 15px;
+  border-bottom: 2px solid #657786;
+  font-size: 19px;
+  font-weight: 500;
 }
 
-.formInput:focus {
+.formInput:focus, .formInput:hover {
   outline: 0;
+  border-bottom: 2px solid #50b5ff;
+}
+
+.formInput.error {
+  border-bottom: 2px solid #FC5A5A;
+}
+
+.errorMessage {
+  position: absolute;
+  width: 100%;
+  top: 100%;
+  display: flex;
+  justify-content: space-between;
+  font-size: 15px;
+  font-weight: 500;
+  color: #657786;
+}
+
+.errorText {
+  color: #FC5A5A;
 }
 
 .signUpBtn {
@@ -188,7 +233,7 @@ form {
 .cancelBtn {
   font-size: 18px;
   font-weight: 700;
-  color: #0099FF;
+  color: #0099ff;
   text-decoration: underline;
   border: 0;
   background-color: #fff;
@@ -197,5 +242,4 @@ form {
 .cancelBtn:hover {
   cursor: pointer;
 }
-
 </style>
