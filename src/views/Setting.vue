@@ -1,6 +1,6 @@
 <template>
   <div class="Setting">
-    <Navbar />
+    <Navbar id="Navbar" />
 
     <div class="settingWrapper">
       <div class="settingTitle">
@@ -97,6 +97,11 @@ export default {
 <style scoped>
 .Setting {
   width: 100%;
+}
+
+#Navbar {
+  position: fixed;
+  margin-left: 113px;
 }
 
 .settingWrapper {
