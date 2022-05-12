@@ -30,8 +30,15 @@
         "
         alt=""
       />
-      <img class="navLinkIcon" src="../assets/selfInfo.png" v-else alt="" />
-      <router-link class="navLinkText" to="/user/self/tweets">
+      <img
+        class="navLinkIcon"
+        src="../assets/selfInfo.png"
+        v-else
+        alt=""
+      />
+      <router-link class="navLinkText"
+      :class="{active: $route.path==='/user/self/tweetsandcomments' || $route.path==='/user/self/likes'}"
+      to="/user/self/tweets">
         個人資料
       </router-link>
     </div>

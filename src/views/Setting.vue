@@ -105,12 +105,12 @@ export default {
 #Navbar {
   justify-self: start;
   position: fixed;
-  margin-left: 113px;
+  margin-left: 130px;
 }
 
 .settingSection {
-  width: 1062px;
-  margin-left: 378px;
+  width: 1068px;
+  margin-left: 332px;
 }
 
 .settingSectionContent {
