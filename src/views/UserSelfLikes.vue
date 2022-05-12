@@ -1,23 +1,23 @@
 <template>
   <div class="UserSelfContainer">
-    <Navbar />
+    <Navbar id="Navbar" />
     <div class="UserSelfMain">
-      <div class="userCard">
-        <img class="userBackgroundImage" src="" width="600px" height="200px" alt="">
-        <img class="userImage" src="" width="140px" height="140px" alt="">
-        <button class="userEdit">編輯個人資料</button>
-        <p>userName</p>
-        <p>userAccount</p>
-        <p>userDescription</p>
-        <router-link to="">userFollowerCount</router-link> //
-        <router-link to="">userFollowingCount</router-link>
+      <div class="userTitle">
+        <router-link to="/main">
+          <img class="backIcon" src="../assets/Vector.png" alt="" />
+        </router-link>
+        <div class="userInfo">
+          <h1 class="infoName">John Doe</h1>
+          <span class="infoTweetsNumber">15推文</span>
+        </div>
       </div>
-      <UserTabs/>
+      <UserSelfCard />
+      <UserTabs />
       <div>
-        <h1>Likes</h1>
+        <h1>Tweets</h1>
       </div>
     </div>
-    <PopularUsers />
+    <PopularUsers id="PopularUsers" />
   </div>
 </template>
 
@@ -25,46 +25,80 @@
 import Navbar from "../components/Navbar.vue";
 import PopularUsers from "../components/PopularUsers.vue";
 import UserTabs from "../components/UserTabs.vue";
+import UserSelfCard from "../components/UserSelfCard.vue";
 
 export default {
   components: {
     Navbar,
     PopularUsers,
-    UserTabs
+    UserTabs,
+    UserSelfCard,
   },
 };
 </script>
 
 <style scoped>
 .UserSelfContainer {
-  display: flex;
-  gap: 10px;
+  width: 100%;
+  display: grid;
+  
+}
+
+#Navbar {
+  justify-self: start;
+  position: fixed;
+  margin-left: 113px;
+  /* width: 210px; */
+}
+
+#PopularUsers {
+  position: fixed;
+  justify-self: end;
+  margin-right: 82px;
+  margin-top: 15px;
+  /* width: 350px; */
 }
 
 .UserSelfMain {
   width: 600px;
-  border: 1px solid black;
+  margin-left: 378px;
+  border-left: 1px solid #E6ECF0;
+  border-right: 1px solid #E6ECF0;
+  /* display: flex;
+  flex-direction: column;
+  align-items: center; */
+  /* border: 1px solid black; */
 }
 
-.userCard {
-  height: 375px;
-  border: 1px solid black;
-  position: relative;
+.userTitle {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-left: 28px;
+  height: 74px;
+  border-bottom: 1px solid #E6ECF0;
 }
 
-.userImage {
-  position: absolute;
-  top: 124px;
-  left: 14px;
-  z-index: 10;
+.backIcon {
+  width: 17px;
+  height: 14px;
 }
 
-.userEdit {
-  position: absolute;
-  right: 30px;
-  top: 220px;
+.userInfo {
+  margin-left: 19px;
 }
 
+.infoName {
+  font-weight: 700;
+  font-size: 18px;
+  height: 24px;
+  line-height: 26px;
+}
 
-
+.infoTweetsNumber {
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 19px;
+  color: #6C757D
+}
 </style>
