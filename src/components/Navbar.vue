@@ -107,7 +107,6 @@ export default {
 
 <style scoped>
 .Navbar {
-  border: 1px solid black;
   background-color: #fff;
   width: 210px;
   height: 100vh;

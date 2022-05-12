@@ -56,6 +56,72 @@ const dummyData = {
         image: "https://cdn2.ettoday.net/images/1027/1027134.jpg",
       },
     },
+    {
+      tweet: {
+        id: 3,
+        text: "hello",
+        createAt: "2022/5/9 12:00",
+        commentsCount: 1,
+        likesCount: 1,
+        isLiked: true
+      },
+      user: {
+        id: 1,
+        name: "awwfuq",
+        account: "awwfuq",
+        image:
+          "https://img.ltn.com.tw/Upload/news/600/2016/04/17/phpFBRDIE.jpg",
+      },
+    },
+    {
+      tweet: {
+        id: 4,
+        text: "hello world",
+        createAt: "2022/5/9 12:00",
+        commentsCount: 1,
+        likesCount: 1,
+        isLiked: false
+      },
+      user: {
+        id: 2,
+        name: "ohhfuck",
+        account: "ohhfuck",
+        image: "https://cdn2.ettoday.net/images/1027/1027134.jpg",
+      },
+    },
+    {
+      tweet: {
+        id: 5,
+        text: "hello",
+        createAt: "2022/5/9 12:00",
+        commentsCount: 1,
+        likesCount: 1,
+        isLiked: true
+      },
+      user: {
+        id: 1,
+        name: "awwfuq",
+        account: "awwfuq",
+        image:
+          "https://img.ltn.com.tw/Upload/news/600/2016/04/17/phpFBRDIE.jpg",
+      },
+    },
+    {
+      tweet: {
+        id: 6,
+        text: "hello world",
+        createAt: "2022/5/9 12:00",
+        commentsCount: 1,
+        likesCount: 1,
+        isLiked: false
+      },
+      user: {
+        id: 2,
+        name: "ohhfuck",
+        account: "ohhfuck",
+        image: "https://cdn2.ettoday.net/images/1027/1027134.jpg",
+      },
+    },
   ],
 };
 
@@ -108,8 +174,8 @@ export default {
 #PopularUsers {
   position: fixed;
   justify-self: end;
-  margin-right: 82px;
-  margin-top: 15px;
+  margin-right: 82px; 
+  margin-top: 15px; 
   /* width: 350px; */
 }
 
