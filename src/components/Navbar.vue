@@ -68,9 +68,27 @@
             class="postTweetModalUserImg"
             alt=""
           />
-          <textarea v-model="tweetText" class="postTweetModalText" placeholder="有什麼新鮮事?">
+          <textarea
+            v-model="tweetText"
+            class="postTweetModalText"
+            placeholder="有什麼新鮮事?"
+          >
           </textarea>
-          <button @click.stop.prevent="postTweetModalSubmit" class="postTweetModalSubmitBtn">推文</button>
+          <p
+            class="postTweetModalErrorMessage"
+            v-if="postTweetModalErrorMessage && !tweetText"
+          >
+            {{ postTweetModalErrorMessage }}
+          </p>
+          <p class="postTweetModalErrorMessage" v-if="tweetText.length > 140">
+            字數不可超過140字
+          </p>
+          <button
+            @click.stop.prevent="postTweetModalSubmit"
+            class="postTweetModalSubmitBtn"
+          >
+            推文
+          </button>
         </div>
       </div>
     </div>
@@ -86,21 +104,30 @@ export default {
   data() {
     return {
       postTweetModalIsOpen: false,
-      tweetText: ''
+      tweetText: "",
+      postTweetModalErrorMessage: "",
     };
   },
   methods: {
     openPostTweetModal() {
+      this.tweetText = "";
+      this.postTweetModalErrorMessage = "";
       this.postTweetModalIsOpen = true;
     },
     closePostTweetModal() {
+      this.tweetText = "";
+      this.postTweetModalErrorMessage = "";
       this.postTweetModalIsOpen = false;
     },
     postTweetModalSubmit() {
-      console.log({text: this.tweetText})
-      this.tweetText = ''
-      this.postTweetModalIsOpen = false
-    }
+      if (!this.tweetText) {
+        this.postTweetModalErrorMessage = "內容不可留白";
+        return;
+      }
+      console.log({ text: this.tweetText });
+      this.tweetText = "";
+      this.postTweetModalIsOpen = false;
+    },
   },
 };
 </script>
@@ -108,7 +135,7 @@ export default {
 <style scoped>
 .Navbar {
   background-color: #fff;
-  width: 210px;
+  width: 178px;
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -116,27 +143,30 @@ export default {
 }
 
 .navbarLogo {
-  margin-top: 10px;
-  margin-left: 10px;
-  margin-bottom: 45px;
+  margin-top: 13px;
+  margin-left: 13px;
+  margin-bottom: 13px;
+  width: 40px;
+  height: 40px;
 }
 
 .navLinkGroup {
-  margin-left: 10px;
-  margin-bottom: 30px;
+  width: 100%;
+  height: 58px;
+  padding-left: 18px;
   display: flex;
   align-items: center;
 }
 
 .navLinkIcon {
-  margin-right: 20px;
+  margin-right: 17px;
 }
 
 .navLinkText {
   font-size: 18px;
   font-weight: 700;
   text-decoration: none;
-  color: black;
+  color: #44444f;
 }
 
 .navLinkText.active {
@@ -144,13 +174,14 @@ export default {
 }
 
 .openPostTweetModalBtn {
+  margin-top: 8px;
   width: 100%;
-  height: 38px;
+  height: 46px;
   border: 0;
-  border-radius: 100px;
+  border-radius: 50px;
   background-color: #ff6600;
-  font-size: 18px;
-  font-weight: 500;
+  font-size: 20px;
+  font-weight: 400;
   color: #fff;
 }
 
@@ -163,13 +194,13 @@ export default {
   z-index: 999;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.3);
   display: flex;
   justify-content: center;
 }
 
 #postTweetModalWrapper {
-  width: 600px;
+  width: 643px;
   height: 300px;
   background-color: #fff;
   margin-top: 54px;
@@ -205,16 +236,21 @@ export default {
 
 .postTweetModalUserImg {
   border-radius: 50%;
-  margin-right: 15px;
+  margin-right: 8px;
 }
 
 .postTweetModalText {
-  width: 510px;
-  height: 170px;
+  margin-top: 10px;
+  width: 528px;
+  height: 160px;
   resize: none;
-  font-size: 18px;
-  font-weight: 500;
+  font-size: 16px;
+  font-weight: 400;
   border: 0;
+}
+
+.postTweetModalText::placeholder {
+  color: #6c757d;
 }
 
 .postTweetModalText:focus {
@@ -223,16 +259,25 @@ export default {
 
 .postTweetModalSubmitBtn {
   position: absolute;
-  right: 15px;
-  bottom: 15px;
-  width: 66px;
-  height: 38px;
-  border-radius: 100px;
+  right: 16px;
+  bottom: 16px;
+  width: 64px;
+  height: 40px;
+  border-radius: 50px;
   border: 0;
-  background-color: #FF6600;
-  color: #FFF;
-  font-size: 18px;
+  background-color: #ff6600;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.postTweetModalErrorMessage {
+  position: absolute;
+  bottom: 28px;
+  right: 101px;
+  font-size: 15px;
   font-weight: 500;
+  color: #fc5a5a;
 }
 
 .navLogoutBtn {
@@ -240,6 +285,7 @@ export default {
   font-weight: 700;
   border: 0;
   background-color: #fff;
+  color: #44444f;
 }
 
 .navLogoutBtn:hover {
@@ -248,6 +294,6 @@ export default {
 
 .navLogoutLinkGroup {
   position: absolute;
-  bottom: 17px;
+  bottom: 0px;
 }
 </style>

@@ -1,76 +1,77 @@
 <template>
   <div class="Setting">
     <Navbar id="Navbar" />
-
     <div class="settingSection">
-      <div class="settingTitle">
-        <h1 class="settingTitleText">帳戶設定</h1>
-      </div>
-
-      <form class="settingForm">
-        <div class="labelInputGroup">
-          <label for="account" class="formLabel">帳號</label>
-          <input
-            v-model="account"
-            type="text"
-            name="account"
-            class="formInput"
-            id="account"
-            required
-          />
+      <div class="settingSectionContent">
+        <div class="settingTitle">
+          <h1 class="settingTitleText">帳戶設定</h1>
         </div>
-        <div class="labelInputGroup">
-          <label for="name" class="formLabel">名稱</label>
-          <input
-            v-model="name"
-            type="text"
-            name="name"
-            class="formInput"
-            :class="{ error: name.length > 50 }"
-            id="name"
-            required
-          />
-          <div class="errorMessage" v-if="name.length > 50">
-            <p class="errorText">字數超出上限!</p>
-            <p>{{ name.length }}/50</p>
+
+        <form class="settingForm">
+          <div class="labelInputGroup">
+            <label for="account" class="formLabel">帳號</label>
+            <input
+              v-model="account"
+              type="text"
+              name="account"
+              class="formInput"
+              id="account"
+              required
+            />
           </div>
-        </div>
-        <div class="labelInputGroup">
-          <label for="email" class="formLabel">Email</label>
-          <input
-            v-model="email"
-            type="email"
-            name="email"
-            class="formInput"
-            id="email"
-            required
-          />
-        </div>
-        <div class="labelInputGroup">
-          <label for="password" class="formLabel">密碼</label>
-          <input
-            v-model="password"
-            type="password"
-            name="password"
-            class="formInput"
-            id="password"
-            required
-          />
-        </div>
+          <div class="labelInputGroup">
+            <label for="name" class="formLabel">名稱</label>
+            <input
+              v-model="name"
+              type="text"
+              name="name"
+              class="formInput"
+              :class="{ error: name.length > 50 }"
+              id="name"
+              required
+            />
+            <div class="errorMessage" v-if="name.length > 50">
+              <p class="errorText">字數超出上限!</p>
+              <p>{{ name.length }}/50</p>
+            </div>
+          </div>
+          <div class="labelInputGroup">
+            <label for="email" class="formLabel">Email</label>
+            <input
+              v-model="email"
+              type="email"
+              name="email"
+              class="formInput"
+              id="email"
+              required
+            />
+          </div>
+          <div class="labelInputGroup">
+            <label for="password" class="formLabel">密碼</label>
+            <input
+              v-model="password"
+              type="password"
+              name="password"
+              class="formInput"
+              id="password"
+              required
+            />
+          </div>
 
-        <div class="labelInputGroup">
-          <label for="password" class="formLabel">密碼確認</label>
-          <input
-            v-model="passwordCheck"
-            type="password"
-            name="passwordCheck"
-            class="formInput"
-            id="passwordCheck"
-            required
-          />
-        </div>
-        <button type="submit" class="settingFormSubmitBtn">儲存</button>
-      </form>
+          <div class="labelInputGroup">
+            <label for="password" class="formLabel">密碼確認</label>
+            <input
+              v-model="passwordCheck"
+              type="password"
+              name="passwordCheck"
+              class="formInput"
+              id="passwordCheck"
+              required
+            />
+          </div>
+          <button type="submit" class="settingFormSubmitBtn">儲存</button>
+        </form>
+      </div>
     </div>
   </div>
 </template>
@@ -99,7 +100,6 @@ export default {
   width: 100%;
   height: 100vh;
   display: grid;
-  grid-auto-flow: column;
 }
 
 #Navbar {
@@ -109,7 +109,13 @@ export default {
 }
 
 .settingSection {
+  width: 1062px;
   margin-left: 378px;
+}
+
+.settingSectionContent {
+  width: 100%;
+  height: 100%;
   border-left: 1px solid #e6ecf0;
 }
 

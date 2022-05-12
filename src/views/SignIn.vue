@@ -16,12 +16,14 @@
           type="text"
           name="account"
           class="formInput"
-          :class="{error: !isFirstTry && !account}"
+          :class="{ error: !isFirstTry && !account || account.length>50 }"
           id="account"
+          placeholder="請輸入帳號"
           required
         />
-        <div class="errorMessage" v-if="!isFirstTry && !account">
-          <p class="errorText">{{accountErrorMessage}}</p>
+        <div class="errorMessage" v-if="account.length > 0">
+          <p class="errorText" v-if="account.length > 50">字數超出上限!</p>
+          <p class="wordsCount">{{ account.length }}/50</p>
         </div>
       </div>
       <div class="labelInputGroup">
@@ -32,12 +34,17 @@
           name="password"
           class="formInput"
           id="password"
+          placeholder="請輸入密碼"
           required
         />
+        <div class="errorMessage" v-if="password.length > 0">
+          <p class="errorText" v-if="password.length > 50">字數超出上限!</p>
+          <p class="wordsCount">{{ password.length }}/50</p>
+        </div>
       </div>
       <button type="submit" class="signInBtn">登入</button>
       <div class="linkGroup">
-        <router-link class="link" to="/signup">註冊Alphitter</router-link>
+        <router-link class="link" to="/signup">註冊</router-link>
         •
         <router-link class="link" to="/admin/signin">後台登入</router-link>
       </div>
@@ -53,8 +60,8 @@ export default {
     return {
       account: "",
       password: "",
-      isFirstTry: 'true',
-      accountErrorMessage: '帳號不存在'
+      isFirstTry: true,
+      accountErrorMessage: "帳號不存在",
     };
   },
   methods: {
@@ -88,15 +95,15 @@ form {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 540px;
+  width: 356px;
 }
 
 .logo {
-  margin-bottom: 25px;
+  margin-bottom: 29px;
 }
 
 .title {
-  font-size: 23px;
+  font-size: 28px;
   font-weight: 700;
   color: #1c1c1c;
   margin-bottom: 40px;
@@ -105,7 +112,7 @@ form {
 .labelInputGroup {
   background-color: #f5f8fa;
   width: 100%;
-  height: 52px;
+  height: 54px;
   margin-bottom: 32px;
   display: flex;
   flex-direction: column;
@@ -113,9 +120,9 @@ form {
 }
 
 .formLabel {
-  font-size: 15px;
-  font-weight: 500;
-  color: #657786;
+  font-size: 14px;
+  font-weight: 400;
+  color: #696974;
   margin-top: 5px;
   margin-left: 10px;
 }
@@ -124,13 +131,17 @@ form {
   border: 0;
   background-color: #f5f8fa;
   width: 100%;
-  height: 30px;
-  padding: 0 10px;
-  line-height: 30;
-  font-size: 15px;
+  padding: 2px 10px;
+  line-height: 26px;
+  font-size: 16px;
   border-bottom: 2px solid #657786;
-  font-size: 19px;
-  font-weight: 500;
+  font-weight: 400;
+  position: absolute;
+  bottom: 0px;
+}
+
+.formInput::placeholder {
+  color: #b5b5be;
 }
 
 .formInput:focus,
@@ -139,31 +150,42 @@ form {
   border-bottom: 2px solid #50b5ff;
 }
 
+.formInput.error {
+  border-bottom: 2px solid #fc5a5a;
+}
+
+
 .errorMessage {
   position: absolute;
   width: 100%;
   top: 100%;
-  display: flex;
-  justify-content: space-between;
-  font-size: 15px;
+  font-size: 12px;
   font-weight: 500;
+  line-height: 20px;
   color: #657786;
 }
 
 .errorText {
   color: #fc5a5a;
+  position: absolute;
+  left: 0px;
+}
+
+.wordsCount {
+  position: absolute;
+  right: 0px;
 }
 
 .signInBtn {
-  margin-top: 10px;
-  margin-bottom: 20px;
+  margin-top: 8px;
+  margin-bottom: 22px;
   width: 100%;
   height: 46px;
   border: 0;
   border-radius: 50px;
   background-color: #ff6600;
-  font-size: 18px;
-  font-weight: 700;
+  font-size: 20px;
+  font-weight: 400;
   color: #ffffff;
 }
 
@@ -174,12 +196,12 @@ form {
 .linkGroup {
   width: 100%;
   text-align: right;
-  font-size: 18px;
-  font-weight: 700;
-  color: #0099ff;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
 }
 
 .link {
-  color: #0099ff;
+  color: #0062FF;
 }
 </style>

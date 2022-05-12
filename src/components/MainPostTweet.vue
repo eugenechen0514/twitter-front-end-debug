@@ -8,10 +8,21 @@
       alt=""
     />
     <textarea
+      v-model="tweetText"
       class="mainPostTweetText"
-      placeholder="有什麼新鮮事嗎?"
+      placeholder="有什麼新鮮事?"
     ></textarea>
-    <button class="mainPostTweetSubmitBtn">推文</button>
+    <p
+      class="mainPostTweetErrorMessage"
+      v-if="mainPostTweetErrorMessage && !tweetText"
+    >
+      {{ mainPostTweetErrorMessage }}
+    </p>
+    <p class="mainPostTweetErrorMessage" v-if="tweetText.length > 140">
+      字數不可超過140字
+    </p>
+
+    <button class="mainPostTweetSubmitBtn" @click.stop.prevent="postTweetModalSubmit">推文</button>
   </div>
 </template>
 
@@ -23,17 +34,32 @@ export default {
       required: true,
     },
   },
+  data() {
+    return {
+      tweetText: "",
+      mainPostTweetErrorMessage: "",
+    };
+  },
+  methods: {
+    postTweetModalSubmit() {
+      if (!this.tweetText) {
+        this.mainPostTweetErrorMessage = "內容不可留白";
+        return;
+      }
+      console.log({ text: this.tweetText });
+      this.tweetText = "";
+    },
+  },
 };
 </script>
 
 <style scoped>
 .mainPostTweet {
-  width: 600px;
-  height: 120px;
-  padding: 10px 15px;
+  width: 100%;
+  height: 136px;
+  padding: 16px 26px;
   position: relative;
   display: flex;
-  border-bottom: 10px solid #e6ecf0;
 }
 
 .mainPostTweetUserImage {
@@ -43,31 +69,45 @@ export default {
 }
 
 .mainPostTweetText {
-  width: 430px;
-  height: 90px;
-  margin-left: 10px;
+  width: 460px;
+  height: 60px;
+  margin-left: 8px;
+  margin-top: 12px;
   resize: none;
   font-size: 18px;
-  font-weight: 500;
-  border: 0;
+  font-weight: 700;
+  border: 0; 
   outline: 0;
 }
 
+.mainPostTweetText::placeholder {
+  color: #6c757d;
+}
+
 .mainPostTweetSubmitBtn {
-  width: 66px;
-  height: 38px;
-  border-radius: 100px;
+  width: 64px;
+  height: 40px;
+  border-radius: 50px;
   background-color: #ff6600;
   color: #fff;
-  font-size: 18px;
-  font-weight: 500;
+  font-size: 16px;
+  font-weight: 400;
   position: absolute;
-  bottom: 10px;
-  right: 10px;
+  bottom: 16px;
+  right: 25px;
   border: 0;
 }
 
 .mainPostTweetSubmitBtn:hover {
   cursor: pointer;
+}
+
+.mainPostTweetErrorMessage {
+  position: absolute;
+  bottom: 20px;
+  right: 101px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #fc5a5a;
 }
 </style>

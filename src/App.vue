@@ -143,7 +143,7 @@ html, * {
 }
 
 #app {
-  width: 1440px;
+  width: 1400px;
   margin: 0 auto;
 }
 

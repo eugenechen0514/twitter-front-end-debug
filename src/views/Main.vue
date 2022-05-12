@@ -167,24 +167,21 @@ export default {
 #Navbar {
   justify-self: start;
   position: fixed;
-  margin-left: 113px;
-  /* width: 210px; */
+  margin-left: 130px;
+  /* width: 178px; */
 }
 
 #PopularUsers {
   position: fixed;
   justify-self: end;
-  margin-right: 82px; 
-  margin-top: 15px; 
-  /* width: 350px; */
+  margin-right: 130px; 
+  margin-top: 16px; 
+  /* width: 273px; */
 }
 
 .mainSection {
-  width: 600px;
-  margin-left: 378px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  width: 640px;
+  margin-left: 332px;
 }
 
 .mainSectionContent {
@@ -193,11 +190,11 @@ export default {
 }
 
 .mainTitle {
-  width: 600px;
-  height: 55px;
+  width: 100%;
+  height: 74px;
   border-bottom: 1px solid #E6ECF0;
-  padding: 15px;
-  font-size: 18px;
+  padding: 24px 23px;
+  font-size: 24px;
   font-weight: 700;
   color: #1c1c1c;
 }

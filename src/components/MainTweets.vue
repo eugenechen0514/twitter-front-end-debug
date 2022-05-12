@@ -132,13 +132,15 @@ export default {
 
 <style scoped>
 .mainTweets {
-  width: 600px;
+  width: 100%;
+  border-top: 10px solid #e6ecf0;
 }
 .mainTweet {
   border-bottom: 1px solid #e6ecf0;
-  min-height: 136px;
+  height: 168px;
   display: flex;
-  padding: 13px 15px 15px 15px;
+  padding: 16px 24px;
+  position: relative;
 }
 
 .mainTweetUserImage {
@@ -153,47 +155,52 @@ export default {
 }
 
 .mainTweetUserNameGroup {
+  height: 26px;
+  line-height: 26px;
   display: flex;
 }
 
 .mainTweetUserName {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 700;
-  color: #1c1c1c;
-  margin-right: 5px;
+  color:  #171725;
+  margin-right: 8px;
   text-decoration: none;
 }
 
 .mainTweetUserAccount {
-  font-size: 15px;
-  font-weight: 500;
-  color: #657786;
+  font-size: 14px;
+  font-weight: 400;
+  color:  #6C757D;
   text-decoration: none;
 }
 
 .mainTweetCreatedAt {
-  font-size: 15px;
-  font-weight: 500;
-  color: #657786;
+  font-size: 14px;
+  font-weight: 400;
+  color:  #6C757D;
 }
 
 .mainTweetText {
   width: 100%;
-  min-height: 50px;
-  margin-top: 6px;
+  height: 78px;
+  margin-top: 8px;
 }
 
 .mainTweetText a {
   text-decoration: none;
-  font-size: 15px;
-  font-weight: 500;
-  color: #1c1c1c;
-  line-height: 22px;
+  font-size: 16px;
+  font-weight: 400;
+  color:  #171725;
+  line-height: 26px;
 }
 
 .mainTweetBtnGroup {
+  height: 16px;
   display: flex;
   margin-top: 14px;
+  left: 82px;
+  bottom: 16px;
 }
 
 .mainTweetBtn {
@@ -232,10 +239,10 @@ export default {
 }
 
 #replyTweetModalWrapper {
-  width: 600px;
-  height: 450px;
+  width: 634px;
+  height: 500px;
   background-color: #fff;
-  margin-top: 54px;
+  margin-top: 56px;
   border-radius: 14px;
   position: relative;
 }
@@ -261,27 +268,32 @@ export default {
 
 .replyTweetModalContent {
   border-top: 1px solid #e6ecf0;
-  height: 245px;
+  height: 443px;
 }
 
 .currentUserReply {
   display: flex;
-  padding: 10px 15px 15px 15px;
-  margin-top: 23px;
+  padding-left: 24px;
+  margin-top: 45px;
 }
 
 .currentUserReplyUserImg {
   border-radius: 50%;
-  margin-right: 15px;
+  margin-right: 8px;
 }
 
 .currentUserReplyText {
+  margin-top: 12px;
   width: 510px;
-  height: 170px;
+  height: 100px;
   resize: none;
-  font-size: 18px;
-  font-weight: 500;
+  font-size: 16px;
+  font-weight: 400;
   border: 0;
+}
+
+.currentUserReplyText::placeholder {
+  color: #6C757D;
 }
 
 .currentUserReplyText:focus {
@@ -290,21 +302,23 @@ export default {
 
 .replyTweetModalSubmitBtn {
   position: absolute;
-  right: 15px;
-  bottom: 15px;
-  width: 66px;
-  height: 38px;
-  border-radius: 100px;
+  right: 16px;
+  bottom: 16px;
+  width: 64px;
+  height: 40px;
+  border-radius: 50px;
   border: 0;
   background-color: #ff6600;
   color: #fff;
-  font-size: 18px;
-  font-weight: 500;
+  font-size: 16px;
+  font-weight: 400;
 }
 
 .replyTweet {
   display: flex;
-  padding: 13px 15px 15px 15px;
+  height: 129px;
+  margin-top: 16px;
+  padding-left: 24px;
   position: relative;
 }
 
@@ -312,45 +326,48 @@ export default {
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  margin-right: 10px;
+  margin-right: 8px;
 }
 
 .replyTweetUserNameGroup {
   display: flex;
+  height: 26px;
+  line-height: 26px;
 }
 
 .replyTweetUserName {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 700;
-  color: #1c1c1c;
-  margin-right: 5px;
+  color:  #171725;
+  margin-right: 8px;
   text-decoration: none;
 }
 
 .replyTweetUserAccount {
-  font-size: 15px;
-  font-weight: 500;
-  color: #657786;
+  font-size: 14px;
+  font-weight: 400;
+  color: #6C757D;
   text-decoration: none;
 }
 
 .replyTweetCreatedAt {
-  font-size: 15px;
-  font-weight: 500;
-  color: #657786;
+  font-size: 14px;
+  font-weight: 400;
+  color: #6C757D;
 }
 
 .replyTweetText {
-  width: 500px;
-  min-height: 50px;
-  margin-top: 6px;
+  width: 528px;
+  height: 78px;
+  margin-top: 8px;
 }
 
 .replyTweetFor {
-  margin-top: 19px;
-  font-size: 13px;
-  font-weight: 500;
-  color: #657786;
+  position: absolute;
+  top: 100%;
+  font-size: 14px;
+  font-weight: 400;
+  color: #6C757D;
 }
 
 .replyTweetFor span {
@@ -359,10 +376,10 @@ export default {
 
 .replyTweetModalConnectLine {
   width: 2px;
-  height: 80px;
-  background-color: #ccd6dd;
+  height: 86px;
+  background-color:  #B5B5BE;
   position: absolute;
-  left: 40px;
-  top: 128px;
+  left: 48px;
+  top: 139px;
 }
 </style>

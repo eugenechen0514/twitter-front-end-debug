@@ -18,9 +18,15 @@
           type="text"
           name="account"
           class="formInput"
+          :class="{ error: account.length > 50 }"
           id="account"
+          placeholder="請輸入帳號"
           required
         />
+        <div class="errorMessage" v-if="account.length > 0">
+          <p class="errorText" v-if="account.length > 50">字數超出上限!</p>
+          <p class="wordsCount">{{ account.length }}/50</p>
+        </div>
       </div>
       <div class="labelInputGroup">
         <label for="name" class="formLabel">名稱</label>
@@ -29,13 +35,14 @@
           type="text"
           name="name"
           class="formInput"
-          :class="{error: name.length>50}"
+          :class="{ error: name.length > 50 }"
           id="name"
+          placeholder="請輸入使用者名稱"
           required
         />
-        <div class="errorMessage" v-if="name.length>50">
-          <p class="errorText">字數超出上限!</p>
-          <p>{{name.length}}/50</p>
+        <div class="errorMessage" v-if="name.length > 0">
+          <p class="errorText" v-if="name.length > 50">字數超出上限!</p>
+          <p class="wordsCount">{{ name.length }}/50</p>
         </div>
       </div>
       <div class="labelInputGroup">
@@ -46,6 +53,7 @@
           name="email"
           class="formInput"
           id="email"
+          placeholder="請輸入Email"
           required
         />
       </div>
@@ -57,8 +65,13 @@
           name="password"
           class="formInput"
           id="password"
+          placeholder="請設定密碼"
           required
         />
+        <div class="errorMessage" v-if="password.length > 0">
+          <p class="errorText" v-if="password.length > 50">字數超出上限!</p>
+          <p class="wordsCount">{{ password.length }}/50</p>
+        </div>
       </div>
 
       <div class="labelInputGroup">
@@ -69,8 +82,13 @@
           name="passwordCheck"
           class="formInput"
           id="passwordCheck"
+          placeholder="請再次輸入密碼"
           required
         />
+        <div class="errorMessage" v-if="passwordCheck.length > 0">
+          <p class="errorText" v-if="passwordCheck.length > 50">字數超出上限!</p>
+          <p class="wordsCount">{{ passwordCheck.length }}/50</p>
+        </div>
       </div>
       <button type="submit" class="signUpBtn">註冊</button>
       <button @click.stop.prevent="clearForm" class="cancelBtn">取消</button>
@@ -106,11 +124,11 @@ export default {
         });
         return;
       }
-      if(this.name.length > 50) {
+      if (this.name.length > 50) {
         Toast.fire({
-          icon: 'warning',
-          title: '名稱超出字數'
-        })
+          icon: "warning",
+          title: "名稱超出字數",
+        });
       }
       console.log({
         account: this.account,
@@ -144,15 +162,15 @@ form {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 540px;
+  width: 356px;
 }
 
 .logo {
-  margin-bottom: 25px;
+  margin-bottom: 29px;
 }
 
 .title {
-  font-size: 23px;
+  font-size: 28px;
   font-weight: 700;
   color: #1c1c1c;
   margin-bottom: 40px;
@@ -161,7 +179,7 @@ form {
 .labelInputGroup {
   background-color: #f5f8fa;
   width: 100%;
-  height: 52px;
+  height: 54px;
   margin-bottom: 32px;
   display: flex;
   flex-direction: column;
@@ -169,9 +187,9 @@ form {
 }
 
 .formLabel {
-  font-size: 15px;
-  font-weight: 500;
-  color: #657786;
+  font-size: 14px;
+  font-weight: 400;
+  color: #696974;
   margin-top: 5px;
   margin-left: 10px;
 }
@@ -180,49 +198,60 @@ form {
   border: 0;
   background-color: #f5f8fa;
   width: 100%;
-  height: 30px;
-  padding: 0 10px;
-  line-height: 30;
-  font-size: 15px;
+  padding: 2px 10px;
+  line-height: 26px;
+  font-size: 16px;
   border-bottom: 2px solid #657786;
-  font-size: 19px;
-  font-weight: 500;
+  font-weight: 400;
+  position: absolute;
+  bottom: 0px;
 }
 
-.formInput:focus, .formInput:hover {
+.formInput::placeholder {
+  color: #b5b5be;
+}
+
+.formInput:focus,
+.formInput:hover {
   outline: 0;
   border-bottom: 2px solid #50b5ff;
 }
 
 .formInput.error {
-  border-bottom: 2px solid #FC5A5A;
+  border-bottom: 2px solid #fc5a5a;
 }
 
 .errorMessage {
   position: absolute;
   width: 100%;
   top: 100%;
-  display: flex;
-  justify-content: space-between;
-  font-size: 15px;
+  font-size: 12px;
   font-weight: 500;
+  line-height: 20px;
   color: #657786;
 }
 
 .errorText {
-  color: #FC5A5A;
+  color: #fc5a5a;
+  position: absolute;
+  left: 0px;
+}
+
+.wordsCount {
+  position: absolute;
+  right: 0px;
 }
 
 .signUpBtn {
-  margin-top: 10px;
-  margin-bottom: 20px;
+  margin-top: 8px;
+  margin-bottom: 22px;
   width: 100%;
   height: 46px;
   border: 0;
   border-radius: 50px;
   background-color: #ff6600;
-  font-size: 18px;
-  font-weight: 700;
+  font-size: 20px;
+  font-weight: 400;
   color: #ffffff;
 }
 
@@ -231,9 +260,9 @@ form {
 }
 
 .cancelBtn {
-  font-size: 18px;
-  font-weight: 700;
-  color: #0099ff;
+  font-size: 16px;
+  font-weight: 400;
+  color: #0062ff;
   text-decoration: underline;
   border: 0;
   background-color: #fff;

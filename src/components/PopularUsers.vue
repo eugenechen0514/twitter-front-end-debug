@@ -1,16 +1,16 @@
 <template>
   <div class="popularUsers">
-    <h1 class="popularUsersTitle">Popular</h1>
+    <h1 class="popularUsersTitle">跟隨誰</h1>
     <div class="popularUser" v-for="user in popularUsers" :key="user.user.id">
       <router-link to="">
-        <img :src="user.user.image" class="popularUsersImage" alt=""/>
+        <img :src="user.user.image" class="popularUsersImage" alt="" />
       </router-link>
       <div class="popularUsersNameGroup">
         <router-link to="" class="popularUsersName">{{
-          user.user.name
+          user | nameIsTooLong
         }}</router-link>
         <router-link to="" class="popularUsersAccount"
-          >@{{ user.user.account }}</router-link
+          >@{{ user | accountIsTooLong }}</router-link
         >
       </div>
       <button class="popularUsersFollowedBtn" v-if="user.isFollowed">
@@ -27,8 +27,8 @@ const dummyData = {
     {
       user: {
         id: 1,
-        name: "awwfuq",
-        account: "awwfuq",
+        name: "awwfuqqqqqq",
+        account: "awwfuqqqqqq",
         image:
           "https://img.ltn.com.tw/Upload/news/600/2016/04/17/phpFBRDIE.jpg",
       },
@@ -37,8 +37,8 @@ const dummyData = {
     {
       user: {
         id: 2,
-        name: "ohhfuck",
-        account: "ohhfuck",
+        name: "ohhfuckkkkkk",
+        account: "ohhfuckkkkkkkk",
         image: "https://cdn2.ettoday.net/images/1027/1027134.jpg",
       },
       isFollowed: false,
@@ -100,25 +100,6 @@ const dummyData = {
       },
       isFollowed: false,
     },
-    {
-      user: {
-        id: 9,
-        name: "awwfuq",
-        account: "awwfuq",
-        image:
-          "https://img.ltn.com.tw/Upload/news/600/2016/04/17/phpFBRDIE.jpg",
-      },
-      isFollowed: true,
-    },
-    {
-      user: {
-        id: 10,
-        name: "ohhfuck",
-        account: "ohhfuck",
-        image: "https://cdn2.ettoday.net/images/1027/1027134.jpg",
-      },
-      isFollowed: false,
-    },
   ],
 };
 
@@ -136,33 +117,61 @@ export default {
   created() {
     this.fetchData();
   },
+  filters: {
+    nameIsTooLong(User) {
+      if (User.isFollowed) {
+        if (User.user.name.length > 7) {
+          return User.user.name.substr(0, 6) + "...";
+        }
+      }
+      if (!User.isFollowed) {
+        if (User.user.name.length > 10) {
+          return User.user.name.substr(0, 9) + "...";
+        }
+      }
+      return User.user.name
+    },
+    accountIsTooLong(User) {
+      if (User.isFollowed) {
+        if (User.user.account.length > 7) {
+          return User.user.account.substr(0, 6) + "...";
+        }
+      }
+      if (!User.isFollowed) {
+        if (User.user.account.length > 10) {
+          return User.user.account.substr(0, 9) + "...";
+        }
+      }
+      return User.user.account;
+    },
+  },
 };
 </script>
 
 <style scoped>
 .popularUsers {
-  width: 350px;
-  height: 765px;
-  border-radius: 14px;
+  width: 273px;
+  height: 731px;
+  border-radius: 16px;
   background-color: #f5f8fa;
   z-index: 50;
 }
 
 .popularUsersTitle {
   width: 100%;
-  height: 45px;
-  padding: 15px;
-  font-size: 18px;
+  height: 74px;
+  padding: 24px;
+  font-size: 24px;
   font-weight: 700;
+  border-bottom: 1px solid #e6ecf0;
 }
 .popularUser {
   width: 100%;
-  height: 71px;
-  border-top: 1px solid #E6ECF0;
+  height: 82px;
   display: flex;
   align-items: center;
-  padding: 10px 15px;
-  position: relative
+  padding: 16px;
+  position: relative;
 }
 
 .popularUsersImage {
@@ -174,50 +183,53 @@ export default {
 .popularUsersNameGroup {
   display: flex;
   flex-direction: column;
-  font-size: 15px;
-  font-weight: 700;
-  margin-left: 10px;
+  margin-left: 8px;
 }
 
 .popularUsersName {
-  color: #1c1c1c;
+  font-size: 16px;
+  font-weight: 700;
+  color: #171725;
   text-decoration: none;
 }
 
 .popularUsersAccount {
-  color: #657786;
+  font-size: 14px;
+  font-weight: 500;
+  color: #92929d;
   text-decoration: none;
 }
 
 .popularUsersFollowedBtn {
-  width: 90px;
-  height: 35px;
-  border-radius: 100px;
+  width: 96px;
+  height: 40px;
+  border-radius: 50px;
   border: 0;
   background-color: #ff6600;
   color: #fff;
-  font-size: 15px;
-  font-weight: 700;
+  font-size: 16px;
+  font-weight: 400;
 }
 
 .popularUsersFollowBtn {
-  width: 60px;
-  height: 35px;
-  border-radius: 100px;
-  border: 1px solid #FF6600;
-  background-color: #F5F8FA;
-  color: #FF6600;
-  font-size: 15px;
-  font-weight: 700;
+  width: 64px;
+  height: 40px;
+  border-radius: 50px;
+  border: 1px solid #ff6600;
+  background-color: #f5f8fa;
+  color: #ff6600;
+  font-size: 16px;
+  font-weight: 400;
 }
 
-.popularUsersFollowedBtn, .popularUsersFollowBtn {
+.popularUsersFollowedBtn,
+.popularUsersFollowBtn {
   position: absolute;
   right: 15px;
 }
 
-.popularUsersFollowedBtn:hover, .popularUsersFollowBtn:hover {
+.popularUsersFollowedBtn:hover,
+.popularUsersFollowBtn:hover {
   cursor: pointer;
-} 
-
+}
 </style>
