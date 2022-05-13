@@ -1,48 +1,27 @@
 <template>
   <div class="Tweet">
-    <Navbar />
-    <div class="TweetContainer">
-      <div class="tweetContent">
-        <div>
-          <img :src="user.image" width="50px" height="50px" alt="" />
-          <router-link to="">{{user.name}}</router-link>
-          <router-link to="">@{{user.account}}</router-link>
+    <Navbar id="Navbar" />
+    <div class="tweetSection">
+      <div class="tweetSectionContent">
+        <div class="tweetTitle">
+          <router-link to="">
+            <img src="../assets/prev-icon.png" alt="" />
+            <p>推文</p>
+          </router-link>
         </div>
-        <div>
-          <p>{{tweet.text}}</p>
-        </div>
-        <div>
-          <p>{{tweet.createAt}}</p>
-        </div>
-      </div>
-      <div class="commentsLikesCount">
-        <p style="display: inline">commentsCount: {{tweet.commentsCount}}</p>
-        <p style="display: inline">LikesCount: {{tweet.likesCount}}</p>
-      </div>
-      <div class="commentsLikesBtn">
-        <button>commentModal</button>
-        <button>Like</button>
-      </div>
-      <div class="comments">
-        <div v-for="comment in tweet.comments" :key="comment.comment.id" class="comment">
-          <img :src="comment.user.image" width="50px" height="50px" alt="" />
-          <div>
-            <router-link to="">{{comment.user.name}}</router-link>
-            <router-link to="">@{{comment.user.account}}</router-link>
-            <p style="display: inline">。{{comment.comment.createAt}}</p>
-            <p>回覆@{{user.account}}</p>
-            <p>{{comment.comment.text}}</p>
-          </div>
-        </div>
+        <TweetDetail id="TweetDetail" />
+        <Comments id="TweetComments" />
       </div>
     </div>
-    <PopularUsers />
+    <PopularUsers id="PopularUsers" />
   </div>
 </template>
 
 <script>
 import Navbar from "../components/Navbar.vue";
 import PopularUsers from "../components/PopularUsers.vue";
+import TweetDetail from "../components/TweetDetail.vue";
+import Comments from "../components/Comments.vue";
 
 const dummyData = {
   tweet: {
@@ -88,62 +67,78 @@ export default {
   components: {
     Navbar,
     PopularUsers,
+    TweetDetail,
+    Comments,
   },
   data() {
     return {
       tweet: {},
       user: {},
-      currentUser: dummyUser.currentUser
-    }
+      currentUser: dummyUser.currentUser,
+    };
   },
   methods: {
     fetchData() {
-      this.tweet = dummyData.tweet
-      this.user = dummyData.user
-    }
+      this.tweet = dummyData.tweet;
+      this.user = dummyData.user;
+    },
   },
   created() {
-    this.fetchData()
-  }
+    this.fetchData();
+  },
 };
 </script>
 
 <style scoped>
 .Tweet {
+  width: 100%;
+  display: grid;
+}
+
+#Navbar {
+  justify-self: start;
+  position: fixed;
+  margin-left: 130px;
+  /* width: 178px; */
+}
+
+#PopularUsers {
+  position: fixed;
+  justify-self: end;
+  margin-right: 130px;
+  margin-top: 16px;
+  /* width: 273px; */
+}
+
+.tweetSection {
+  width: 640px;
+  margin-left: 332px;
+}
+
+.tweetSectionContent {
+  border-left: 1px solid #e6ecf0;
+  border-right: 1px solid #e6ecf0;
+}
+
+.tweetTitle {
+  width: 100%;
+  height: 74px;
+  border-bottom: 1px solid #e6ecf0;
+  padding: 24px 23px;
+}
+
+.tweetTitle a {
   display: flex;
-  justify-content: center;
-  gap: 10px;
+  text-decoration: none;
 }
 
-.TweetContainer {
-  width: 600px;
-  border: 1px solid black;
+.tweetTitle p {
+  margin-left: 16px;
+  font-size: 24px;
+  font-weight: 700;
+  color: #1c1c1c;
 }
 
-.tweetContent {
-  border: 1px solid black;
-}
-
-.commentsLikesCount {
-  border: 1px solid black;
-  display: flex;
-  justify-content: space-evenly;
-}
-
-.commentsLikesBtn {
-  border: 1px solid black;
-  display: flex;
-  justify-content: space-evenly;
-}
-
-.comments {
-  border: 1px solid black;
-  padding: 15px;
-}
-
-.comment {
-  border: 1px solid black;
-  display: flex;
-  min-height: 91px;
+.TweetDetail {
 }
 </style>
