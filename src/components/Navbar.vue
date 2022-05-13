@@ -25,7 +25,7 @@
         src="../assets/selfInfo-active.png"
         v-if="
           ($route.path === '/user/self/tweets') |
-            ($route.path === '/user/self/tweetsandcomments') |
+            ($route.path === '/user/self/comments') |
             ($route.path === '/user/self/likes')
         "
         alt=""
@@ -37,7 +37,7 @@
         alt=""
       />
       <router-link class="navLinkText"
-      :class="{active: $route.path==='/user/self/tweetsandcomments' || $route.path==='/user/self/likes'}"
+      :class="{active: $route.path==='/user/self/comments' || $route.path==='/user/self/likes'}"
       to="/user/self/tweets">
         個人資料
       </router-link>

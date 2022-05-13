@@ -13,9 +13,7 @@
       </div>
       <UserSelfCard />
       <UserTabs />
-      <div>
-        <h1>Tweets</h1>
-      </div>
+      <Comments />
     </div>
     <PopularUsers id="PopularUsers" />
   </div>
@@ -26,6 +24,7 @@ import Navbar from "../components/Navbar.vue";
 import PopularUsers from "../components/PopularUsers.vue";
 import UserTabs from "../components/UserTabs.vue";
 import UserSelfCard from "../components/UserSelfCard.vue";
+import Comments from "../components/Comments.vue"
 
 export default {
   components: {
@@ -33,6 +32,7 @@ export default {
     PopularUsers,
     UserTabs,
     UserSelfCard,
+    Comments
   },
 };
 </script>

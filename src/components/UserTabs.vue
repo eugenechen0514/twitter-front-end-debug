@@ -5,8 +5,8 @@
         <router-link class="tweet" to="/user/self/tweets">推文</router-link>
       </li>
       <li>
-        <router-link class="tweetAndResponse" to="/user/self/tweetsandcomments"
-          >推文與回覆</router-link
+        <router-link class="response" to="/user/self/comments"
+          >回覆</router-link
         >
       </li>
       <li>
@@ -24,11 +24,23 @@
 }
 
 li {
-  padding: 0px 50px 15px;
+  padding-bottom: 15px;
+}
+
+.tweet {
+  padding-left: 50px;
+}
+
+.response {
+  padding-left: 99px;
+}
+
+.likedContent {
+  padding-left: 78px;
 }
 
 .tweet,
-.tweetAndResponse,
+.response,
 .likedContent {
   text-decoration: none;
   font-weight: 700;
@@ -38,15 +50,34 @@ li {
 }
 
 .tweet.active,
-.tweetAndResponse.active,
+.response.active,
 .likedContent.active {
-  color: #FF6600;
-  border-bottom: 1px solid #FF6600;
+  color: #ff6600;
+  position: relative;
 }
 
-.tweet.active,
-.tweetAndResponse.active,
-.likedContent.active {
-  color: #FF6600;
+.tweet.active::after,
+.response.active::after,
+.likedContent.active::after {
+  content: "";
+  position: absolute;
+  bottom: -15px;
+  left: 0px;
+  height: 2px;
+  width: 130px;
+  background-color: #ff6600;
+  border-radius: 100px;
+}
+
+.response.active::after {
+  left: 50px;
+}
+
+.likedContent.active::after {
+  left: 51px;
+}
+
+.tabs {
+  border-bottom: 1px solid #e6ecf0;
 }
 </style>

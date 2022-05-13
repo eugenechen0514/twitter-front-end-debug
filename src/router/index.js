@@ -27,9 +27,9 @@ const routes = [
     component: () => import('../views/UserSelfTweets.vue')
   },
   {
-    path: '/user/self/tweetsandcomments',
-    name: 'user-self-tweets-and-comments',
-    component: () => import('../views/UserSelfTweetsAndComments.vue')
+    path: '/user/self/comments',
+    name: 'user-self-comments',
+    component: () => import('../views/UserSelfComments.vue')
   },
   {
     path: '/user/self/likes',
