@@ -37,6 +37,21 @@ const routes = [
     component: () => import('../views/UserSelfLikes.vue')
   },
   {
+    path: '/user/:id/tweets',
+    name: 'user-tweets',
+    component: () => import('../views/UserOtherTweets.vue')
+  },
+  {
+    path: '/user/:id/comments',
+    name: 'user-comments',
+    component: () => import('../views/UserOtherComments.vue')
+  },
+  {
+    path: '/user/:id/likes',
+    name: 'user-likes',
+    component: () => import('../views/UserOtherLikes.vue')
+  },
+  {
     path: '/user/:id/followings',
     name: 'user-followings',
     component: () => import('../views/UserFollowings.vue')

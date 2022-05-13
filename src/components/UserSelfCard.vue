@@ -9,21 +9,21 @@
     />
     <img
       class="userImage"
-      src="https://img.ltn.com.tw/Upload/news/600/2016/04/17/phpFBRDIE.jpg"
+      :src="currentUser.image"
       width="140px"
       height="140px"
       alt=""
     />
     <button class="userEdit">編輯個人資料</button>
     <div class="userInformation">
-      <p class="userName">userName</p>
-      <p class="userAccount">@userAccount</p>
+      <p class="userName">{{currentUser.name}}</p>
+      <p class="userAccount">@{{currentUser.account}}</p>
       <p class="userDescription">Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint.</p>
-      <router-link class="userFollowersCount" to="/user/1/followers"
+      <router-link class="userFollowersCount" to="/user/1/followings"
         >34個<span>跟隨中</span></router-link
       >
       //
-      <router-link class="userFollowingsCount" to="/user/1/followings"
+      <router-link class="userFollowingsCount" to="/user/1/followers"
         >59個<span>跟隨者</span></router-link
       >
     </div>

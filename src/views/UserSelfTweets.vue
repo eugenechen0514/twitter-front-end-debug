@@ -177,21 +177,21 @@ export default {
 #Navbar {
   justify-self: start;
   position: fixed;
-  margin-left: 113px;
+  margin-left: 130px;
   /* width: 210px; */
 }
 
 #PopularUsers {
   position: fixed;
   justify-self: end;
-  margin-right: 82px;
-  margin-top: 15px;
+  margin-right: 130px;
+  margin-top: 16px;
   /* width: 350px; */
 }
 
 .UserSelfMain {
-  width: 600px;
-  margin-left: 378px;
+  width: 640px;
+  margin-left: 332px;
   border-left: 1px solid #e6ecf0;
   border-right: 1px solid #e6ecf0;
   /* display: flex;
@@ -204,7 +204,7 @@ export default {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  margin-left: 28px;
+  padding-left: 28px;
   height: 74px;
   border-bottom: 1px solid #e6ecf0;
 }
