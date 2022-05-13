@@ -1,33 +1,33 @@
 <template>
-  <div class="mainTweets">
-    <div class="mainTweet" v-for="tweet in currentTweets" :key="tweet.tweet.id">
-      <img class="mainTweetUserImage" :src="tweet.user.image" alt="" />
-      <div class="mainTweetContent">
-        <div class="mainTweetUserNameGroup">
-          <router-link class="mainTweetUserName" to="">{{
+  <div class="AllTweets">
+    <div class="singleTweet" v-for="tweet in currentTweets" :key="tweet.tweet.id">
+      <img class="singleTweetUserImage" :src="tweet.user.image" alt="" />
+      <div class="singleTweetContent">
+        <div class="singleTweetUserNameGroup">
+          <router-link class="singleTweetUserName" to="">{{
             tweet.user.name
           }}</router-link>
-          <router-link class="mainTweetUserAccount" to=""
+          <router-link class="singleTweetUserAccount" to=""
             >@{{ tweet.user.account }}</router-link
           >
-          <p class="mainTweetCreatedAt">・{{ tweet.tweet.createAt }}</p>
+          <p class="singleTweetCreatedAt">・{{ tweet.tweet.createAt }}</p>
         </div>
-        <p class="mainTweetText">
+        <p class="singleTweetText">
           <router-link
             :to="{ name: 'tweet', params: { id: tweet.tweet.id } }"
             >{{ tweet.tweet.text }}</router-link
           >
         </p>
-        <div class="mainTweetBtnGroup">
+        <div class="singleTweetBtnGroup">
           <button
-            class="mainTweetBtn"
+            class="singleTweetBtn"
             @click.stop.prevent="openReplyTweetModal"
           >
             <img src="../assets/comment-icon.png" alt="" />
             <p>{{ tweet.tweet.commentsCount }}</p>
           </button>
 
-          <button class="mainTweetBtn">
+          <button class="singleTweetBtn">
             <img
               src="../assets/like-icon-active.png"
               v-if="tweet.tweet.isLiked"
@@ -131,11 +131,10 @@ export default {
 </script>
 
 <style scoped>
-.mainTweets {
+.AllTweets {
   width: 100%;
-  border-top: 10px solid #e6ecf0;
 }
-.mainTweet {
+.singleTweet {
   border-bottom: 1px solid #e6ecf0;
   height: 168px;
   display: flex;
@@ -143,24 +142,24 @@ export default {
   position: relative;
 }
 
-.mainTweetUserImage {
+.singleTweetUserImage {
   width: 50px;
   height: 50px;
   border-radius: 50%;
   margin-right: 10px;
 }
 
-.mainTweetContent {
+.singleTweetContent {
   width: 510px;
 }
 
-.mainTweetUserNameGroup {
+.singleTweetUserNameGroup {
   height: 26px;
   line-height: 26px;
   display: flex;
 }
 
-.mainTweetUserName {
+.singleTweetUserName {
   font-size: 16px;
   font-weight: 700;
   color:  #171725;
@@ -168,26 +167,26 @@ export default {
   text-decoration: none;
 }
 
-.mainTweetUserAccount {
+.singleTweetUserAccount {
   font-size: 14px;
   font-weight: 400;
   color:  #6C757D;
   text-decoration: none;
 }
 
-.mainTweetCreatedAt {
+.singleTweetCreatedAt {
   font-size: 14px;
   font-weight: 400;
   color:  #6C757D;
 }
 
-.mainTweetText {
+.singleTweetText {
   width: 100%;
   height: 78px;
   margin-top: 8px;
 }
 
-.mainTweetText a {
+.singleTweetText a {
   text-decoration: none;
   font-size: 16px;
   font-weight: 400;
@@ -195,7 +194,7 @@ export default {
   line-height: 26px;
 }
 
-.mainTweetBtnGroup {
+.singleTweetBtnGroup {
   height: 16px;
   display: flex;
   margin-top: 14px;
@@ -203,7 +202,7 @@ export default {
   bottom: 16px;
 }
 
-.mainTweetBtn {
+.singleTweetBtn {
   padding: 0;
   width: 40px;
   border: 0;
@@ -217,10 +216,10 @@ export default {
   color: #657786;
 }
 
-.mainTweetBtn .active {
+.singleTweetBtn .active {
   color: #e0245e;
 }
-.mainTweetBtn:hover {
+.singleTweetBtn:hover {
   cursor: pointer;
 }
 

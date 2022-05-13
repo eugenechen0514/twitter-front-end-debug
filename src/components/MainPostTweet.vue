@@ -1,5 +1,5 @@
 <template>
-  <div class="mainPostTweet">
+  <div class="MainPostTweet">
     <img
       class="mainPostTweetUserImage"
       :src="currentUser.image"
@@ -54,12 +54,13 @@ export default {
 </script>
 
 <style scoped>
-.mainPostTweet {
+.MainPostTweet {
   width: 100%;
-  height: 136px;
+  height: 146px;
   padding: 16px 26px;
   position: relative;
   display: flex;
+  border-bottom: 10px solid #e6ecf0;
 }
 
 .mainPostTweetUserImage {

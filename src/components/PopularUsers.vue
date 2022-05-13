@@ -1,5 +1,5 @@
 <template>
-  <div class="popularUsers">
+  <div class="PopularUsers">
     <h1 class="popularUsersTitle">跟隨誰</h1>
     <div class="popularUser" v-for="user in popularUsers" :key="user.user.id">
       <router-link to="">
@@ -149,7 +149,7 @@ export default {
 </script>
 
 <style scoped>
-.popularUsers {
+.PopularUsers {
   width: 273px;
   height: 731px;
   border-radius: 16px;

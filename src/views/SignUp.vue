@@ -91,7 +91,7 @@
         </div>
       </div>
       <button type="submit" class="signUpBtn">註冊</button>
-      <button @click.stop.prevent="clearForm" class="cancelBtn">取消</button>
+      <button @click.stop.prevent="cancelSubmit" class="cancelBtn">取消</button>
     </form>
   </div>
 </template>
@@ -139,12 +139,8 @@ export default {
       });
       this.$router.push({ name: "sign-in" });
     },
-    clearForm() {
-      this.account = "";
-      this.name = "";
-      this.email = "";
-      this.password = "";
-      this.passwordCheck = "";
+    cancelSubmit() {
+      this.$router.push('/signin')
     },
   },
 };

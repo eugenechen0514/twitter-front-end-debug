@@ -1,5 +1,5 @@
 <template>
-  <div class="main">
+  <div class="Main">
     <Navbar id="Navbar" />
     <div class="mainSection">
       <div class="mainSectionContent">
@@ -7,7 +7,7 @@
           <h1>首頁</h1>
         </div>
         <MainPostTweet :currentUser="currentUser" />
-        <MainTweets :currentTweets="currentTweets" />
+        <AllTweets :currentTweets="currentTweets" />
       </div>
     </div>
     <PopularUsers id="PopularUsers" />
@@ -17,7 +17,7 @@
 <script>
 import Navbar from "../components/Navbar.vue";
 import MainPostTweet from "../components/MainPostTweet.vue";
-import MainTweets from "../components/MainTweets.vue";
+import AllTweets from "../components/AllTweets.vue";
 import PopularUsers from "../components/PopularUsers.vue";
 
 const dummyData = {
@@ -138,7 +138,7 @@ export default {
   components: {
     Navbar,
     MainPostTweet,
-    MainTweets,
+    AllTweets,
     PopularUsers,
   },
   data() {
@@ -159,7 +159,7 @@ export default {
 </script>
 
 <style scoped>
-.main {
+.Main {
   width: 100%;
   display: grid;
 }

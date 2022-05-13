@@ -1,6 +1,5 @@
 <template>
   <div class="Tweet">
-    <h1>Tweet</h1>
     <Navbar />
     <div class="TweetContainer">
       <div class="tweetContent">
