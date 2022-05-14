@@ -121,9 +121,10 @@ export default {
 
 .settingTitle {
   width: 100%;
-  border-bottom: 1px solid #e6ecf0;
-  padding: 13px 20px;
-  font-size: 19px;
+  height: 74px;
+  border-bottom: 1px solid #E6ECF0;
+  padding: 24px 23px;
+  font-size: 24px;
   font-weight: 700;
   color: #1c1c1c;
 }

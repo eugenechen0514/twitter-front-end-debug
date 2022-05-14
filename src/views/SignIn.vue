@@ -16,7 +16,7 @@
           type="text"
           name="account"
           class="formInput"
-          :class="{ error: !isFirstTry && !account || account.length>50 }"
+          :class="{ error: (!isFirstTry && !account) || account.length > 50 }"
           id="account"
           placeholder="請輸入帳號"
           required
@@ -33,6 +33,7 @@
           type="password"
           name="password"
           class="formInput"
+          :class="{ error: (!isFirstTry && !password) || password.length > 50 }"
           id="password"
           placeholder="請輸入密碼"
           required
@@ -154,7 +155,6 @@ form {
   border-bottom: 2px solid #fc5a5a;
 }
 
-
 .errorMessage {
   position: absolute;
   width: 100%;
@@ -202,6 +202,6 @@ form {
 }
 
 .link {
-  color: #0062FF;
+  color: #0062ff;
 }
 </style>
