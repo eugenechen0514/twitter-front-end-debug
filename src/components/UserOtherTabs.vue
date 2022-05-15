@@ -2,15 +2,19 @@
   <div>
     <ul class="tabs">
       <li>
-        <router-link class="tweet" to="/user/self/tweets">推文</router-link>
+        <router-link
+          class="tweet"
+          :to="{ name: 'user-tweets', query: 2}"
+          >推文</router-link
+        >
       </li>
       <li>
-        <router-link class="response" to="/user/self/comments"
+        <router-link class="response" :to="{ name: 'user-comments', query: 2 }"
           >回覆</router-link
         >
       </li>
       <li>
-        <router-link class="likedContent" to="/user/self/likes"
+        <router-link class="likedContent" :to="{ name: 'user-likes', query: 2 }"
           >喜歡的內容</router-link
         >
       </li>
@@ -48,7 +52,6 @@ li {
   line-height: 22px;
   color: #657786;
 }
-
 
 .tweet.active,
 .response.active,
