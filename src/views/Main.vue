@@ -19,6 +19,7 @@ import Navbar from "../components/Navbar.vue";
 import MainPostTweet from "../components/MainPostTweet.vue";
 import AllTweets from "../components/AllTweets.vue";
 import PopularUsers from "../components/PopularUsers.vue";
+import {mapState} from 'vuex'
 
 const dummyData = {
   currentTweets: [
@@ -125,14 +126,6 @@ const dummyData = {
   ],
 };
 
-const dummyUser = {
-  currentUser: {
-    id: 1,
-    name: "awwfuq",
-    account: "awwfuq",
-    image: "https://img.ltn.com.tw/Upload/news/600/2016/04/17/phpFBRDIE.jpg",
-  },
-};
 
 export default {
   components: {
@@ -144,8 +137,10 @@ export default {
   data() {
     return {
       currentTweets: [],
-      currentUser: dummyUser.currentUser,
     };
+  },
+  computed: {
+    ...mapState(['currentUser'])
   },
   methods: {
     fetchData() {

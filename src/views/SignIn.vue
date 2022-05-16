@@ -54,6 +54,7 @@
 </template>
 
 <script>
+import authorizationAPI from "../apis/authorization.js";
 import { Toast } from "../utility/helpers";
 
 export default {
@@ -66,19 +67,40 @@ export default {
     };
   },
   methods: {
-    handleSubmit() {
-      if (!this.account | !this.password) {
+    async handleSubmit() {
+      try {
+        if (!this.account | !this.password) {
+          Toast.fire({
+            icon: "warning",
+            title: "請輸入帳號密碼",
+          });
+          return;
+        }
+
+        const {data} = await authorizationAPI.signIn({account:this.account, password: this.password})
+
+        if(data.status !== 'success') {
+          throw new Error(data.message)
+        }
+
+        console.log(data)
+
+        localStorage.setItem('token', data.token)
+
+        this.$store.commit('setCurrentUser', data.user)
+
         Toast.fire({
-          icon: "warning",
-          title: "請輸入帳號密碼",
-        });
-        return;
+          icon: 'success',
+          title: '成功登入，即將跳轉'
+        })
+
+        this.$router.push({ name: "main" });
+      } catch (error) {
+        Toast.fire({
+          icon: 'error',
+          title: '無法登入，請稍後再試'
+        })
       }
-      console.log({
-        account: this.account,
-        password: this.password,
-      });
-      this.$router.push({ name: "main" });
     },
   },
 };
