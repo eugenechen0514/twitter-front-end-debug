@@ -327,7 +327,8 @@ span {
   z-index: 10;
 }
 
-.backgroundCamera:hover,.backgroundX:hover {
+.backgroundCamera:hover,
+.backgroundX:hover {
   cursor: pointer;
 }
 

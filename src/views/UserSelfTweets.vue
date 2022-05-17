@@ -26,110 +26,112 @@ import UserTabs from "../components/UserTabs.vue";
 import UserSelfCard from "../components/UserSelfCard.vue";
 import AllTweets from "../components/AllTweets.vue";
 
-const dummyData = {
-  currentTweets: [
-    //顯示 isFollowed: true 的user推文  //排序從新到舊
-    {
-      tweet: {
-        id: 1,
-        text: "hello",
-        createAt: "2022/5/9 12:00",
-        commentsCount: 1,
-        likesCount: 1,
-        isLiked: true,
-      },
-      user: {
-        id: 1,
-        name: "awwfuq",
-        account: "awwfuq",
-        image:
-          "https://img.ltn.com.tw/Upload/news/600/2016/04/17/phpFBRDIE.jpg",
-      },
-    },
-    {
-      tweet: {
-        id: 2,
-        text: "hello world",
-        createAt: "2022/5/9 12:00",
-        commentsCount: 1,
-        likesCount: 1,
-        isLiked: false,
-      },
-      user: {
-        id: 2,
-        name: "ohhfuck",
-        account: "ohhfuck",
-        image: "https://cdn2.ettoday.net/images/1027/1027134.jpg",
-      },
-    },
-    {
-      tweet: {
-        id: 3,
-        text: "hello",
-        createAt: "2022/5/9 12:00",
-        commentsCount: 1,
-        likesCount: 1,
-        isLiked: true,
-      },
-      user: {
-        id: 1,
-        name: "awwfuq",
-        account: "awwfuq",
-        image:
-          "https://img.ltn.com.tw/Upload/news/600/2016/04/17/phpFBRDIE.jpg",
-      },
-    },
-    {
-      tweet: {
-        id: 4,
-        text: "hello world",
-        createAt: "2022/5/9 12:00",
-        commentsCount: 1,
-        likesCount: 1,
-        isLiked: false,
-      },
-      user: {
-        id: 2,
-        name: "ohhfuck",
-        account: "ohhfuck",
-        image: "https://cdn2.ettoday.net/images/1027/1027134.jpg",
-      },
-    },
-    {
-      tweet: {
-        id: 5,
-        text: "hello",
-        createAt: "2022/5/9 12:00",
-        commentsCount: 1,
-        likesCount: 1,
-        isLiked: true,
-      },
-      user: {
-        id: 1,
-        name: "awwfuq",
-        account: "awwfuq",
-        image:
-          "https://img.ltn.com.tw/Upload/news/600/2016/04/17/phpFBRDIE.jpg",
-      },
-    },
-    {
-      tweet: {
-        id: 6,
-        text: "hello world",
-        createAt: "2022/5/9 12:00",
-        commentsCount: 1,
-        likesCount: 1,
-        isLiked: false,
-      },
-      user: {
-        id: 2,
-        name: "ohhfuck",
-        account: "ohhfuck",
-        image: "https://cdn2.ettoday.net/images/1027/1027134.jpg",
-      },
-    },
-  ],
-};
+import usersAPI from "./../apis/users";
+
+// const dummyData = {
+//   currentTweets: [
+//     //顯示 isFollowed: true 的user推文  //排序從新到舊
+//     {
+//       tweet: {
+//         id: 1,
+//         text: "hello",
+//         createAt: "2022/5/9 12:00",
+//         commentsCount: 1,
+//         likesCount: 1,
+//         isLiked: true,
+//       },
+//       user: {
+//         id: 1,
+//         name: "awwfuq",
+//         account: "awwfuq",
+//         image:
+//           "https://img.ltn.com.tw/Upload/news/600/2016/04/17/phpFBRDIE.jpg",
+//       },
+//     },
+//     {
+//       tweet: {
+//         id: 2,
+//         text: "hello world",
+//         createAt: "2022/5/9 12:00",
+//         commentsCount: 1,
+//         likesCount: 1,
+//         isLiked: false,
+//       },
+//       user: {
+//         id: 2,
+//         name: "ohhfuck",
+//         account: "ohhfuck",
+//         image: "https://cdn2.ettoday.net/images/1027/1027134.jpg",
+//       },
+//     },
+//     {
+//       tweet: {
+//         id: 3,
+//         text: "hello",
+//         createAt: "2022/5/9 12:00",
+//         commentsCount: 1,
+//         likesCount: 1,
+//         isLiked: true,
+//       },
+//       user: {
+//         id: 1,
+//         name: "awwfuq",
+//         account: "awwfuq",
+//         image:
+//           "https://img.ltn.com.tw/Upload/news/600/2016/04/17/phpFBRDIE.jpg",
+//       },
+//     },
+//     {
+//       tweet: {
+//         id: 4,
+//         text: "hello world",
+//         createAt: "2022/5/9 12:00",
+//         commentsCount: 1,
+//         likesCount: 1,
+//         isLiked: false,
+//       },
+//       user: {
+//         id: 2,
+//         name: "ohhfuck",
+//         account: "ohhfuck",
+//         image: "https://cdn2.ettoday.net/images/1027/1027134.jpg",
+//       },
+//     },
+//     {
+//       tweet: {
+//         id: 5,
+//         text: "hello",
+//         createAt: "2022/5/9 12:00",
+//         commentsCount: 1,
+//         likesCount: 1,
+//         isLiked: true,
+//       },
+//       user: {
+//         id: 1,
+//         name: "awwfuq",
+//         account: "awwfuq",
+//         image:
+//           "https://img.ltn.com.tw/Upload/news/600/2016/04/17/phpFBRDIE.jpg",
+//       },
+//     },
+//     {
+//       tweet: {
+//         id: 6,
+//         text: "hello world",
+//         createAt: "2022/5/9 12:00",
+//         commentsCount: 1,
+//         likesCount: 1,
+//         isLiked: false,
+//       },
+//       user: {
+//         id: 2,
+//         name: "ohhfuck",
+//         account: "ohhfuck",
+//         image: "https://cdn2.ettoday.net/images/1027/1027134.jpg",
+//       },
+//     },
+//   ],
+// };
 
 const dummyUser = {
   currentUser: {
@@ -157,13 +159,20 @@ export default {
   },
 
   methods: {
-    fetchData() {
-      this.currentTweets = dummyData.currentTweets;
+    async fetchData(id) {
+      try {
+        const response = await usersAPI.getUserTweets({
+          id,
+        });
+        console.log('response', response)
+      } catch (error) {
+        console.log("error", error);
+      }
     },
   },
 
   created() {
-    this.fetchData();
+    this.fetchData(14);
   },
 };
 </script>
