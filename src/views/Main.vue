@@ -140,7 +140,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(['currentUser'])
+    ...mapState(['currentUser','token'])
   },
   methods: {
     fetchData() {
