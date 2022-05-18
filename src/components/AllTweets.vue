@@ -1,8 +1,8 @@
 <template>
   <div class="AllTweets">
     <div class="singleTweet" v-for="tweet in currentTweets" :key="tweet.id">
-      <router-link :to="{name: 'user-tweets', params: {id: tweet.UserId}}">
-      <img class="singleTweetUserImage" :src="tweet.userAvatar" alt="" />
+      <router-link :to="{ name: 'user-tweets', params: { id: tweet.UserId } }">
+        <img class="singleTweetUserImage" :src="tweet.userAvatar" alt="" />
       </router-link>
       <div class="singleTweetContent">
         <div class="singleTweetUserNameGroup">
@@ -23,14 +23,30 @@
           <button
             class="singleTweetBtn"
             @click.stop.prevent="openReplyTweetModal(tweet.id)"
+            :disabled="isProcessing"
           >
             <img src="../assets/comment-icon.png" alt="" />
             <p>{{ tweet.Replies }}</p>
           </button>
 
-          <button class="singleTweetBtn">
-            <img v-if="tweet.isLiked" src="../assets/like-icon-active.png" alt="" />
-            <img v-else src="../assets/like-icon.png" alt="" />
+          <button
+            @click.stop.prevent="deleteLike(tweet.id)"
+            :disabled="isProcessing"
+            v-if="tweet.isLiked"
+            class="singleTweetBtn"
+          >
+            <img src="../assets/like-icon-active.png" alt="" />
+            <p>
+              {{ tweet.Likes }}
+            </p>
+          </button>
+          <button
+            @click.stop.prevent="addLike(tweet.id)"
+            :disabled="isProcessing"
+            v-else
+            class="singleTweetBtn"
+          >
+            <img src="../assets/like-icon.png" alt="" />
             <p>
               {{ tweet.Likes }}
             </p>
@@ -52,16 +68,26 @@
           <div class="replyTweet">
             <img
               class="replyTweetUserImage"
-              src="https://img.ltn.com.tw/Upload/news/600/2016/04/17/phpFBRDIE.jpg"
+              :src="replyTweetModalTweetInfo.User.avatar"
               alt=""
             />
             <div class="replyTweetContent">
               <div class="replyTweetUserNameGroup">
-                <router-link class="replyTweetUserName" to=""
-                  >awwfuq</router-link
+                <router-link
+                  class="replyTweetUserName"
+                  :to="{
+                    name: 'user-tweets',
+                    params: { id: replyTweetModalTweetInfo.User.id },
+                  }"
+                  >{{ replyTweetModalTweetInfo.User.name }}</router-link
                 >
-                <router-link class="replyTweetUserAccount" to=""
-                  >@awwfuq</router-link
+                <router-link
+                  class="replyTweetUserAccount"
+                  :to="{
+                    name: 'user-tweets',
+                    params: { id: replyTweetModalTweetInfo.User.id },
+                  }"
+                  >@{{ replyTweetModalTweetInfo.User.account }}</router-link
                 >
                 <p class="replyTweetCreatedAt">
                   ・{{ replyTweetModalTweetInfo.createdAt }}
@@ -70,7 +96,9 @@
               <p class="replyTweetText">
                 {{ replyTweetModalTweetInfo.description }}
               </p>
-              <p class="replyTweetFor">回覆給 <span>@awwfuq</span></p>
+              <p class="replyTweetFor">
+                回覆給 <span>@{{ replyTweetModalTweetInfo.User.account }}</span>
+              </p>
             </div>
           </div>
           <div class="currentUserReply">
@@ -115,22 +143,48 @@ export default {
   data() {
     return {
       replyTweetModalIsOpen: false,
-      replyTweetModalTweetInfo: {},
+      replyTweetModalTweetInfo: {
+        id: -1,
+        UserId: -1,
+        description: "",
+        createdAt: "",
+        updatedAt: "",
+        Likes: -1,
+        Replies: -1,
+        User: {
+          id: -1,
+          email: "",
+          password: "",
+          name: "",
+          role: "",
+          account: "",
+          cover: "",
+          avatar: "",
+          introduction: "",
+          createdAt: "",
+          updatedAt: "",
+        },
+        isLiked: false,
+      },
       replyText: "",
+      isProcessing: false,
     };
   },
   computed: {
-    ...mapState(['currentUser'])
+    ...mapState(["currentUser"]),
   },
   methods: {
     async openReplyTweetModal(id) {
       try {
+        this.isProcessing = true;
         const { data } = await tweetsAPI.getTweet({ id });
 
         this.replyTweetModalTweetInfo = data;
 
         this.replyTweetModalIsOpen = true;
+        this.isProcessing = false;
       } catch (error) {
+        this.isProcessing = false;
         Toast.fire({
           icon: "error",
           title: "推文資料取得失敗",
@@ -138,36 +192,97 @@ export default {
       }
     },
     closeReplyTweetModal() {
-      this.replyTweetModalTweetInfo = {}
+      this.isProcessing = true;
+      this.replyTweetModalTweetInfo = {
+        id: -1,
+        UserId: -1,
+        description: "",
+        createdAt: "",
+        updatedAt: "",
+        Likes: -1,
+        Replies: -1,
+        User: {
+          id: -1,
+          email: "",
+          password: "",
+          name: "",
+          role: "",
+          account: "",
+          cover: "",
+          avatar: "",
+          introduction: "",
+          createdAt: "",
+          updatedAt: "",
+        },
+        isLiked: false,
+      };
       this.replyTweetModalIsOpen = false;
+      this.isProcessing = false;
     },
     async replyTweetModalSubmit() {
       try {
-        if(!this.replyText) {
+        if (!this.replyText) {
           Toast.fire({
-            icon: 'warning',
-            title: '回覆內容不可留白'
-          })
-        }else if(this.replyText.length > 140) {
+            icon: "warning",
+            title: "回覆內容不可留白",
+          });
+        } else if (this.replyText.length > 140) {
           Toast.fire({
-            icon: 'warning',
-            title: '回覆內容不可超過140字'
-          })
+            icon: "warning",
+            title: "回覆內容不可超過140字",
+          });
         }
 
-        await tweetsAPI.replyTweet({id: this.replyTweetModalTweetInfo.id, comment: this.replyText})
+        this.isProcessing = true;
+
+        await tweetsAPI.replyTweet({
+          id: this.replyTweetModalTweetInfo.id,
+          comment: this.replyText,
+        });
 
         Toast.fire({
-          icon: 'success',
-          title: '回覆推文成功'
-        })
+          icon: "success",
+          title: "回覆推文成功",
+        });
 
         this.replyText = "";
         this.replyTweetModalIsOpen = false;
+        this.isProcessing = false;
       } catch (error) {
+        this.isProcessing = false;
         Toast.fire({
           icon: "error",
           title: "回復推文失敗",
+        });
+      }
+    },
+    async addLike(id) {
+      try {
+        this.isProcessing = true;
+        await tweetsAPI.addLike({ id });
+
+        this.$emit("addLike", id);
+        this.isProcessing = false;
+      } catch (error) {
+        this.isProcessing = false;
+        Toast.fire({
+          icon: "error",
+          title: "無法按讚推文",
+        });
+      }
+    },
+    async deleteLike(id) {
+      try {
+        this.isProcessing = true;
+        await tweetsAPI.deleteLike({ id });
+
+        this.$emit("deleteLike", id);
+        this.isProcessing = false;
+      } catch (error) {
+        this.isProcessing = false;
+        Toast.fire({
+          icon: "error",
+          title: "無法取消按讚推文",
         });
       }
     },

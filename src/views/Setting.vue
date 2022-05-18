@@ -78,6 +78,7 @@
 
 <script>
 import Navbar from "../components/Navbar.vue";
+import { mapState } from "vuex";
 
 export default {
   components: {
@@ -92,6 +93,19 @@ export default {
       passwordCheck: "",
     };
   },
+  computed: {
+    ...mapState(['currentUser'])
+  },
+  methods: {
+    fetchData() {
+      this.account = this.currentUser.account
+      this.name = this.currentUser.name
+      this.email = this.currentUser.email
+    }
+  },
+  created() {
+    this.fetchData()
+  }
 };
 </script>
 

@@ -28,5 +28,16 @@ export default {
     return apiHelper.post(`/api/tweets/${id}/replies`, {comment}, {
       headers: { Authorization: `Bearer ${getToken()}` }
     })
+  },
+  addLike({id}) {
+    return apiHelper.post(`/api/tweets/${id}/like`,null, {
+      headers: { Authorization: `Bearer ${getToken()}` }
+    })
+  },
+  deleteLike({ id }) {
+    return apiHelper.post(`/api/tweets/${id}/unlike`, null, {
+      headers: { Authorization: `Bearer ${getToken()}` }
+    })
   }
+
 }

@@ -22,4 +22,9 @@ export default {
       headers: {Authorization: `Bearer ${getToken()}`}
     })
   },
+  editUser({id, data}) {
+    return apiHelper.put(`/api/users/${id}`, data, {
+      headers: { Authorization: `Bearer ${getToken()}` }
+    })
+  }
 }
