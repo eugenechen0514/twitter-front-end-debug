@@ -1,140 +1,58 @@
 <template>
   <div class="Comments">
-    <div class="comment">
+    <div
+      class="comment"
+      v-for="comment in currentRepliedTweets"
+      :key="comment.id"
+    >
       <div class="commentUserImage">
         <router-link to="">
-          <img src="https://img.ltn.com.tw/Upload/news/600/2016/04/17/phpFBRDIE.jpg" alt="">
+          <img :src="comment.userAvatar" alt="" />
         </router-link>
       </div>
       <div class="commentContent">
         <div class="commentUserNameGroup">
-          <router-link to="" class="commentUserName">awwfuq</router-link>
-          <router-link to="" class="commentUserAccount">@awwfuq</router-link>
-          <p class="commentCreatedAt">・2022/5/13</p>
+          <router-link to="" class="commentUserName">等等處理</router-link>
+          <router-link to="" class="commentUserAccount">＠account</router-link>
+          <p class="commentCreatedAt">{{ comment.createdAt }}</p>
         </div>
         <div class="commentFor">
-          <p>回覆 <span>@ohhfuck</span></p>
+          <p>
+            回覆 <span>@{{ comment.User }}</span>
+          </p>
         </div>
         <div class="commentText">
-          <p>Basic Elements 通常會包含網站中必要的基礎元素，像是：表單，按鈕，Icon 等等，任何專案都需要有這些基礎元素</p>
+          <p>
+            {{ comment.comment }}
+          </p>
         </div>
         <div class="commentLikeBtnGroup">
-          <button class="commentBtn"><img src="../assets/comment-icon.png" alt=""><p>13</p></button>
-          <button class="likeBtn"><img src="../assets/like-icon.png" alt=""><p>76</p></button>
-          <button class="likeBtn"><img src="../assets/like-icon-active.png" alt=""><p>76</p></button>
+          <button class="commentBtn">
+            <img src="../assets/comment-icon.png" alt="" />
+            <p>13</p>
+          </button>
+          <button class="likeBtn">
+            <img src="../assets/like-icon-active.png" alt="" />
+            <p>76</p>
+          </button>
         </div>
       </div>
     </div>
-
-        <div class="comment">
-      <div class="commentUserImage">
-        <router-link to="">
-          <img src="https://img.ltn.com.tw/Upload/news/600/2016/04/17/phpFBRDIE.jpg" alt="">
-        </router-link>
-      </div>
-      <div class="commentContent">
-        <div class="commentUserNameGroup">
-          <router-link to="" class="commentUserName">awwfuq</router-link>
-          <router-link to="" class="commentUserAccount">@awwfuq</router-link>
-          <p class="commentCreatedAt">・2022/5/13</p>
-        </div>
-        <div class="commentFor">
-          <p>回覆 <span>@ohhfuck</span></p>
-        </div>
-        <div class="commentText">
-          <p>Basic Elements 通常會包含網站中必要的基礎元素，像是：表單，按鈕，Icon 等等，任何專案都需要有這些基礎元素</p>
-        </div>
-        <div class="commentLikeBtnGroup">
-          <button class="commentBtn"><img src="../assets/comment-icon.png" alt=""><p>13</p></button>
-          <button class="likeBtn"><img src="../assets/like-icon.png" alt=""><p>76</p></button>
-          <button class="likeBtn"><img src="../assets/like-icon-active.png" alt=""><p>76</p></button>
-        </div>
-      </div>
-    </div>
-
-        <div class="comment">
-      <div class="commentUserImage">
-        <router-link to="">
-          <img src="https://img.ltn.com.tw/Upload/news/600/2016/04/17/phpFBRDIE.jpg" alt="">
-        </router-link>
-      </div>
-      <div class="commentContent">
-        <div class="commentUserNameGroup">
-          <router-link to="" class="commentUserName">awwfuq</router-link>
-          <router-link to="" class="commentUserAccount">@awwfuq</router-link>
-          <p class="commentCreatedAt">・2022/5/13</p>
-        </div>
-        <div class="commentFor">
-          <p>回覆 <span>@ohhfuck</span></p>
-        </div>
-        <div class="commentText">
-          <p>Basic Elements 通常會包含網站中必要的基礎元素，像是：表單，按鈕，Icon 等等，任何專案都需要有這些基礎元素</p>
-        </div>
-        <div class="commentLikeBtnGroup">
-          <button class="commentBtn"><img src="../assets/comment-icon.png" alt=""><p>13</p></button>
-          <button class="likeBtn"><img src="../assets/like-icon.png" alt=""><p>76</p></button>
-          <button class="likeBtn"><img src="../assets/like-icon-active.png" alt=""><p>76</p></button>
-        </div>
-      </div>
-    </div>
-
-        <div class="comment">
-      <div class="commentUserImage">
-        <router-link to="">
-          <img src="https://img.ltn.com.tw/Upload/news/600/2016/04/17/phpFBRDIE.jpg" alt="">
-        </router-link>
-      </div>
-      <div class="commentContent">
-        <div class="commentUserNameGroup">
-          <router-link to="" class="commentUserName">awwfuq</router-link>
-          <router-link to="" class="commentUserAccount">@awwfuq</router-link>
-          <p class="commentCreatedAt">・2022/5/13</p>
-        </div>
-        <div class="commentFor">
-          <p>回覆 <span>@ohhfuck</span></p>
-        </div>
-        <div class="commentText">
-          <p>Basic Elements 通常會包含網站中必要的基礎元素，像是：表單，按鈕，Icon 等等，任何專案都需要有這些基礎元素</p>
-        </div>
-        <div class="commentLikeBtnGroup">
-          <button class="commentBtn"><img src="../assets/comment-icon.png" alt=""><p>13</p></button>
-          <button class="likeBtn"><img src="../assets/like-icon.png" alt=""><p>76</p></button>
-          <button class="likeBtn"><img src="../assets/like-icon-active.png" alt=""><p>76</p></button>
-        </div>
-      </div>
-    </div>
-
-        <div class="comment">
-      <div class="commentUserImage">
-        <router-link to="">
-          <img src="https://img.ltn.com.tw/Upload/news/600/2016/04/17/phpFBRDIE.jpg" alt="">
-        </router-link>
-      </div>
-      <div class="commentContent">
-        <div class="commentUserNameGroup">
-          <router-link to="" class="commentUserName">awwfuq</router-link>
-          <router-link to="" class="commentUserAccount">@awwfuq</router-link>
-          <p class="commentCreatedAt">・2022/5/13</p>
-        </div>
-        <div class="commentFor">
-          <p>回覆 <span>@ohhfuck</span></p>
-        </div>
-        <div class="commentText">
-          <p>Basic Elements 通常會包含網站中必要的基礎元素，像是：表單，按鈕，Icon 等等，任何專案都需要有這些基礎元素</p>
-        </div>
-        <div class="commentLikeBtnGroup">
-          <button class="commentBtn"><img src="../assets/comment-icon.png" alt=""><p>13</p></button>
-          <button class="likeBtn"><img src="../assets/like-icon.png" alt=""><p>76</p></button>
-          <button class="likeBtn"><img src="../assets/like-icon-active.png" alt=""><p>76</p></button>
-        </div>
-      </div>
-    </div>
-    
   </div>
 </template>
 
-<style scoped>
+<script>
+export default {
+   props: {
+    currentRepliedTweets: {
+      type: Array,
+      required: true,
+    },
+}
+}
+</script>
 
+<style scoped>
 .Comments {
   width: 100%;
 }
@@ -143,7 +61,7 @@
   min-height: 146px;
   padding: 16px 23px;
   display: flex;
-  border-bottom: 1px solid #E6ECF0;
+  border-bottom: 1px solid #e6ecf0;
 }
 
 .commentUserImage {
@@ -154,9 +72,6 @@
   height: 50px;
   width: 50px;
   border-radius: 50%;
-}
-
-.commentContent {
 }
 
 .commentUserNameGroup {
@@ -173,11 +88,12 @@
   margin-right: 8px;
 }
 
-.commentUserAccount, .commentCreatedAt {
+.commentUserAccount,
+.commentCreatedAt {
   font-size: 14px;
   font-weight: 400;
   text-decoration: none;
-  color: #6C757D;
+  color: #6c757d;
 }
 
 .commentFor {
@@ -185,13 +101,13 @@
   margin-top: 8px;
   font-size: 14px;
   font-weight: 400;
-  color: #6C757D;
+  color: #6c757d;
   display: flex;
   align-items: center;
 }
 
 .commentFor span {
-  color: #FF6600;
+  color: #ff6600;
 }
 
 .commentText {
@@ -221,5 +137,4 @@
 .commentLikeBtnGroup button:hover {
   cursor: pointer;
 }
-
 </style>

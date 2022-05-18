@@ -4,23 +4,55 @@
       <li>
         <router-link
           class="tweet"
-          :to="{ name: 'user-tweets', query: 2}"
+          :to="{ name: 'user-tweets', params: { id: newCurrentUser.id } }"
           >推文</router-link
         >
       </li>
       <li>
-        <router-link class="response" :to="{ name: 'user-comments', query: 2 }"
+        <router-link
+          class="response"
+          :to="{ name: 'user-comments', params: { id: newCurrentUser.id } }"
           >回覆</router-link
         >
       </li>
       <li>
-        <router-link class="likedContent" :to="{ name: 'user-likes', query: 2 }"
+        <router-link
+          class="likedContent"
+          :to="{ name: 'user-likes', params: { id: newCurrentUser.id } }"
           >喜歡的內容</router-link
         >
       </li>
     </ul>
   </div>
 </template>
+
+<script>
+export default {  
+  data() {
+    return {
+      newCurrentUser: this.currentUser,
+    };
+  },
+
+  props: {
+    currentUser: {
+      type: Object,
+      required: true,
+    },
+  },
+
+  watch: {
+    currentUser(newValue) {
+      this.newCurrentUser = {
+        ...this.newCurrentUser,
+        ...newValue,
+      };
+      console.log(this.currentUser)
+    },
+  },
+};
+</script>
+
 
 <style scoped>
 .tabs {

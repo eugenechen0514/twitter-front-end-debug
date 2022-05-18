@@ -2,14 +2,14 @@
   <div class="userCard">
     <img
       class="userBackgroundImage"
-      src="https://static.vecteezy.com/system/resources/previews/002/523/012/original/wide-tropical-beach-banner-background-vector.jpg"
-      width="600px"
+      :src="currentUser.cover"
+      width="639px"
       height="200px"
       alt=""
     />
     <img
       class="userImage"
-      :src="currentUser.image"
+      :src="currentUser.avatar"
       width="140px"
       height="140px"
       alt=""

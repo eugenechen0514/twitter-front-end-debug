@@ -1,20 +1,20 @@
 <template>
   <div class="AllTweets">
     <div class="singleTweet" v-for="tweet in currentTweets" :key="tweet.id">
-      <img class="singleTweetUserImage" :src="tweet.userAvatar" alt="" />
+      <img class="singleTweetUserImage" :src="tweet.tweetAvatar" alt="" />
       <div class="singleTweetContent">
         <div class="singleTweetUserNameGroup">
           <router-link class="singleTweetUserName" to="">{{
-            tweet.User
+            tweet.tweetName
           }}</router-link>
           <router-link class="singleTweetUserAccount" to=""
-            >@{{ tweet.userAccount }}</router-link
+            >@{{ tweet.tweetAccount }}</router-link
           >
           <p class="singleTweetCreatedAt">・{{ tweet.createdAt }}</p>
         </div>
         <p class="singleTweetText">
-          <router-link :to="{ name: 'tweet', params: { id: tweet.id } }">{{
-            tweet.description
+          <router-link :to="{ name: 'tweet', params: { id: tweet.UserId } }">{{
+            tweet.tweetDescription
           }}</router-link>
         </p>
         <div class="singleTweetBtnGroup">
@@ -23,14 +23,14 @@
             @click.stop.prevent="openReplyTweetModal"
           >
             <img src="../assets/comment-icon.png" alt="" />
-            <p>{{ tweet.Replies }}</p>
+            <p>{{ tweet.tweetRepliesCount }}</p>
           </button>
 
           <button class="singleTweetBtn">
             <img src="../assets/like-icon-active.png" alt="" />
             <img src="../assets/like-icon.png" alt="" />
             <p>
-              {{ tweet.Likes }}
+              {{ tweet.tweetLikesCount }}
             </p>
           </button>
         </div>

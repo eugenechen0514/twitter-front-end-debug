@@ -12,7 +12,7 @@
         </div>
       </div>
       <UserOtherCard :currentUser="currentUser" />
-      <UserOtherTabs />
+      <UserOtherTabs :currentUser="currentUser" />
       <AllTweets :currentTweets="currentTweets" />
     </div>
     <PopularUsers id="PopularUsers" />
@@ -27,6 +27,7 @@ import UserOtherCard from "../components/UserOtherCard.vue";
 import AllTweets from "../components/AllTweets.vue";
 
 import usersAPI from "./../apis/users";
+import { Toast } from "../utility/helpers";
 
 // const dummyData = {
 //   currentTweets: [
@@ -133,15 +134,6 @@ import usersAPI from "./../apis/users";
 //   ],
 // };
 
-const dummyUser = {
-  currentUser: {
-    id: 1,
-    name: "awwfuq",
-    account: "awwfuq",
-    image: "https://img.ltn.com.tw/Upload/news/600/2016/04/17/phpFBRDIE.jpg",
-  },
-};
-
 export default {
   components: {
     Navbar,
@@ -154,25 +146,55 @@ export default {
   data() {
     return {
       currentTweets: [],
-      currentUser: dummyUser.currentUser,
+      currentUser: {},
     };
   },
 
   methods: {
     async fetchData(id) {
       try {
-        const response = await usersAPI.getUserTweets(
-          {id},
-        );
-        console.log("response", response);
+        const { data } = await usersAPI.getUserTweets({ id });
+        if (data.status === "error") {
+          throw new Error(data.message);
+        }
+        this.currentTweets = data;
       } catch (error) {
         console.log("error", error);
+        Toast.fire({
+          icon: "error",
+          title: "無法取得使用者推文，請稍候再試",
+        });
+      }
+    },
+    async fetchUser(id) {
+      try {
+        const { data } = await usersAPI.getUser({ id });
+        if (data.status === "error") {
+          throw new Error(data.message);
+        }
+        this.currentUser = data;
+        console.log(data);
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "error",
+          title: "無法取得使用者資料，請稍候再試",
+        });
       }
     },
   },
 
   created() {
-    this.fetchData(14);
+    const { id } = this.$route.params;
+    this.fetchData(id);
+    this.fetchUser(id);
+  },
+
+  beforeRouteUpdate(to, from, next) {
+    const { id } = to.params;
+    this.fetchData(id);
+    this.fetchUser(id);
+    next();
   },
 };
 </script>
