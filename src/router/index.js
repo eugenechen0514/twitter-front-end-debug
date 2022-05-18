@@ -68,19 +68,49 @@ const routes = [
     path: '/user/:id/tweets',
     name: 'user-tweets',
     component: () => import('../views/UserOtherTweets.vue'),
-    beforeEnter: authorizeIsUser
+    beforeEnter: (to, from, next) => {
+      const currentUser = store.state.currentUser
+      if (currentUser && (currentUser.role !== 'user')) {
+        next('/not-found')
+        return
+      } else if (to.params.id == store.state.currentUser.id) {
+        next('/user/self/tweets')
+      }
+
+      next()
+    }
   },
   {
     path: '/user/:id/comments',
     name: 'user-comments',
     component: () => import('../views/UserOtherComments.vue'),
-    beforeEnter: authorizeIsUser
+    beforeEnter: (to, from, next) => {
+      const currentUser = store.state.currentUser
+      if (currentUser && (currentUser.role !== 'user')) {
+        next('/not-found')
+        return
+      } else if (to.params.id == store.state.currentUser.id) {
+        next('/user/self/comments')
+      }
+
+      next()
+    }
   },
   {
     path: '/user/:id/likes',
     name: 'user-likes',
     component: () => import('../views/UserOtherLikes.vue'),
-    beforeEnter: authorizeIsUser
+    beforeEnter: (to, from, next) => {
+      const currentUser = store.state.currentUser
+      if (currentUser && (currentUser.role !== 'user')) {
+        next('/not-found')
+        return
+      } else if (to.params.id == store.state.currentUser.id) {
+        next('/user/self/likes')
+      }
+
+      next()
+    }
   },
   {
     path: '/user/:id/followings',
@@ -149,14 +179,14 @@ router.beforeEach(async (to, from, next) => {
   // 在登入的情況下 如果token存在且不相符時自動登出
   if (tokenInLocalStorage && tokenInStore && tokenInStore !== tokenInLocalStorage) {
     store.commit('revokeAuthentication')
-  } 
+  }
   // 在登入的情況下 按下重新整理 store.state.token會變回空值 重新給store.state賦值
   else if (tokenInLocalStorage && !tokenInStore) {
     store.commit('setCurrentUser', tokenInLocalStorage)
     store.commit('setToken')
   }
 
-  
+
   let isAuthenticated = store.state.isAuthenticated
 
 
