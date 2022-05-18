@@ -122,7 +122,7 @@ router.beforeEach(async (to, from, next) => {
   let isAuthenticated = store.state.isAuthenticated
 
 
-  const pathsWithoutAuthentication = ['sign-in', 'sign-up']
+  const pathsWithoutAuthentication = ['sign-in', 'sign-up', 'admin-sign-in']
 
   // 如果 token 無效，且要去除了登入和註冊以外的其他頁面，則轉址到登入頁
   if (!isAuthenticated && !pathsWithoutAuthentication.includes(to.name)) {
