@@ -101,7 +101,7 @@
     </div>
     <div class="navLinkGroup navLogoutLinkGroup">
       <img class="navLinkIcon" src="../assets/logout.png" alt="" />
-      <button class="navLogoutBtn">登出</button>
+      <button @click.stop.prevent="logout" class="navLogoutBtn">登出</button>
     </div>
   </div>
 </template>
@@ -135,6 +135,9 @@ export default {
       this.tweetText = "";
       this.postTweetModalIsOpen = false;
     },
+    logout () {
+      this.$store.commit('revokeAuthentication')
+    }
   },
 };
 </script>

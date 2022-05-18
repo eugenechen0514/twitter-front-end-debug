@@ -21,9 +21,20 @@
           placeholder="請輸入帳號"
           required
         />
-        <div class="errorMessage" v-if="account.length > 0">
+        <div
+          class="errorMessage"
+          v-if="account.length === 0 || account.length > 50"
+        >
+          <p
+            class="errorText"
+            v-if="account.length === 0"
+          >
+            {{ errorMessage }}
+          </p>
           <p class="errorText" v-if="account.length > 50">字數超出上限!</p>
-          <p class="wordsCount">{{ account.length }}/50</p>
+          <p class="wordsCount" v-if="account.length > 50">
+            {{ account.length }}/50
+          </p>
         </div>
       </div>
       <div class="labelInputGroup">
@@ -38,12 +49,14 @@
           placeholder="請輸入密碼"
           required
         />
-        <div class="errorMessage" v-if="password.length > 0">
+        <div class="errorMessage" v-if="password.length > 50">
           <p class="errorText" v-if="password.length > 50">字數超出上限!</p>
-          <p class="wordsCount">{{ password.length }}/50</p>
+          <p class="wordsCount" v-if="password.length > 50">{{ password.length }}/50</p>
         </div>
       </div>
-      <button type="submit" class="signInBtn">登入</button>
+      <button :disabled="isProcessing" type="submit" class="signInBtn">
+        登入
+      </button>
       <div class="linkGroup">
         <router-link class="link" to="/signup">註冊</router-link>
         •
@@ -63,13 +76,17 @@ export default {
       account: "",
       password: "",
       isFirstTry: true,
-      accountErrorMessage: "帳號不存在",
+      errorMessage: "",
+      isProcessing: false,
     };
   },
   methods: {
     async handleSubmit() {
       try {
+        this.isProcessing = true;
+
         if (!this.account | !this.password) {
+          this.isProcessing = false;
           Toast.fire({
             icon: "warning",
             title: "請輸入帳號密碼",
@@ -77,29 +94,41 @@ export default {
           return;
         }
 
-        const {data} = await authorizationAPI.signIn({account:this.account, password: this.password})
+        const { data } = await authorizationAPI.signIn({
+          account: this.account,
+          password: this.password,
+        });
 
-        if(data.status !== 'success') {
-          throw new Error(data.message)
+        if (data.status !== "success") {
+          throw new Error(data.message);
         }
 
-        console.log(data)
+        localStorage.setItem("token", data.token);
 
-        localStorage.setItem('token', data.token)
-
-        this.$store.commit('setCurrentUser', data.user)
+        this.$store.commit("setCurrentUser", data.token);
+        this.$store.commit("setToken");
 
         Toast.fire({
-          icon: 'success',
-          title: '成功登入，即將跳轉'
-        })
+          icon: "success",
+          title: "成功登入，跳轉至首頁",
+        });
 
         this.$router.push({ name: "main" });
       } catch (error) {
+        if (error.response.data.message === "Error: Account or Password Error!") {
+          this.errorMessage = "帳號或密碼錯誤";
+        } else if (error.response.data.message === "Error: User didn't exists!") {
+          this.errorMessage = "帳號不存在!";
+        }
+
+        this.isProcessing = false;
+        this.isFirstTry = false;
+        this.account = "";
+        this.password = "";
         Toast.fire({
-          icon: 'error',
-          title: '無法登入，請稍後再試'
-        })
+          icon: "error",
+          title: "無法登入，請稍後再試",
+        });
       }
     },
   },

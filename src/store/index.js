@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import jwt_decode from "jwt-decode";
+import router from '../router/index'
 
 Vue.use(Vuex)
 
@@ -18,33 +19,38 @@ export default new Vuex.Store({
       createdAt: "",
       updatedAt: ""
     },
-    isAuthenticated: false
+    isAuthenticated: false,
+    token: '',
   },
   getters: {
   },
   mutations: {
-    setCurrentUser(state, currentUser) {
-      state.currentUser = {
-        ...state.currentUser,
-        ...currentUser
+    async setCurrentUser(state, token) {
+      try {
+        const currentUser = jwt_decode(token)
+
+        state.currentUser = {
+          ...state.currentUser,
+          ...currentUser
+        }
+        state.isAuthenticated = true
+      } catch(error) {
+        this.commit('revokeAuthentication')
       }
-      state.isAuthenticated = true
+    },
+    setToken(state) {
+      state.token = localStorage.getItem('token')
+    },
+    revokeAuthentication(state) {
+      console.log('revoke')
+      state.currentUser = {}
+      state.isAuthenticated = false
+      state.token = ''
+      localStorage.removeItem('token')
+      router.push('/signin')
     }
   },
   actions: {
-    async fetchCurrentUser() {
-      try {
-        const token = localStorage.getItem('token')
-        const payload = jwt_decode(token)
-        console.log(payload)
-
-        this.commit('setCurrentUser', payload)
-        
-      }
-      catch(error) {
-        console.error(error.message)
-      }
-    }
   },
   modules: {
   }
