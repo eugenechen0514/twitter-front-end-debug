@@ -25,10 +25,7 @@
           class="errorMessage"
           v-if="account.length === 0 || account.length > 50"
         >
-          <p
-            class="errorText"
-            v-if="account.length === 0"
-          >
+          <p class="errorText" v-if="account.length === 0">
             {{ errorMessage }}
           </p>
           <p class="errorText" v-if="account.length > 50">字數超出上限!</p>
@@ -49,18 +46,14 @@
           placeholder="請輸入密碼"
           required
         />
-        <div class="errorMessage" v-if="password.length > 50">
-          <p class="errorText" v-if="password.length > 50">字數超出上限!</p>
-          <p class="wordsCount" v-if="password.length > 50">{{ password.length }}/50</p>
-        </div>
       </div>
       <button :disabled="isProcessing" type="submit" class="signInBtn">
         登入
       </button>
       <div class="linkGroup">
-        <router-link class="link" to="/signup">註冊</router-link>
+        <router-link :is="isProcessing ? 'span' : 'router-link'" class="link" to="/signup">註冊</router-link>
         •
-        <router-link class="link" to="/admin/signin">後台登入</router-link>
+        <router-link :is="isProcessing ? 'span' : 'router-link'" class="link" to="/admin/signin">後台登入</router-link>
       </div>
     </form>
   </div>
@@ -94,6 +87,15 @@ export default {
           return;
         }
 
+        if (this.account.length > 50) {
+          this.isProcessing = false;
+          Toast.fire({
+            icon: "warning",
+            title: "帳號超出字數上限",
+          });
+          return;
+        }
+
         const { data } = await authorizationAPI.signIn({
           account: this.account,
           password: this.password,
@@ -115,9 +117,13 @@ export default {
 
         this.$router.push({ name: "main" });
       } catch (error) {
-        if (error.response.data.message === "Error: Account or Password Error!") {
+        if (
+          error.response.data.message === "Error: Account or Password Error!"
+        ) {
           this.errorMessage = "帳號或密碼錯誤";
-        } else if (error.response.data.message === "Error: User didn't exists!") {
+        } else if (
+          error.response.data.message === "Error: User didn't exists!"
+        ) {
           this.errorMessage = "帳號不存在!";
         }
 
@@ -127,7 +133,7 @@ export default {
         this.password = "";
         Toast.fire({
           icon: "error",
-          title: "無法登入，請稍後再試",
+          title: "無法登入",
         });
       }
     },
@@ -244,6 +250,10 @@ form {
   cursor: pointer;
 }
 
+.signInBtn:disabled:hover {
+  cursor: wait;
+}
+
 .linkGroup {
   width: 100%;
   text-align: right;
@@ -253,6 +263,7 @@ form {
 }
 
 .link {
+  text-decoration: underline;
   color: #0062ff;
 }
 </style>

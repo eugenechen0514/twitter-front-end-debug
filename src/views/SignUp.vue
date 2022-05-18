@@ -18,14 +18,24 @@
           type="text"
           name="account"
           class="formInput"
-          :class="{ error: account.length > 50 }"
+          :class="{
+            error: (accountErrorMessage && !account) || account.length > 50,
+          }"
           id="account"
           placeholder="請輸入帳號"
           required
         />
-        <div class="errorMessage" v-if="account.length > 0">
+        <div
+          class="errorMessage"
+          v-if="account.length === 0 || account.length > 50"
+        >
+          <p class="errorText" v-if="account.length === 0">
+            {{ accountErrorMessage }}
+          </p>
           <p class="errorText" v-if="account.length > 50">字數超出上限!</p>
-          <p class="wordsCount">{{ account.length }}/50</p>
+          <p class="wordsCount" v-if="account.length > 50">
+            {{ account.length }}/50
+          </p>
         </div>
       </div>
       <div class="labelInputGroup">
@@ -40,8 +50,8 @@
           placeholder="請輸入使用者名稱"
           required
         />
-        <div class="errorMessage" v-if="name.length > 0">
-          <p class="errorText" v-if="name.length > 50">字數超出上限!</p>
+        <div class="errorMessage" v-if="name.length > 50">
+          <p class="errorText">字數超出上限!</p>
           <p class="wordsCount">{{ name.length }}/50</p>
         </div>
       </div>
@@ -52,10 +62,16 @@
           type="email"
           name="email"
           class="formInput"
+          :class="{ error: emailErrorMessage && !email }"
           id="email"
           placeholder="請輸入Email"
           required
         />
+        <div class="errorMessage" v-if="email.length === 0">
+          <p class="errorText">
+            {{ emailErrorMessage }}
+          </p>
+        </div>
       </div>
       <div class="labelInputGroup">
         <label for="password" class="formLabel">密碼</label>
@@ -64,13 +80,15 @@
           type="password"
           name="password"
           class="formInput"
+          :class="{ error: passwordErrorMessage && !password }"
           id="password"
           placeholder="請設定密碼"
           required
         />
-        <div class="errorMessage" v-if="password.length > 0">
-          <p class="errorText" v-if="password.length > 50">字數超出上限!</p>
-          <p class="wordsCount">{{ password.length }}/50</p>
+        <div class="errorMessage" v-if="password.length === 0">
+          <p class="errorText">
+            {{ passwordErrorMessage }}
+          </p>
         </div>
       </div>
 
@@ -85,19 +103,16 @@
           placeholder="請再次輸入密碼"
           required
         />
-        <div class="errorMessage" v-if="passwordCheck.length > 0">
-          <p class="errorText" v-if="passwordCheck.length > 50">字數超出上限!</p>
-          <p class="wordsCount">{{ passwordCheck.length }}/50</p>
-        </div>
       </div>
-      <button type="submit" class="signUpBtn">註冊</button>
-      <button @click.stop.prevent="cancelSubmit" class="cancelBtn">取消</button>
+      <button :disabled="isProcessing" type="submit" class="signUpBtn">註冊</button>
+      <button :disabled="isProcessing" @click.stop.prevent="cancelSubmit" class="cancelBtn">取消</button>
     </form>
   </div>
 </template>
 
 <script>
 import { Toast } from "../utility/helpers";
+import authorizationAPI from "../apis/authorization";
 
 export default {
   data() {
@@ -107,40 +122,91 @@ export default {
       email: "",
       password: "",
       passwordCheck: "",
+      isFirstTry: true,
+      accountErrorMessage: "",
+      emailErrorMessage: "",
+      passwordErrorMessage: "",
+      isProcessing: false
     };
   },
   methods: {
-    handleSubmit() {
-      if (
-        !this.account |
-        !this.password |
-        !this.name |
-        !this.email |
-        this.passwordCheck
-      ) {
-        Toast.fire({
-          icon: "warning",
-          title: "請輸入帳號密碼",
+    async handleSubmit() {
+      try {
+        this.isProcessing = true
+        if (
+          !this.account |
+          !this.password |
+          !this.name |
+          !this.email |
+          !this.passwordCheck
+        ) {
+          Toast.fire({
+            icon: "warning",
+            title: "請確實填寫每個欄位",
+          });
+          return;
+        }
+        if (this.account.length > 50) {
+          Toast.fire({
+            icon: "warning",
+            title: "帳號超出字數",
+          });
+          return;
+        } else if (this.name.length > 50) {
+          Toast.fire({
+            icon: "warning",
+            title: "名稱超出字數",
+          });
+          return;
+        }
+        const { data } = await authorizationAPI.signUp({
+          account: this.account,
+          name: this.name,
+          email: this.email,
+          password: this.password,
+          checkPassword: this.passwordCheck,
         });
-        return;
-      }
-      if (this.name.length > 50) {
+
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+
         Toast.fire({
-          icon: "warning",
-          title: "名稱超出字數",
-        });
+          icon: 'success',
+          title: '註冊成功，跳轉至登入頁'
+        })
+        this.$router.push({ name: "sign-in" });
+      } catch (error) {
+        this.isFirstTry = false;
+        this.account = "";
+        this.name = "";
+        this.email = "";
+        this.password = "";
+        this.passwordCheck = "";
+        this.accountErrorMessage = "";
+        this.emailErrorMessage = "";
+        this.isProcessing = false
+
+        if (error.response.data.message === "Error: Account already exists!") {
+          this.accountErrorMessage = "帳號已有存在";
+        } else if (
+          error.response.data.message === "Error: Email already exists!"
+        ) {
+          this.emailErrorMessage = "Email已被註冊";
+        } else if (
+          error.response.data.message === "Error: Password do not match!"
+        ) {
+          this.passwordErrorMessage = "密碼與密碼確認不相符";
+        }
+
+        Toast.fire({
+          icon: 'error',
+          title: '註冊失敗'
+        })
       }
-      console.log({
-        account: this.account,
-        name: this.name,
-        email: this.email,
-        password: this.password,
-        passwordCheck: this.passwordCheck,
-      });
-      this.$router.push({ name: "sign-in" });
     },
     cancelSubmit() {
-      this.$router.push('/signin')
+      this.$router.push("/signin");
     },
   },
 };
@@ -253,6 +319,10 @@ form {
 
 .signUpBtn:hover {
   cursor: pointer;
+}
+
+.signUpBtn:disabled:hover {
+  cursor: wait;
 }
 
 .cancelBtn {
