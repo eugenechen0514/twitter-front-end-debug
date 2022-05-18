@@ -6,19 +6,25 @@
       :key="comment.id"
     >
       <div class="commentUserImage">
-        <router-link to="">
+        <router-link :to="{ name: 'user-tweets', params: { id: comment.UserId } }">
           <img :src="comment.userAvatar" alt="" />
         </router-link>
       </div>
       <div class="commentContent">
         <div class="commentUserNameGroup">
-          <router-link to="" class="commentUserName">等等處理</router-link>
-          <router-link to="" class="commentUserAccount">＠account</router-link>
-          <p class="commentCreatedAt">{{ comment.createdAt }}</p>
+          <router-link
+            :to="{ name: 'user-tweets', params: { id: comment.UserId } }"
+            class="commentUserName"
+            >{{ comment.userName }}</router-link
+          >
+          <router-link :to="{ name: 'user-tweets', params: { id: comment.UserId } }" class="commentUserAccount"
+            >＠{{ comment.userAccount }}</router-link
+          >
+          <p class="commentCreatedAt">・{{ comment.createdAt }}</p>
         </div>
         <div class="commentFor">
           <p>
-            回覆 <span>@{{ comment.User }}</span>
+            回覆 <span>@{{ comment.replyUserAccount }}</span>
           </p>
         </div>
         <div class="commentText">
@@ -43,13 +49,13 @@
 
 <script>
 export default {
-   props: {
+  props: {
     currentRepliedTweets: {
       type: Array,
       required: true,
     },
-}
-}
+  },
+};
 </script>
 
 <style scoped>
@@ -112,11 +118,13 @@ export default {
 
 .commentText {
   margin-top: 8px;
+  width: 528px;
   min-height: 26px;
   line-height: 26px;
   font-size: 16px;
   font-weight: 400;
   color: #171725;
+  word-break: break-all;
 }
 
 .commentLikeBtnGroup {

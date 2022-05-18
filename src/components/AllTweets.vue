@@ -1,7 +1,9 @@
 <template>
   <div class="AllTweets">
     <div class="singleTweet" v-for="tweet in currentTweets" :key="tweet.id">
+      <router-link :to="{name: 'user-tweets', params: {id: tweet.UserId}}">
       <img class="singleTweetUserImage" :src="tweet.userAvatar" alt="" />
+      </router-link>
       <div class="singleTweetContent">
         <div class="singleTweetUserNameGroup">
           <router-link class="singleTweetUserName" to="">{{
@@ -20,15 +22,15 @@
         <div class="singleTweetBtnGroup">
           <button
             class="singleTweetBtn"
-            @click.stop.prevent="openReplyTweetModal"
+            @click.stop.prevent="openReplyTweetModal(tweet.id)"
           >
             <img src="../assets/comment-icon.png" alt="" />
             <p>{{ tweet.Replies }}</p>
           </button>
 
           <button class="singleTweetBtn">
-            <img src="../assets/like-icon-active.png" alt="" />
-            <img src="../assets/like-icon.png" alt="" />
+            <img v-if="tweet.isLiked" src="../assets/like-icon-active.png" alt="" />
+            <img v-else src="../assets/like-icon.png" alt="" />
             <p>
               {{ tweet.Likes }}
             </p>
@@ -61,15 +63,19 @@
                 <router-link class="replyTweetUserAccount" to=""
                   >@awwfuq</router-link
                 >
-                <p class="replyTweetCreatedAt">・2022/5/11</p>
+                <p class="replyTweetCreatedAt">
+                  ・{{ replyTweetModalTweetInfo.createdAt }}
+                </p>
               </div>
-              <p class="replyTweetText">helloooo</p>
+              <p class="replyTweetText">
+                {{ replyTweetModalTweetInfo.description }}
+              </p>
               <p class="replyTweetFor">回覆給 <span>@awwfuq</span></p>
             </div>
           </div>
           <div class="currentUserReply">
             <img
-              src="https://img.ltn.com.tw/Upload/news/600/2016/04/17/phpFBRDIE.jpg"
+              :src="currentUser.avatar"
               width="50px"
               height="50px"
               class="currentUserReplyUserImg"
@@ -95,6 +101,10 @@
 </template>
 
 <script>
+import { Toast } from "../utility/helpers";
+import tweetsAPI from "../apis/tweets";
+import { mapState } from "vuex";
+
 export default {
   props: {
     currentTweets: {
@@ -105,20 +115,61 @@ export default {
   data() {
     return {
       replyTweetModalIsOpen: false,
+      replyTweetModalTweetInfo: {},
       replyText: "",
     };
   },
+  computed: {
+    ...mapState(['currentUser'])
+  },
   methods: {
-    openReplyTweetModal() {
-      this.replyTweetModalIsOpen = true;
+    async openReplyTweetModal(id) {
+      try {
+        const { data } = await tweetsAPI.getTweet({ id });
+
+        this.replyTweetModalTweetInfo = data;
+
+        this.replyTweetModalIsOpen = true;
+      } catch (error) {
+        Toast.fire({
+          icon: "error",
+          title: "推文資料取得失敗",
+        });
+      }
     },
     closeReplyTweetModal() {
+      this.replyTweetModalTweetInfo = {}
       this.replyTweetModalIsOpen = false;
     },
-    replyTweetModalSubmit() {
-      console.log({ text: this.replyText });
-      this.replyText = "";
-      this.replyTweetModalIsOpen = false;
+    async replyTweetModalSubmit() {
+      try {
+        if(!this.replyText) {
+          Toast.fire({
+            icon: 'warning',
+            title: '回覆內容不可留白'
+          })
+        }else if(this.replyText.length > 140) {
+          Toast.fire({
+            icon: 'warning',
+            title: '回覆內容不可超過140字'
+          })
+        }
+
+        await tweetsAPI.replyTweet({id: this.replyTweetModalTweetInfo.id, comment: this.replyText})
+
+        Toast.fire({
+          icon: 'success',
+          title: '回覆推文成功'
+        })
+
+        this.replyText = "";
+        this.replyTweetModalIsOpen = false;
+      } catch (error) {
+        Toast.fire({
+          icon: "error",
+          title: "回復推文失敗",
+        });
+      }
     },
   },
 };
@@ -139,6 +190,7 @@ export default {
 .singleTweetUserImage {
   width: 50px;
   height: 50px;
+  object-fit: cover;
   border-radius: 50%;
   margin-right: 10px;
 }

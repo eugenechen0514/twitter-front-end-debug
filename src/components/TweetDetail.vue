@@ -5,39 +5,75 @@
         <router-link to="">
           <img
             class="tweetUserImage"
-            src="https://img.ltn.com.tw/Upload/news/600/2016/04/17/phpFBRDIE.jpg"
+            :src='tweet.User.avatar'
             alt=""
           />
           <div class="tweetUserNameGroup">
-            <p class="tweetUserName">awwfuq</p>
-            <p class="tweetUserAccount">@awwfuq</p>
+            <p class="tweetUserName">{{tweet.User.name}}</p>
+            <p class="tweetUserAccount">@{{tweet.User.account}}</p>
           </div>
         </router-link>
       </div>
       <div class="tweetText">
-        <p>UI Components 是透過 Basic Elements 組合延伸而成。設計稿中提供的 UI Components 是設計師專為 Twitter 設計的元件，如：Nav Item 中，Icon 與文字的組合、不同的 Modal 中，按鈕的使用方式與陳列。因此，設計師準</p>
+        <p>{{ tweet.description }}</p>
       </div>
       <div class="tweetCreatedAt">
-        <p>2022/5/13</p>
+        <p>{{ tweet.createdAt }}</p>
       </div>
       <div class="tweetCommentsLikesCount">
-        <p class="tweetCommentsCount"><span>34</span>回覆</p>
-        <p class="tweetLikesCount"><span>808</span>喜歡次數</p>
+        <p class="tweetCommentsCount">
+          <span>{{ tweet.Replies }}</span
+          >回覆
+        </p>
+        <p class="tweetLikesCount">
+          <span>{{ tweet.Likes }}</span
+          >喜歡次數
+        </p>
       </div>
       <div class="tweetCommentLikeBtn">
-        <button class="tweetCommentBtn"><img class="tweetCommentIcon" src="../assets/comment-icon-large.png" alt=""></button>
-        <button class="tweetLikeBtn"><img class="tweetLikeIcon" src="../assets/like-icon-large.png" alt=""></button>
-        <button class="tweetLikeBtn"><img class="tweetLikeActiveIcon" src="../assets/like-icon-large-active.png" alt=""></button>
+        <button class="tweetCommentBtn">
+          <img
+            class="tweetCommentIcon"
+            src="../assets/comment-icon-large.png"
+            alt=""
+          />
+        </button>
+        <button v-if="!tweet.isLiked" class="tweetLikeBtn">
+          <img
+            class="tweetLikeIcon"
+            src="../assets/like-icon-large.png"
+            alt=""
+          />
+        </button>
+        <button v-else class="tweetLikeBtn">
+          <img
+            class="tweetLikeActiveIcon"
+            src="../assets/like-icon-large-active.png"
+            alt=""
+          />
+        </button>
       </div>
     </div>
   </div>
 </template>
 
+<script>
+export default {
+  props: {
+    tweet: {
+      type: Object,
+      required: true,
+    },
+  },
+};
+</script>
+
+
 <style scoped>
 .TweetDetail {
   width: 100%;
   min-height: 350px;
-  border-bottom: 1px solid #E6ECF0;
+  border-bottom: 1px solid #e6ecf0;
   padding: 16px 16px 0px 16px;
 }
 
@@ -70,11 +106,12 @@
 .tweetUserAccount {
   font-size: 14px;
   font-weight: 400;
-  color: #6C757D;
+  color: #6c757d;
 }
 
 .tweetText {
   margin-top: 8px;
+  min-height: 108px;
 }
 
 .tweetText p {
@@ -85,7 +122,7 @@
 }
 
 .tweetCreatedAt {
-  border-bottom: 1px solid #E6ECF0;
+  border-bottom: 1px solid #e6ecf0;
   margin-top: 8px;
   padding-bottom: 8px;
 }
@@ -93,18 +130,18 @@
 .tweetCreatedAt p {
   font-size: 14px;
   font-weight: 500;
-  color: #6C757D;
+  color: #6c757d;
   line-height: 22px;
 }
 
 .tweetCommentsLikesCount {
-  border-bottom: 1px solid #E6ECF0;
+  border-bottom: 1px solid #e6ecf0;
   height: 60px;
   display: flex;
   align-items: center;
   font-size: 19px;
   font-weight: 500;
-  color: #6C757D;
+  color: #6c757d;
 }
 
 .tweetCommentsCount {
@@ -112,7 +149,7 @@
 }
 
 .tweetCommentsLikesCount span {
-  color:  #171725;
+  color: #171725;
   font-weight: 700;
 }
 
@@ -136,6 +173,4 @@
 .tweetCommentLikeBtn button:hover {
   cursor: pointer;
 }
-
-
 </style>

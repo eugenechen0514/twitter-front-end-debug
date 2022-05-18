@@ -4,13 +4,13 @@
     <div class="tweetSection">
       <div class="tweetSectionContent">
         <div class="tweetTitle">
-          <router-link to="">
+          <router-link to="/main">
             <img src="../assets/prev-icon.png" alt="" />
             <p>推文</p>
           </router-link>
         </div>
-        <TweetDetail id="TweetDetail" />
-        <Comments id="TweetComments" />
+        <TweetDetail id="TweetDetail" :tweet="tweet" />
+        <Comments id="TweetComments" :currentRepliedTweets="tweetReplies" />
       </div>
     </div>
     <PopularUsers id="PopularUsers" />
@@ -22,46 +22,8 @@ import Navbar from "../components/Navbar.vue";
 import PopularUsers from "../components/PopularUsers.vue";
 import TweetDetail from "../components/TweetDetail.vue";
 import Comments from "../components/Comments.vue";
-
-const dummyData = {
-  tweet: {
-    id: 1,
-    text: "hello",
-    createAt: "2022/5/9 12:00",
-    commentsCount: 1,
-    likesCount: 1,
-    comments: [
-      {
-        comment: {
-          id: 1,
-          text: "wow",
-          createAt: "2022/5/9 14:00",
-        },
-        user: {
-          id: 2,
-          name: "ohhfuck",
-          account: "ohhfuck",
-          image: "https://cdn2.ettoday.net/images/1027/1027134.jpg",
-        },
-      },
-    ],
-  },
-  user: {
-    id: 1,
-    name: "awwfuq",
-    account: "awwfuq",
-    image: "https://img.ltn.com.tw/Upload/news/600/2016/04/17/phpFBRDIE.jpg",
-  },
-};
-
-const dummyUser = {
-  currentUser: {
-    id: 1,
-    name: "awwfuq",
-    account: "awwfuq",
-    image: "https://img.ltn.com.tw/Upload/news/600/2016/04/17/phpFBRDIE.jpg",
-  },
-};
+import tweetsAPI from "../apis/tweets";
+import { Toast } from "../utility/helpers";
 
 export default {
   components: {
@@ -72,15 +34,53 @@ export default {
   },
   data() {
     return {
-      tweet: {},
-      user: {},
-      currentUser: dummyUser.currentUser,
+      tweet: {
+        id: -1,
+        UserId: -1,
+        description: "",
+        createdAt: "",
+        updatedAt: "",
+        Likes: -1,
+        Replies: -1,
+        User: {
+          id: -1,
+          email: "",
+          password:
+            "",
+          name: "",
+          role: "",
+          account: "",
+          cover: "",
+          avatar: "",
+          introduction: "",
+          createdAt: "",
+          updatedAt: "",
+        },
+        isLiked: false,
+      },
+      tweetReplies: [],
     };
   },
   methods: {
-    fetchData() {
-      this.tweet = dummyData.tweet;
-      this.user = dummyData.user;
+    async fetchData() {
+      try {
+        const tweetInfoResponse = await tweetsAPI.getTweet({
+          id: this.$route.params.id,
+        });
+
+        this.tweet = tweetInfoResponse.data;
+
+        const tweetRepliesResponse = await tweetsAPI.getTweetReplies({
+          id: this.$route.params.id,
+        });
+
+        this.tweetReplies = tweetRepliesResponse.data;
+      } catch (error) {
+        Toast.fire({
+          icon: "error",
+          title: "無法取得推文資料",
+        });
+      }
     },
   },
   created() {

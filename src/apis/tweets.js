@@ -1,0 +1,32 @@
+import { apiHelper } from './../utility/helpers'
+const getToken = () => localStorage.getItem('token')
+
+export default {
+  postTweet({description}) {
+    return apiHelper.post('/api/tweets', {
+      description
+    }, {
+      headers: { Authorization: `Bearer ${getToken()}` }
+    })
+  },
+  getCurrentTweets({id}) {
+    return apiHelper.get(`/api/users/${id}/tweets`, {
+      headers: { Authorization: `Bearer ${getToken()}` }
+    })
+  },
+  getTweet({id}) {
+    return apiHelper.get(`/api/tweets/${id}`, {
+      headers: { Authorization: `Bearer ${getToken()}` }
+    })
+  },
+  getTweetReplies({id}) {
+    return apiHelper.get(`/api/tweets/${id}/replies`, {
+      headers: { Authorization: `Bearer ${getToken()}` }
+    })
+  },
+  replyTweet({id, comment}) {
+    return apiHelper.post(`/api/tweets/${id}/replies`, {comment}, {
+      headers: { Authorization: `Bearer ${getToken()}` }
+    })
+  }
+}

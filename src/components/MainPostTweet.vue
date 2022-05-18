@@ -2,7 +2,7 @@
   <div class="MainPostTweet">
     <img
       class="mainPostTweetUserImage"
-      :src="currentUser.image"
+      :src="currentUser.avatar"
       width="50px"
       height="50px"
       alt=""
@@ -22,17 +22,23 @@
       字數不可超過140字
     </p>
 
-    <button class="mainPostTweetSubmitBtn" @click.stop.prevent="postTweetModalSubmit">推文</button>
+    <button
+      class="mainPostTweetSubmitBtn"
+      @click.stop.prevent="postTweetModalSubmit"
+    >
+      推文
+    </button>
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
+import tweetsAPI from "../apis/tweets";
+import {Toast} from '../utility/helpers'
+
 export default {
-  props: {
-    currentUser: {
-      type: Object,
-      required: true,
-    },
+  computed: {
+    ...mapState(["currentUser"]),
   },
   data() {
     return {
@@ -41,13 +47,31 @@ export default {
     };
   },
   methods: {
-    postTweetModalSubmit() {
-      if (!this.tweetText) {
-        this.mainPostTweetErrorMessage = "內容不可留白";
-        return;
+    async postTweetModalSubmit() {
+      try {
+        if (!this.tweetText) {
+          this.mainPostTweetErrorMessage = "內容不可留白";
+          return;
+        }
+        if (this.tweetText.length > 140) {
+          return;
+        }
+
+        await tweetsAPI.postTweet({description: this.tweetText})
+
+
+        this.tweetText = "";
+
+        Toast.fire({
+          icon: 'success',
+          title: '推文成功'
+        })
+      } catch (error) {
+        Toast.fire({
+          icon: 'error',
+          title: '推文失敗'
+        })
       }
-      console.log({ text: this.tweetText });
-      this.tweetText = "";
     },
   },
 };
@@ -67,6 +91,7 @@ export default {
   width: 50px;
   height: 50px;
   border-radius: 50%;
+  object-fit: cover;
 }
 
 .mainPostTweetText {
@@ -77,7 +102,7 @@ export default {
   resize: none;
   font-size: 18px;
   font-weight: 700;
-  border: 0; 
+  border: 0;
   outline: 0;
 }
 
