@@ -1,8 +1,16 @@
 <template>
   <div class="AllTweets">
-    <div class="singleTweet" v-for="tweet in currentTweets" :key="tweet.id">
+    <div
+      class="singleTweet"
+      v-for="tweet in initialCurrentTweets"
+      :key="tweet.id"
+    >
       <router-link :to="{ name: 'user-tweets', params: { id: tweet.UserId } }">
-        <img class="singleTweetUserImage" :src="tweet.userAvatar" alt="" />
+        <img
+          class="singleTweetUserImage"
+          :src="tweet.userAvatar | emptyImage"
+          alt=""
+        />
       </router-link>
       <div class="singleTweetContent">
         <div class="singleTweetUserNameGroup">
@@ -12,7 +20,7 @@
           <router-link class="singleTweetUserAccount" to=""
             >@{{ tweet.userAccount }}</router-link
           >
-          <p class="singleTweetCreatedAt">・{{ tweet.createdAt }}</p>
+          <p class="singleTweetCreatedAt">・{{ tweet.createdAt | fromNow }}</p>
         </div>
         <p class="singleTweetText">
           <router-link :to="{ name: 'tweet', params: { id: tweet.id } }">{{
@@ -68,7 +76,7 @@
           <div class="replyTweet">
             <img
               class="replyTweetUserImage"
-              :src="replyTweetModalTweetInfo.User.avatar"
+              :src="replyTweetModalTweetInfo.User.avatar | emptyImage"
               alt=""
             />
             <div class="replyTweetContent">
@@ -90,7 +98,7 @@
                   >@{{ replyTweetModalTweetInfo.User.account }}</router-link
                 >
                 <p class="replyTweetCreatedAt">
-                  ・{{ replyTweetModalTweetInfo.createdAt }}
+                  ・{{ replyTweetModalTweetInfo.createdAt | fromNow }}
                 </p>
               </div>
               <p class="replyTweetText">
@@ -103,7 +111,7 @@
           </div>
           <div class="currentUserReply">
             <img
-              :src="currentUser.avatar"
+              :src="currentUser.avatar | emptyImage"
               width="50px"
               height="50px"
               class="currentUserReplyUserImg"
@@ -118,6 +126,7 @@
           </div>
           <button
             @click.stop.prevent="replyTweetModalSubmit"
+            :disabled="isProcessing"
             class="replyTweetModalSubmitBtn"
           >
             回覆
@@ -132,14 +141,17 @@
 import { Toast } from "../utility/helpers";
 import tweetsAPI from "../apis/tweets";
 import { mapState } from "vuex";
+import { fromNowFilter } from "../utility/mixins";
+import { emptyImageFilter } from "../utility/mixins";
 
 export default {
   props: {
-    currentTweets: {
+    initialCurrentTweets: {
       type: Array,
       required: true,
     },
   },
+  mixins: [fromNowFilter, emptyImageFilter],
   data() {
     return {
       replyTweetModalIsOpen: false,
@@ -226,11 +238,13 @@ export default {
             icon: "warning",
             title: "回覆內容不可留白",
           });
+          return;
         } else if (this.replyText.length > 140) {
           Toast.fire({
             icon: "warning",
             title: "回覆內容不可超過140字",
           });
+          return;
         }
 
         this.isProcessing = true;
@@ -248,6 +262,7 @@ export default {
         this.replyText = "";
         this.replyTweetModalIsOpen = false;
         this.isProcessing = false;
+        this.$router.go(0);
       } catch (error) {
         this.isProcessing = false;
         Toast.fire({
@@ -261,7 +276,9 @@ export default {
         this.isProcessing = true;
         await tweetsAPI.addLike({ id });
 
-        this.$emit("addLike", id);
+        const tweet = this.initialCurrentTweets.find((item) => item.id === id);
+        tweet.isLiked = true;
+        tweet.Likes++;
         this.isProcessing = false;
       } catch (error) {
         this.isProcessing = false;
@@ -276,7 +293,9 @@ export default {
         this.isProcessing = true;
         await tweetsAPI.deleteLike({ id });
 
-        this.$emit("deleteLike", id);
+        const tweet = this.initialCurrentTweets.find((item) => item.id === id);
+        tweet.isLiked = false;
+        tweet.Likes--;
         this.isProcessing = false;
       } catch (error) {
         this.isProcessing = false;
@@ -308,6 +327,7 @@ export default {
   object-fit: cover;
   border-radius: 50%;
   margin-right: 10px;
+  background-color: #fff;
 }
 
 .singleTweetContent {
@@ -384,6 +404,10 @@ export default {
   cursor: pointer;
 }
 
+.singleTweetBtn:disabled:hover {
+  cursor: wait;
+}
+
 #replyTweetModal {
   position: fixed;
   left: 0px;
@@ -438,8 +462,11 @@ export default {
 }
 
 .currentUserReplyUserImg {
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   margin-right: 8px;
+  background-color: #fff;
 }
 
 .currentUserReplyText {
@@ -474,6 +501,14 @@ export default {
   font-weight: 400;
 }
 
+.replyTweetModalSubmitBtn:hover {
+  cursor: pointer;
+}
+
+.replyTweetModalSubmitBtn:disabled:hover {
+  cursor: wait;
+}
+
 .replyTweet {
   display: flex;
   height: 129px;
@@ -487,6 +522,7 @@ export default {
   height: 50px;
   border-radius: 50%;
   margin-right: 8px;
+  background-color: #fff;
 }
 
 .replyTweetUserNameGroup {

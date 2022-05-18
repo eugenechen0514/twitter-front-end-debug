@@ -7,22 +7,7 @@
           <h1 class="adminUsersTitleText">使用者列表</h1>
         </div>
         <div class="adminUsersTable">
-          <AdminUser/>
-          <AdminUser/>
-          <AdminUser/>
-          <AdminUser/>
-          <AdminUser/>
-          <AdminUser/>
-          <AdminUser/>
-          <AdminUser/>
-          <AdminUser/>
-          <AdminUser/>
-          <AdminUser/>
-          <AdminUser/>
-          <AdminUser/>
-          <AdminUser/>
-          <AdminUser/>
-          <AdminUser/>
+          <AdminUser v-for="user in users" :key="user.id" :user="user" />
         </div>
       </div>
     </div>
@@ -32,12 +17,37 @@
 <script>
 import AdminNavbar from "../components/AdminNavbar.vue";
 import AdminUser from '../components/AdminUser.vue'
+import adminAPI from '../apis/admin'
+import { Toast } from "../utility/helpers";
 
 export default {
   components: {
     AdminNavbar,
     AdminUser
   },
+  data() {
+    return {
+      users: [],
+    }
+  },
+  methods: {
+    async fetchData() {
+      try {
+        const {data} = await adminAPI.getUsers()
+
+        this.users = data
+      }
+      catch(error) {
+        Toast.fire({
+          icon: 'error',
+          title: '無法取得使用者列表'
+        })
+      }
+    }
+  },
+  created() {
+    this.fetchData()
+  }
 };
 </script>
 

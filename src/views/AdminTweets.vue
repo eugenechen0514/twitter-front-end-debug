@@ -7,13 +7,12 @@
           <h1 class="adminTweetsTitleText">推文清單</h1>
         </div>
         <div class="adminTweetsTable">
-          <AdminTweet/>
-          <AdminTweet/>
-          <AdminTweet/>
-          <AdminTweet/>
-          <AdminTweet/>
-          <AdminTweet/>
-          <AdminTweet/>
+          <AdminTweet
+            @deleteTweet="deleteTweet"
+            v-for="tweet in tweets"
+            :key="tweet.id"
+            :tweet="tweet"
+          />
         </div>
       </div>
     </div>
@@ -22,12 +21,39 @@
 
 <script>
 import AdminNavbar from "../components/AdminNavbar.vue";
-import AdminTweet from '../components/AdminTweet.vue'
+import AdminTweet from "../components/AdminTweet.vue";
+import adminAPI from "../apis/admin";
+import { Toast } from "../utility/helpers";
 
 export default {
   components: {
     AdminNavbar,
-    AdminTweet
+    AdminTweet,
+  },
+  data() {
+    return {
+      tweets: [],
+    };
+  },
+  methods: {
+    async fetchData() {
+      try {
+        const { data } = await adminAPI.getTweets();
+
+        this.tweets = data;
+      } catch (error) {
+        Toast.fire({
+          icon: "error",
+          title: "無法取得推文列表",
+        });
+      }
+    },
+    deleteTweet(id) {
+      this.tweets = this.tweets.filter((item) => item.id !== id);
+    },
+  },
+  created() {
+    this.fetchData();
   },
 };
 </script>
@@ -58,7 +84,7 @@ export default {
 .adminTweetsTitle {
   width: 100%;
   height: 74px;
-  border-bottom: 1px solid #E6ECF0;
+  border-bottom: 1px solid #e6ecf0;
   padding: 24px 23px;
   font-size: 24px;
   font-weight: 700;

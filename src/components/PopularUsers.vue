@@ -1,117 +1,110 @@
 <template>
   <div class="PopularUsers">
     <h1 class="popularUsersTitle">跟隨誰</h1>
-    <div class="popularUser" v-for="user in popularUsers" :key="user.user.id">
-      <router-link to="">
-        <img :src="user.user.image" class="popularUsersImage" alt="" />
+    <div class="popularUser" v-for="user in popularUsers" :key="user.id">
+      <router-link :to="{ name: 'user-tweets', params: { id: user.id } }">
+        <img :src="user.avatar | emptyImage" class="popularUsersImage" alt="" />
       </router-link>
       <div class="popularUsersNameGroup">
-        <router-link to="" class="popularUsersName">{{
-          user | nameIsTooLong
-        }}</router-link>
-        <router-link to="" class="popularUsersAccount"
+        <router-link
+          :to="{ name: 'user-tweets', params: { id: user.id } }"
+          class="popularUsersName"
+          >{{ user | nameIsTooLong }}</router-link
+        >
+        <router-link
+          :to="{ name: 'user-tweets', params: { id: user.id } }"
+          class="popularUsersAccount"
           >@{{ user | accountIsTooLong }}</router-link
         >
       </div>
-      <button class="popularUsersFollowedBtn" v-if="user.isFollowed">
+      <button
+        :disabled="isProcessing"
+        @click.stop.prevent="deleteFollowing(user.id)"
+        class="popularUsersFollowedBtn"
+        v-if="user.isFollowed"
+      >
         正在跟隨
       </button>
-      <button class="popularUsersFollowBtn" v-else>跟隨</button>
+      <button
+        :disabled="isProcessing"
+        @click.stop.prevent="addFollowing(user.id)"
+        class="popularUsersFollowBtn"
+        v-else
+      >
+        跟隨
+      </button>
     </div>
   </div>
 </template>
 
 <script>
-const dummyData = {
-  popularUsers: [
-    {
-      user: {
-        id: 1,
-        name: "awwfuqqqqqq",
-        account: "awwfuqqqqqq",
-        image:
-          "https://img.ltn.com.tw/Upload/news/600/2016/04/17/phpFBRDIE.jpg",
-      },
-      isFollowed: true,
-    },
-    {
-      user: {
-        id: 2,
-        name: "ohhfuckkkkkk",
-        account: "ohhfuckkkkkkkk",
-        image: "https://cdn2.ettoday.net/images/1027/1027134.jpg",
-      },
-      isFollowed: false,
-    },
-    {
-      user: {
-        id: 3,
-        name: "awwfuq",
-        account: "awwfuq",
-        image:
-          "https://img.ltn.com.tw/Upload/news/600/2016/04/17/phpFBRDIE.jpg",
-      },
-      isFollowed: true,
-    },
-    {
-      user: {
-        id: 4,
-        name: "ohhfuck",
-        account: "ohhfuck",
-        image: "https://cdn2.ettoday.net/images/1027/1027134.jpg",
-      },
-      isFollowed: false,
-    },
-    {
-      user: {
-        id: 5,
-        name: "awwfuq",
-        account: "awwfuq",
-        image:
-          "https://img.ltn.com.tw/Upload/news/600/2016/04/17/phpFBRDIE.jpg",
-      },
-      isFollowed: true,
-    },
-    {
-      user: {
-        id: 6,
-        name: "ohhfuck",
-        account: "ohhfuck",
-        image: "https://cdn2.ettoday.net/images/1027/1027134.jpg",
-      },
-      isFollowed: false,
-    },
-    {
-      user: {
-        id: 7,
-        name: "awwfuq",
-        account: "awwfuq",
-        image:
-          "https://img.ltn.com.tw/Upload/news/600/2016/04/17/phpFBRDIE.jpg",
-      },
-      isFollowed: true,
-    },
-    {
-      user: {
-        id: 8,
-        name: "ohhfuck",
-        account: "ohhfuck",
-        image: "https://cdn2.ettoday.net/images/1027/1027134.jpg",
-      },
-      isFollowed: false,
-    },
-  ],
-};
+import usersAPI from "../apis/users";
+import { Toast } from "../utility/helpers";
+import { emptyImageFilter } from "../utility/mixins";
 
 export default {
+  mixins: [emptyImageFilter],
   data() {
     return {
       popularUsers: [],
+      isProcessing: false,
     };
   },
   methods: {
-    fetchData() {
-      this.popularUsers = dummyData.popularUsers;
+    async fetchData() {
+      try {
+        const { data } = await usersAPI.getTopUsers();
+        this.popularUsers = data;
+      } catch (error) {
+        Toast.fire({
+          icon: "error",
+          title: "無法取得熱門使用者",
+        });
+      }
+    },
+    async addFollowing(id) {
+      try {
+        this.isProcessing = true;
+        await usersAPI.addFollowing({ id });
+
+        const user = this.popularUsers.find((item) => item.id === id);
+
+        user.isFollowed = true;
+
+        Toast.fire({
+          icon: "success",
+          title: "跟隨成功",
+        });
+        this.isProcessing = false;
+      } catch (error) {
+        this.isProcessing = false;
+        Toast.fire({
+          icon: "error",
+          title: "跟隨失敗",
+        });
+      }
+    },
+    async deleteFollowing(id) {
+      try {
+        this.isProcessing = true;
+        await usersAPI.deleteFollowing({ id });
+
+        const user = this.popularUsers.find((item) => item.id === id);
+
+        user.isFollowed = false;
+
+        Toast.fire({
+          icon: "success",
+          title: "取消跟隨成功",
+        });
+        this.isProcessing = false;
+      } catch (error) {
+        this.isProcessing = false;
+        Toast.fire({
+          icon: "error",
+          title: "取消跟隨失敗",
+        });
+      }
     },
   },
   created() {
@@ -120,29 +113,29 @@ export default {
   filters: {
     nameIsTooLong(User) {
       if (User.isFollowed) {
-        if (User.user.name.length > 7) {
-          return User.user.name.substr(0, 6) + "...";
+        if (User.name.length > 7) {
+          return User.name.substr(0, 6) + "...";
         }
       }
       if (!User.isFollowed) {
-        if (User.user.name.length > 10) {
-          return User.user.name.substr(0, 9) + "...";
+        if (User.name.length > 10) {
+          return User.name.substr(0, 9) + "...";
         }
       }
-      return User.user.name
+      return User.name;
     },
     accountIsTooLong(User) {
       if (User.isFollowed) {
-        if (User.user.account.length > 7) {
-          return User.user.account.substr(0, 6) + "...";
+        if (User.account.length > 7) {
+          return User.account.substr(0, 6) + "...";
         }
       }
       if (!User.isFollowed) {
-        if (User.user.account.length > 10) {
-          return User.user.account.substr(0, 9) + "...";
+        if (User.account.length > 10) {
+          return User.account.substr(0, 9) + "...";
         }
       }
-      return User.user.account;
+      return User.account;
     },
   },
 };
@@ -177,7 +170,9 @@ export default {
 .popularUsersImage {
   width: 50px;
   height: 50px;
+  object-fit: cover;
   border-radius: 50%;
+  background-color: #fff;
 }
 
 .popularUsersNameGroup {
@@ -231,5 +226,10 @@ export default {
 .popularUsersFollowedBtn:hover,
 .popularUsersFollowBtn:hover {
   cursor: pointer;
+}
+
+.popularUsersFollowedBtn:disabled:hover,
+.popularUsersFollowBtn:disabled:hover {
+  cursor: wait;
 }
 </style>

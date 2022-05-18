@@ -7,7 +7,7 @@
           <h1 class="settingTitleText">帳戶設定</h1>
         </div>
 
-        <form class="settingForm">
+        <form @submit.stop.prevent="submitForm" class="settingForm">
           <div class="labelInputGroup">
             <label for="account" class="formLabel">帳號</label>
             <input
@@ -15,9 +15,14 @@
               type="text"
               name="account"
               class="formInput"
+              :class="{ error: account.length > 50 }"
               id="account"
               required
             />
+            <div class="errorMessage" v-if="account.length > 50">
+              <p class="errorText">字數超出上限!</p>
+              <p>{{ account.length }}/50</p>
+            </div>
           </div>
           <div class="labelInputGroup">
             <label for="name" class="formLabel">名稱</label>
@@ -54,6 +59,7 @@
               name="password"
               class="formInput"
               id="password"
+              placeholder="請填寫想要更改的密碼"
               required
             />
           </div>
@@ -66,10 +72,17 @@
               name="passwordCheck"
               class="formInput"
               id="passwordCheck"
+              placeholder="請再輸入一次密碼"
               required
             />
           </div>
-          <button type="submit" class="settingFormSubmitBtn">儲存</button>
+          <button
+            :disabled="isProcessing"
+            type="submit"
+            class="settingFormSubmitBtn"
+          >
+            儲存
+          </button>
         </form>
       </div>
     </div>
@@ -79,6 +92,8 @@
 <script>
 import Navbar from "../components/Navbar.vue";
 import { mapState } from "vuex";
+import usersAPI from "../apis/users";
+import { Toast } from "../utility/helpers";
 
 export default {
   components: {
@@ -91,21 +106,84 @@ export default {
       email: "",
       password: "",
       passwordCheck: "",
+      isProcessing: false,
     };
   },
   computed: {
-    ...mapState(['currentUser'])
+    ...mapState(["currentUser"]),
   },
   methods: {
     fetchData() {
-      this.account = this.currentUser.account
-      this.name = this.currentUser.name
-      this.email = this.currentUser.email
-    }
+      this.account = this.currentUser.account;
+      this.name = this.currentUser.name;
+      this.email = this.currentUser.email;
+    },
+    async submitForm() {
+      try {
+        if (
+          !this.account ||
+          !this.name ||
+          !this.email ||
+          !this.password ||
+          !this.passwordCheck
+        ) {
+          Toast.fire({
+            icon: "warning",
+            title: "請確實填寫全部欄位",
+          });
+          return;
+        } else if (this.account.length > 50) {
+          Toast.fire({
+            icon: "warning",
+            title: "帳號不可超過50字",
+          });
+          return;
+        } else if (this.name.length > 50) {
+          Toast.fire({
+            icon: "warning",
+            title: "名稱不可超過50字",
+          });
+          return;
+        } else if (this.password !== this.passwordCheck) {
+          Toast.fire({
+            icon: "error",
+            title: "密碼與密碼確認欄位不相符",
+          });
+          return;
+        }
+
+        this.isProcessing = true;
+
+        await usersAPI.editUser({
+          id: this.currentUser.id,
+          data: {
+            account: this.account,
+            name: this.name,
+            email: this.email,
+            password: this.password,
+            checkPassword: this.passwordCheck
+          },
+        });
+
+        Toast.fire({
+          icon: "success",
+          title: "使用者資料更改成功",
+        });
+
+        this.isProcessing = false;
+        this.$router.push('/main')
+      } catch (error) {
+        this.isProcessing = false;
+        Toast.fire({
+          icon: "error",
+          title: "無法更改使用者資料",
+        });
+      }
+    },
   },
   created() {
-    this.fetchData()
-  }
+    this.fetchData();
+  },
 };
 </script>
 
@@ -136,7 +214,7 @@ export default {
 .settingTitle {
   width: 100%;
   height: 74px;
-  border-bottom: 1px solid #E6ECF0;
+  border-bottom: 1px solid #e6ecf0;
   padding: 24px 23px;
   font-size: 24px;
   font-weight: 700;
@@ -178,6 +256,11 @@ export default {
   font-weight: 500;
 }
 
+.formInput::placeholder {
+  color: #b5b5be;
+  font-size: 14px;
+}
+
 .formInput:focus,
 .formInput:hover {
   outline: 0;
@@ -217,5 +300,9 @@ export default {
 
 .settingFormSubmitBtn:hover {
   cursor: pointer;
+}
+
+.settingFormSubmitBtn:disabled:hover {
+  cursor: wait;
 }
 </style>

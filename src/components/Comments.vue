@@ -6,8 +6,10 @@
       :key="comment.id"
     >
       <div class="commentUserImage">
-        <router-link :to="{ name: 'user-tweets', params: { id: comment.UserId } }">
-          <img :src="comment.userAvatar" alt="" />
+        <router-link
+          :to="{ name: 'user-tweets', params: { id: comment.UserId } }"
+        >
+          <img :src="comment.userAvatar | emptyImage" alt="" />
         </router-link>
       </div>
       <div class="commentContent">
@@ -17,10 +19,12 @@
             class="commentUserName"
             >{{ comment.userName }}</router-link
           >
-          <router-link :to="{ name: 'user-tweets', params: { id: comment.UserId } }" class="commentUserAccount"
+          <router-link
+            :to="{ name: 'user-tweets', params: { id: comment.UserId } }"
+            class="commentUserAccount"
             >＠{{ comment.userAccount }}</router-link
           >
-          <p class="commentCreatedAt">・{{ comment.createdAt }}</p>
+          <p class="commentCreatedAt">・{{ comment.createdAt | fromNow }}</p>
         </div>
         <div class="commentFor">
           <p>
@@ -48,6 +52,8 @@
 </template>
 
 <script>
+import { fromNowFilter } from "../utility/mixins";
+import { emptyImageFilter } from "../utility/mixins";
 export default {
   props: {
     currentRepliedTweets: {
@@ -55,6 +61,7 @@ export default {
       required: true,
     },
   },
+  mixins: [fromNowFilter, emptyImageFilter],
 };
 </script>
 

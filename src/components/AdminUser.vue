@@ -1,31 +1,45 @@
 <template>
   <div class="AdminUser">
-    <img class="adminUserBackgroundImage" src="https://i2.jueshifan.com/205a28/78027f82/705f25c11eaabe409478.jpg" alt="">
-    <img class="adminUserImage" src="https://img.ltn.com.tw/Upload/news/600/2016/04/17/phpFBRDIE.jpg" alt="">
+    <img class="adminUserBackgroundImage" :src="user.cover" alt="">
+    <img class="adminUserImage" :src="user.avatar | emptyImage" alt="">
     <div class="adminUserNameGroup">
-      <p class="adminUserName">awwfuq</p>
-      <p class="adminUserAccount">@awwfuq</p>
+      <p class="adminUserName">{{user.name}}</p>
+      <p class="adminUserAccount">@{{user.account}}</p>
     </div>
     <div class="adminUserTweetsAndLikesCountGroup">
       <div class="adminUserTweetsCountGroup">
         <img src="../assets/admin-tweet-icon.png" alt="">
-        <p>1.5k</p>
+        <p>{{user.Tweets}}</p>
       </div>
       <div class="adminUserLikesCountGroup">
         <img src="../assets/admin-like-icon.png" alt="">
-        <p>20k</p>
+        <p>{{user.Likes}}</p>
       </div>
     </div>
     <div class="adminUserFollowingsFollowersCountGroup">
       <div class="adminUserFollowingsCountGroup">
-        <p><span>34 個</span>跟隨中</p>
+        <p><span>{{user.Followings}} 個</span>跟隨中</p>
       </div>
       <div class="adminUserFollowersCountGroup">
-        <p><span>59 位</span>跟隨者</p>
+        <p><span>{{user.Followers}} 位</span>跟隨者</p>
       </div>
     </div>
   </div>
 </template>
+
+<script>
+import { emptyImageFilter } from '../utility/mixins'
+
+export default {
+  props: {
+    user: {
+      type: Object,
+      required: true
+    }
+  },
+  mixins: [emptyImageFilter]
+}
+</script>
 
 <style scoped>
 .AdminUser {
@@ -55,6 +69,7 @@
   top: 64px;
   transform: translateX(-50%);
   z-index: 1;
+  background-color: #fff;
 }
 
 .adminUserNameGroup {

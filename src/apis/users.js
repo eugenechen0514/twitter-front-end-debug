@@ -26,5 +26,21 @@ export default {
     return apiHelper.put(`/api/users/${id}`, data, {
       headers: { Authorization: `Bearer ${getToken()}` }
     })
+  },
+  getTopUsers() {
+    return apiHelper.get('/api/users/top', {
+      headers: { Authorization: `Bearer ${getToken()}` }
+    })
+  },
+  addFollowing({id}) {
+    return apiHelper.post('/api/followships',{id},{
+      headers: { Authorization: `Bearer ${getToken()}` }
+    })
+  },
+  deleteFollowing({ id }) {
+    return apiHelper.delete(`/api/followships/${id}`, {
+      headers: { Authorization: `Bearer ${getToken()}` }
+    })
   }
+
 }

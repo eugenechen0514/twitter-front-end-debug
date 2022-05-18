@@ -3,9 +3,30 @@ import VueRouter from 'vue-router'
 import SignIn from '../views/SignIn'
 import Main from '../views/Main'
 import store from '../store/index'
+import NotFound from '../views/NotFound'
 
 
 Vue.use(VueRouter)
+
+const authorizeIsAdmin = (to, from, next) => {
+  const currentUser = store.state.currentUser
+  if (currentUser && (currentUser.role !== 'admin')) {
+    next('/not-found')
+    return
+  }
+
+  next()
+}
+
+const authorizeIsUser = (to, from, next) => {
+  const currentUser = store.state.currentUser
+  if (currentUser && (currentUser.role !== 'user')) {
+    next('/not-found')
+    return
+  }
+
+  next()
+}
 
 const routes = [
   {
@@ -16,67 +37,79 @@ const routes = [
   {
     path: '/main',
     name: 'main',
-    component: Main
+    component: Main,
+    beforeEnter: authorizeIsUser
   },
   {
     path: '/tweets/:id',
     name: 'tweet',
-    component: () => import('../views/Tweet.vue')
+    component: () => import('../views/Tweet.vue'),
+    beforeEnter: authorizeIsUser
   },
   {
     path: '/user/self/tweets',
     name: 'user-self-tweets',
-    component: () => import('../views/UserSelfTweets.vue')
+    component: () => import('../views/UserSelfTweets.vue'),
+    beforeEnter: authorizeIsUser
   },
   {
     path: '/user/self/comments',
     name: 'user-self-comments',
-    component: () => import('../views/UserSelfComments.vue')
+    component: () => import('../views/UserSelfComments.vue'),
+    beforeEnter: authorizeIsUser
   },
   {
     path: '/user/self/likes',
     name: 'user-self-likes',
-    component: () => import('../views/UserSelfLikes.vue')
+    component: () => import('../views/UserSelfLikes.vue'),
+    beforeEnter: authorizeIsUser
   },
   {
     path: '/user/:id/tweets',
     name: 'user-tweets',
-    component: () => import('../views/UserOtherTweets.vue')
+    component: () => import('../views/UserOtherTweets.vue'),
+    beforeEnter: authorizeIsUser
   },
   {
     path: '/user/:id/comments',
     name: 'user-comments',
-    component: () => import('../views/UserOtherComments.vue')
+    component: () => import('../views/UserOtherComments.vue'),
+    beforeEnter: authorizeIsUser
   },
   {
     path: '/user/:id/likes',
     name: 'user-likes',
-    component: () => import('../views/UserOtherLikes.vue')
+    component: () => import('../views/UserOtherLikes.vue'),
+    beforeEnter: authorizeIsUser
   },
   {
     path: '/user/:id/followings',
     name: 'user-followings',
-    component: () => import('../views/UserFollowings.vue')
+    component: () => import('../views/UserFollowings.vue'),
+    beforeEnter: authorizeIsUser
   },
   {
     path: '/user/:id/followers',
     name: 'user-followers',
-    component: () => import('../views/UserFollowers')
+    component: () => import('../views/UserFollowers'),
+    beforeEnter: authorizeIsUser
   },
   {
     path: '/admin/signin',
     name: 'admin-sign-in',
-    component: () => import('../views/AdminSignIn.vue')
+    component: () => import('../views/AdminSignIn.vue'),
   },
   {
     path: '/admin/tweets',
     name: 'admin-tweets',
-    component: () => import('../views/AdminTweets.vue')
+    component: () => import('../views/AdminTweets.vue'),
+    beforeEnter: authorizeIsAdmin
   },
   {
     path: '/admin/users',
     name: 'admin-users',
-    component: () => import('../views/AdminUsers.vue')
+    component: () => import('../views/AdminUsers.vue'),
+    beforeEnter: authorizeIsAdmin
   },
   {
     path: '/signin',
@@ -92,6 +125,11 @@ const routes = [
     path: '/setting',
     name: 'setting',
     component: () => import('../views/Setting.vue')
+  },
+  {
+    path: '*',
+    name: 'not-found',
+    component: NotFound
   }
 ]
 

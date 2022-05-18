@@ -9,7 +9,10 @@
             <p>推文</p>
           </router-link>
         </div>
-        <TweetDetail id="TweetDetail" :tweet="tweet" />
+        <TweetDetail
+          id="TweetDetail"
+          :initialTweet="tweet"
+        />
         <Comments id="TweetComments" :currentRepliedTweets="tweetReplies" />
       </div>
     </div>
@@ -45,8 +48,7 @@ export default {
         User: {
           id: -1,
           email: "",
-          password:
-            "",
+          password: "",
           name: "",
           role: "",
           account: "",
@@ -62,16 +64,16 @@ export default {
     };
   },
   methods: {
-    async fetchData() {
+    async fetchData(id) {
       try {
         const tweetInfoResponse = await tweetsAPI.getTweet({
-          id: this.$route.params.id,
+          id
         });
 
         this.tweet = tweetInfoResponse.data;
 
         const tweetRepliesResponse = await tweetsAPI.getTweetReplies({
-          id: this.$route.params.id,
+          id
         });
 
         this.tweetReplies = tweetRepliesResponse.data;
@@ -84,7 +86,13 @@ export default {
     },
   },
   created() {
-    this.fetchData();
+    const { id } = this.$route.params;
+    this.fetchData(id);
+  },
+  beforeRouteUpdate(to, from, next) {
+    const { id } = to.params;
+    this.fetchData(id);
+    next();
   },
 };
 </script>

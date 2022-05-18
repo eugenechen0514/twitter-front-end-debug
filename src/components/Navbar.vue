@@ -30,15 +30,16 @@
         "
         alt=""
       />
-      <img
-        class="navLinkIcon"
-        src="../assets/selfInfo.png"
-        v-else
-        alt=""
-      />
-      <router-link class="navLinkText"
-      :class="{active: $route.path==='/user/self/comments' || $route.path==='/user/self/likes'}"
-      to="/user/self/tweets">
+      <img class="navLinkIcon" src="../assets/selfInfo.png" v-else alt="" />
+      <router-link
+        class="navLinkText"
+        :class="{
+          active:
+            $route.path === '/user/self/comments' ||
+            $route.path === '/user/self/likes',
+        }"
+        to="/user/self/tweets"
+      >
         個人資料
       </router-link>
     </div>
@@ -69,9 +70,7 @@
         </button>
         <div class="postTweetModalContent">
           <img
-            src="https://img.ltn.com.tw/Upload/news/600/2016/04/17/phpFBRDIE.jpg"
-            width="50px"
-            height="50px"
+            :src="currentUser.avatar | emptyImage"
             class="postTweetModalUserImg"
             alt=""
           />
@@ -92,6 +91,7 @@
           </p>
           <button
             @click.stop.prevent="postTweetModalSubmit"
+            :disabled="isProcessing"
             class="postTweetModalSubmitBtn"
           >
             推文
@@ -107,13 +107,23 @@
 </template>
 
 <script>
+import { Toast } from "../utility/helpers";
+import tweetsAPI from '../apis/tweets'
+import { mapState } from "vuex";
+import { emptyImageFilter } from "../utility/mixins";
+
 export default {
+  mixins: [emptyImageFilter],
   data() {
     return {
       postTweetModalIsOpen: false,
       tweetText: "",
       postTweetModalErrorMessage: "",
+      isProcessing: false,
     };
+  },
+  computed: {
+    ...mapState(['currentUser'])
   },
   methods: {
     openPostTweetModal() {
@@ -126,18 +136,38 @@ export default {
       this.postTweetModalErrorMessage = "";
       this.postTweetModalIsOpen = false;
     },
-    postTweetModalSubmit() {
-      if (!this.tweetText) {
-        this.postTweetModalErrorMessage = "內容不可留白";
-        return;
+    async postTweetModalSubmit() {
+      try {
+        if (!this.tweetText) {
+          this.postTweetModalErrorMessage = "內容不可留白";
+          return;
+        }else if (this.tweetText.length > 140) {
+          return
+        }
+
+        this.isProcessing = true
+
+        await tweetsAPI.postTweet({description: this.tweetText})
+
+        this.tweetText = "";
+        this.postTweetModalIsOpen = false;
+
+        Toast.fire({
+          icon: 'success',
+          title: '推文成功'
+        })
+        this.isProcessing = false
+      } catch (error) {
+        this.isProcessing = false
+        Toast.fire({
+          icon: "error",
+          title: "推文失敗",
+        });
       }
-      console.log({ text: this.tweetText });
-      this.tweetText = "";
-      this.postTweetModalIsOpen = false;
     },
-    logout () {
-      this.$store.commit('revokeAuthentication')
-    }
+    logout() {
+      this.$store.commit("revokeAuthentication");
+    },
   },
 };
 </script>
@@ -245,8 +275,12 @@ export default {
 }
 
 .postTweetModalUserImg {
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
+  object-fit: cover;
   margin-right: 8px;
+  background-color: #fff;
 }
 
 .postTweetModalText {
@@ -279,6 +313,14 @@ export default {
   color: #fff;
   font-size: 16px;
   font-weight: 400;
+}
+
+.postTweetModalSubmitBtn:hover {
+  cursor: pointer;
+}
+
+.postTweetModalSubmitBtn:disabled:hover {
+  cursor: wait;
 }
 
 .postTweetModalErrorMessage {

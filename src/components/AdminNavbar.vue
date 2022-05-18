@@ -1,6 +1,6 @@
 <template>
   <div class="AdminNavbar">
-    <router-link to="/admin/signin">
+    <router-link to="/admin/tweets">
       <img
         class="adminNavbarLogo"
         src="../assets/Icon.png"
@@ -36,10 +36,20 @@
     </div>
     <div class="adminNavLinkGroup adminNavLogoutLinkGroup">
       <img class="adminNavLinkIcon" src="../assets/logout.png" alt="" />
-      <button class="adminNavLogoutBtn">登出</button>
+      <button @click.stop.prevent="logout" class="adminNavLogoutBtn">登出</button>
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  methods: {
+    logout() {
+      this.$store.commit("revokeAuthentication");
+    }
+  }
+}
+</script>
 
 
 <style scoped>

@@ -2,7 +2,7 @@
   <div class="MainPostTweet">
     <img
       class="mainPostTweetUserImage"
-      :src="currentUser.avatar"
+      :src="currentUser.avatar | emptyImage"
       width="50px"
       height="50px"
       alt=""
@@ -35,8 +35,10 @@
 import { mapState } from "vuex";
 import tweetsAPI from "../apis/tweets";
 import {Toast} from '../utility/helpers'
+import { emptyImageFilter } from "../utility/mixins";
 
 export default {
+  mixins: [emptyImageFilter],
   computed: {
     ...mapState(["currentUser"]),
   },
@@ -66,6 +68,7 @@ export default {
           icon: 'success',
           title: '推文成功'
         })
+        this.$router.go(0);
       } catch (error) {
         Toast.fire({
           icon: 'error',
@@ -92,6 +95,7 @@ export default {
   height: 50px;
   border-radius: 50%;
   object-fit: cover;
+  background-color: #fff;
 }
 
 .mainPostTweetText {

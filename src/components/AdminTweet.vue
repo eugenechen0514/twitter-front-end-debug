@@ -1,21 +1,63 @@
 <template>
   <div class="AdminTweet">
     <router-link to="">
-      <img class="adminTweetUserImage" src="https://img.ltn.com.tw/Upload/news/600/2016/04/17/phpFBRDIE.jpg" alt="">
+      <img class="adminTweetUserImage" :src="tweet.UserAvatar" alt="">
     </router-link>
     <div class="adminTweetContent">
       <div class="adminTweetUserNameGroup">
-        <router-link class="adminTweetUserName" to="">awwfuq</router-link>
-        <router-link class="adminTweetUserAccount" to="">@awwfuq</router-link>
-        <p class="adminTweetCreatedAt">・3小時</p>
+        <router-link class="adminTweetUserName" to="">{{tweet.UserName}}</router-link>
+        <router-link class="adminTweetUserAccount" to="">@{{tweet.UserAccount}}</router-link>
+        <p class="adminTweetCreatedAt">・{{tweet.createdAt | fromNow}}</p>
       </div>
       <div class="adminTweetText">
-        <p>這份設計稿將包含「網站風格設定」、「基本元件設定」、「使用者介面」、「使用者動線」等...。設計稿內容將使用目前業界主流工具 - Figma 呈現，進入設計稿前，請你詳閱以下說明。這份設計稿將包含「網站風格設定」、「基本元件設定」、「使用者介面」、「使用者動線」等...。設計稿內容將使用目前業界主流工具 - Figma 呈現，進入設計稿前，請你詳閱以下說明。</p>
+        <p>{{tweet.description}}</p>
       </div>
     </div>
-    <button class="deleteTweetBtn"><img src="../assets/delete-icon.png" alt=""></button>
+    <button @click.stop.prevent="deleteTweet(tweet.id)" :disabled="isProcessing" class="deleteTweetBtn"><img src="../assets/delete-icon.png" alt=""></button>
   </div>
 </template>
+
+<script>
+import { fromNowFilter } from '../utility/mixins'
+import adminAPI from '../apis/admin'
+import { Toast } from '../utility/helpers'
+
+export default {
+  props: {
+    tweet: {
+      type: Object,
+      required: true
+    }
+  },
+  mixins: [fromNowFilter],
+  data() {
+    return {
+      isProcessing: false
+    }
+  },
+  methods: {
+    async deleteTweet(id) {
+      try {
+        this.isProcessing = true
+        await adminAPI.deleteTweet({id})
+        Toast.fire({
+          icon: 'success',
+          title: '刪除推文成功'
+        })
+        this.$emit('deleteTweet',id)
+        this.isProcessing = false
+      }
+      catch(error) {
+        this.isProcessing = false
+        Toast.fire({
+          icon: 'error',
+          title: '刪除推文失敗'
+        })
+      }
+    }
+  }
+}
+</script>
 
 <style scoped>
 .AdminTweet {
@@ -30,7 +72,9 @@
 .adminTweetUserImage {
   width: 50px;
   height: 50px;
+  object-fit: cover;
   margin-right: 8px;
+  background-color: #fff;
 }
 
 .adminTweetContent {
@@ -82,6 +126,10 @@
   align-items: center;
   position: absolute;
   right: 0;
+}
+
+.deleteTweetBtn:disabled:hover {
+  cursor: wait;
 }
 
 .deleteTweetBtn:hover {

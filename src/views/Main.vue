@@ -7,7 +7,7 @@
           <h1>首頁</h1>
         </div>
         <MainPostTweet :currentUser="currentUser" />
-        <AllTweets @addLike="addLikeTweet" @deleteLike="deleteLikeTweet" :currentTweets="currentTweets" />
+        <AllTweets :initialCurrentTweets="currentTweets" />
       </div>
     </div>
     <PopularUsers id="PopularUsers" />
@@ -53,17 +53,6 @@ export default {
         })
       }
     },
-    addLikeTweet(id) {
-      const tweet = this.currentTweets.find((item) => item.id === id)
-      tweet.isLiked = true
-      tweet.Likes++
-    },
-    deleteLikeTweet(id) {
-      const tweet = this.currentTweets.find((item) => item.id === id)
-      tweet.isLiked = false
-      tweet.Likes--
-    }
-
   },
   created() {
     this.fetchData();
