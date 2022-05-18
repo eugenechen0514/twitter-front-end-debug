@@ -104,8 +104,16 @@
           required
         />
       </div>
-      <button :disabled="isProcessing" type="submit" class="signUpBtn">註冊</button>
-      <button :disabled="isProcessing" @click.stop.prevent="cancelSubmit" class="cancelBtn">取消</button>
+      <button :disabled="isProcessing" type="submit" class="signUpBtn">
+        註冊
+      </button>
+      <button
+        :disabled="isProcessing"
+        @click.stop.prevent="cancelSubmit"
+        class="cancelBtn"
+      >
+        取消
+      </button>
     </form>
   </div>
 </template>
@@ -126,13 +134,13 @@ export default {
       accountErrorMessage: "",
       emailErrorMessage: "",
       passwordErrorMessage: "",
-      isProcessing: false
+      isProcessing: false,
     };
   },
   methods: {
     async handleSubmit() {
       try {
-        this.isProcessing = true
+        this.isProcessing = true;
         if (
           !this.account |
           !this.password |
@@ -140,6 +148,8 @@ export default {
           !this.email |
           !this.passwordCheck
         ) {
+          this.isProcessing = false;
+
           Toast.fire({
             icon: "warning",
             title: "請確實填寫每個欄位",
@@ -147,12 +157,16 @@ export default {
           return;
         }
         if (this.account.length > 50) {
+          this.isProcessing = false;
+
           Toast.fire({
             icon: "warning",
             title: "帳號超出字數",
           });
           return;
         } else if (this.name.length > 50) {
+          this.isProcessing = false;
+
           Toast.fire({
             icon: "warning",
             title: "名稱超出字數",
@@ -172,9 +186,9 @@ export default {
         }
 
         Toast.fire({
-          icon: 'success',
-          title: '註冊成功，跳轉至登入頁'
-        })
+          icon: "success",
+          title: "註冊成功，跳轉至登入頁",
+        });
         this.$router.push({ name: "sign-in" });
       } catch (error) {
         this.isFirstTry = false;
@@ -185,7 +199,7 @@ export default {
         this.passwordCheck = "";
         this.accountErrorMessage = "";
         this.emailErrorMessage = "";
-        this.isProcessing = false
+        this.isProcessing = false;
 
         if (error.response.data.message === "Error: Account already exists!") {
           this.accountErrorMessage = "帳號已有存在";
@@ -200,9 +214,9 @@ export default {
         }
 
         Toast.fire({
-          icon: 'error',
-          title: '註冊失敗'
-        })
+          icon: "error",
+          title: "註冊失敗",
+        });
       }
     },
     cancelSubmit() {
@@ -336,5 +350,9 @@ form {
 
 .cancelBtn:hover {
   cursor: pointer;
+}
+
+.cancelBtn:disabled:hover {
+  cursor: wait;
 }
 </style>
