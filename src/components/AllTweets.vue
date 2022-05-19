@@ -233,6 +233,7 @@ export default {
         isLiked: false,
       };
       this.replyTweetModalIsOpen = false;
+      this.replyText = ''
       this.isProcessing = false;
     },
     async replyTweetModalSubmit() {
