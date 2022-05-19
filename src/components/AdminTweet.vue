@@ -1,7 +1,7 @@
 <template>
   <div class="AdminTweet">
     <router-link to="">
-      <img class="adminTweetUserImage" :src="tweet.User.avatar" alt="">
+      <img class="adminTweetUserImage" :src="tweet.User.avatar | emptyImage" alt="">
     </router-link>
     <div class="adminTweetContent">
       <div class="adminTweetUserNameGroup">
@@ -21,6 +21,7 @@
 import { fromNowFilter } from '../utility/mixins'
 import adminAPI from '../apis/admin'
 import { Toast } from '../utility/helpers'
+import { emptyImageFilter } from '../utility/mixins'
 
 export default {
   props: {
@@ -29,7 +30,7 @@ export default {
       required: true
     }
   },
-  mixins: [fromNowFilter],
+  mixins: [fromNowFilter, emptyImageFilter],
   data() {
     return {
       isProcessing: false

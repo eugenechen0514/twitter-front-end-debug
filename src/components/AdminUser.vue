@@ -1,44 +1,62 @@
 <template>
   <div class="AdminUser">
-    <img class="adminUserBackgroundImage" :src="user.cover" alt="">
-    <img class="adminUserImage" :src="user.avatar | emptyImage" alt="">
+    <img class="adminUserBackgroundImage" :src="user.cover" alt="" />
+    <img class="adminUserImage" :src="user.avatar | emptyImage" alt="" />
     <div class="adminUserNameGroup">
-      <p class="adminUserName">{{user.name}}</p>
-      <p class="adminUserAccount">@{{user.account}}</p>
+      <p class="adminUserName">{{ user.name | nameIsTooLong }}</p>
+      <p class="adminUserAccount">@{{ user.account | accountIsTooLong }}</p>
     </div>
     <div class="adminUserTweetsAndLikesCountGroup">
       <div class="adminUserTweetsCountGroup">
-        <img src="../assets/admin-tweet-icon.png" alt="">
-        <p>{{user.Tweets}}</p>
+        <img src="../assets/admin-tweet-icon.png" alt="" />
+        <p>{{ user.Tweets }}</p>
       </div>
       <div class="adminUserLikesCountGroup">
-        <img src="../assets/admin-like-icon.png" alt="">
-        <p>{{user.Likes}}</p>
+        <img src="../assets/admin-like-icon.png" alt="" />
+        <p>{{ user.Likes }}</p>
       </div>
     </div>
     <div class="adminUserFollowingsFollowersCountGroup">
       <div class="adminUserFollowingsCountGroup">
-        <p><span>{{user.Followings}} 個</span>跟隨中</p>
+        <p>
+          <span>{{ user.Followings }} 個</span>跟隨中
+        </p>
       </div>
       <div class="adminUserFollowersCountGroup">
-        <p><span>{{user.Followers}} 位</span>跟隨者</p>
+        <p>
+          <span>{{ user.Followers }} 位</span>跟隨者
+        </p>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { emptyImageFilter } from '../utility/mixins'
+import { emptyImageFilter } from "../utility/mixins";
 
 export default {
   props: {
     user: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
-  mixins: [emptyImageFilter]
-}
+  mixins: [emptyImageFilter],
+  filters: {
+    nameIsTooLong(name) {
+      if (name.length > 15) {
+        return name.substr(0, 15) + "...";
+      }
+      return name;
+    },
+    accountIsTooLong(account) {
+      if (account.length > 15) {
+        return account.substr(0, 15) + "...";
+      }
+      return account;
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -48,7 +66,7 @@ export default {
   border-radius: 10px;
   overflow: hidden;
   position: relative;
-  background-color: #F6F7F8;
+  background-color: #f6f7f8;
 }
 
 .adminUserBackgroundImage {
@@ -62,7 +80,7 @@ export default {
 .adminUserImage {
   width: 100px;
   height: 100px;
-  border: 4px solid #FFFFFF;
+  border: 4px solid #ffffff;
   border-radius: 50%;
   position: absolute;
   left: 50%;
@@ -87,7 +105,7 @@ export default {
 .adminUserAccount {
   font-size: 14px;
   font-weight: 400;
-  color: #6C757D;
+  color: #6c757d;
   line-height: 22px;
 }
 
@@ -99,7 +117,8 @@ export default {
   gap: 16px;
 }
 
-.adminUserTweetsCountGroup, .adminUserLikesCountGroup {
+.adminUserTweetsCountGroup,
+.adminUserLikesCountGroup {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -111,19 +130,21 @@ export default {
 .adminUserFollowingsFollowersCountGroup {
   margin-top: 9px;
   display: flex;
-    justify-content: center;
+  justify-content: center;
   align-items: center;
   gap: 8px;
 }
 
-.adminUserFollowingsCountGroup, .adminUserFollowersCountGroup {
+.adminUserFollowingsCountGroup,
+.adminUserFollowersCountGroup {
   font-size: 14px;
   font-weight: 400;
   line-height: 22px;
-  color: #6C757D;
+  color: #6c757d;
 }
 
-.adminUserFollowingsCountGroup span, .adminUserFollowersCountGroup span {
+.adminUserFollowingsCountGroup span,
+.adminUserFollowersCountGroup span {
   color: #171725;
 }
 </style>
