@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import SignIn from '../views/SignIn'
-import Main from '../views/Main'
-import store from '../store/index'
-import NotFound from '../views/NotFound'
+import SignIn from '../views/SignIn.vue'
+import Main from '../views/Main.vue'
+import store from '../store'
+import NotFound from '../views/NotFound.vue'
 
 
 Vue.use(VueRouter)
@@ -167,6 +167,7 @@ const routes = [
 const router = new VueRouter({
   routes,
   linkExactActiveClass: 'active',
+  mode: 'hash'
 })
 
 
