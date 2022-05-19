@@ -319,7 +319,7 @@ export default {
 }
 .singleTweet {
   border-bottom: 1px solid #e6ecf0;
-  height: 168px;
+  min-height: 168px;
   display: flex;
   padding: 16px 24px;
   position: relative;
@@ -367,7 +367,7 @@ export default {
 
 .singleTweetText {
   width: 100%;
-  height: 78px;
+  min-height: 78px;
   margin-top: 8px;
 }
 

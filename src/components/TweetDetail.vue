@@ -207,11 +207,13 @@ export default {
             icon: "warning",
             title: "回覆內容不可留白",
           });
+          return
         } else if (this.replyText.length > 140) {
           Toast.fire({
             icon: "warning",
             title: "回覆內容不可超過140字",
           });
+          return
         }
 
         this.isProcessing = true;
