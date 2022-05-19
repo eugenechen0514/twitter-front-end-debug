@@ -55,6 +55,7 @@ export default {
       try {
         const { data } = await usersAPI.getTopUsers();
         this.popularUsers = data;
+        this.popularUsers = this.popularUsers.filter((item) => item.id !== this.$store.state.currentUser.id).slice(0, 8)
       } catch (error) {
         Toast.fire({
           icon: "error",
