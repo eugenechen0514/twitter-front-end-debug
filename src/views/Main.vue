@@ -41,9 +41,7 @@ export default {
   methods: {
     async fetchData() {
       try {
-        const {data} = await tweetsAPI.getCurrentTweets({
-          id: this.currentUser.id,
-        });
+        const {data} = await tweetsAPI.getTweets();
 
         this.currentTweets = data
       } catch (error) {

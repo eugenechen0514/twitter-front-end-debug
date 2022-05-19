@@ -167,11 +167,11 @@ export default {
 
         Toast.fire({
           icon: "success",
-          title: "使用者資料更改成功",
+          title: "使用者資料更改成功，請重新登入",
         });
 
         this.isProcessing = false;
-        this.$router.push('/main')
+        this.$store.commit('revokeAuthentication')
       } catch (error) {
         this.isProcessing = false;
         Toast.fire({

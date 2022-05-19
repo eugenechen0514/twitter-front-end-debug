@@ -1,12 +1,12 @@
 <template>
   <div class="AdminTweet">
     <router-link to="">
-      <img class="adminTweetUserImage" :src="tweet.UserAvatar" alt="">
+      <img class="adminTweetUserImage" :src="tweet.User.avatar" alt="">
     </router-link>
     <div class="adminTweetContent">
       <div class="adminTweetUserNameGroup">
-        <router-link class="adminTweetUserName" to="">{{tweet.UserName}}</router-link>
-        <router-link class="adminTweetUserAccount" to="">@{{tweet.UserAccount}}</router-link>
+        <router-link class="adminTweetUserName" to="">{{tweet.User.name}}</router-link>
+        <router-link class="adminTweetUserAccount" to="">@{{tweet.User.account}}</router-link>
         <p class="adminTweetCreatedAt">・{{tweet.createdAt | fromNow}}</p>
       </div>
       <div class="adminTweetText">
@@ -72,6 +72,7 @@ export default {
 .adminTweetUserImage {
   width: 50px;
   height: 50px;
+  border-radius: 50%;
   object-fit: cover;
   margin-right: 8px;
   background-color: #fff;

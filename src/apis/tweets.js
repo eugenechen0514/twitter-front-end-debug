@@ -9,8 +9,8 @@ export default {
       headers: { Authorization: `Bearer ${getToken()}` }
     })
   },
-  getCurrentTweets({id}) {
-    return apiHelper.get(`/api/users/${id}/tweets`, {
+  getTweets() {
+    return apiHelper.get(`/api/tweets`, {
       headers: { Authorization: `Bearer ${getToken()}` }
     })
   },

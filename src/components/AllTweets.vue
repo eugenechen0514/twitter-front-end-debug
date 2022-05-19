@@ -5,20 +5,24 @@
       v-for="tweet in initialCurrentTweets"
       :key="tweet.id"
     >
-      <router-link :to="{ name: 'user-tweets', params: { id: tweet.UserId } }">
+      <router-link :to="{ name: 'user-tweets', params: { id: tweet.User.id } }">
         <img
           class="singleTweetUserImage"
-          :src="tweet.userAvatar | emptyImage"
+          :src="tweet.User.avatar | emptyImage"
           alt=""
         />
       </router-link>
       <div class="singleTweetContent">
         <div class="singleTweetUserNameGroup">
-          <router-link class="singleTweetUserName" to="">{{
-            tweet.User
-          }}</router-link>
-          <router-link class="singleTweetUserAccount" to=""
-            >@{{ tweet.userAccount }}</router-link
+          <router-link
+            class="singleTweetUserName"
+            :to="{ name: 'user-tweets', params: { id: tweet.User.id } }"
+            >{{ tweet.User.name }}</router-link
+          >
+          <router-link
+            class="singleTweetUserAccount"
+            :to="{ name: 'user-tweets', params: { id: tweet.User.id } }"
+            >@{{ tweet.User.account }}</router-link
           >
           <p class="singleTweetCreatedAt">・{{ tweet.createdAt | fromNow }}</p>
         </div>
