@@ -198,10 +198,6 @@ export default {
         const form = e.target
         const formData = new FormData(form)
 
-        for (let [name, value] of formData.entries()) {
-          console.log(name + ": " + value);
-        }
-
         await usersAPI.editUser({
           id: this.initialCurrentUser.id,
           data: formData,
