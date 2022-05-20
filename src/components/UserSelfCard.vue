@@ -115,10 +115,10 @@
       <p class="userDescription">
         {{ initialCurrentUser.introduction }}
       </p>
-      <router-link class="userFollowersCount" to="/user/1/followings"
+      <router-link class="userFollowersCount" :to="{name: 'user-followings', params: {id: initialCurrentUser.id}}"
         >{{ initialCurrentUser.Followings }}個<span>跟隨中</span></router-link
       >
-      <router-link class="userFollowingsCount" to="/user/1/followers"
+      <router-link class="userFollowingsCount" :to="{name: 'user-followers', params: {id: initialCurrentUser.id}}"
         >{{ initialCurrentUser.Followers }}個<span>跟隨者</span></router-link
       >
     </div>
