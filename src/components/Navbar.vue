@@ -138,8 +138,9 @@ export default {
     },
     async postTweetModalSubmit() {
       try {
-        if (!this.tweetText) {
+        if (!this.tweetText.trim()) {
           this.postTweetModalErrorMessage = "內容不可留白";
+          this.tweetText = ''
           return;
         }else if (this.tweetText.length > 140) {
           return

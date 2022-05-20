@@ -78,7 +78,7 @@ export default {
       try {
         this.isProcessing = true;
 
-        if (!this.account | !this.password) {
+        if (!this.account.trim() || !this.password.trim()) {
           this.isProcessing = false;
           Toast.fire({
             icon: "warning",
