@@ -8,7 +8,7 @@
         </router-link>
         <div class="userInfo">
           <h1 class="infoName">{{currentUser.name}}</h1>
-          <span class="infoTweetsNumber">{{currentTweets.length}}推文</span>
+          <span class="infoTweetsNumber">{{currentTweets.length}}則推文</span>
         </div>
       </div>
       <UserSelfCard :initialCurrentUser="currentUser" />

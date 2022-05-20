@@ -2,12 +2,12 @@
   <div class="Comments">
     <div
       class="comment"
-      v-for="comment in currentRepliedTweets"
-      :key="comment.id"
+      v-for="(comment, index) in currentRepliedTweets"
+      :key="comment.id || index"
     >
       <div class="commentUserImage">
         <router-link
-          :to="{ name: 'user-tweets', params: { id: comment.UserId } }"
+          :to="{ name: 'user-tweets', params: { id: comment.UserId || comment.userId} }"
         >
           <img :src="comment.userAvatar | emptyImage" alt="" />
         </router-link>
@@ -15,12 +15,12 @@
       <div class="commentContent">
         <div class="commentUserNameGroup">
           <router-link
-            :to="{ name: 'user-tweets', params: { id: comment.UserId } }"
+            :to="{ name: 'user-tweets', params: { id: comment.UserId || comment.userId} }"
             class="commentUserName"
             >{{ comment.userName }}</router-link
           >
           <router-link
-            :to="{ name: 'user-tweets', params: { id: comment.UserId } }"
+            :to="{ name: 'user-tweets', params: { id: comment.UserId || comment.userId} }"
             class="commentUserAccount"
             >＠{{ comment.userAccount }}</router-link
           >
@@ -28,7 +28,7 @@
         </div>
         <div class="commentFor">
           <p>
-            回覆 <span>@{{ comment.replyAccount }}</span>
+            回覆 <span>@{{comment.replyUserAccount || comment.replyAccount }}</span>
           </p>
         </div>
         <div class="commentText">
@@ -39,11 +39,11 @@
         <div class="commentLikeBtnGroup">
           <button class="commentBtn">
             <img src="../assets/comment-icon.png" alt="" />
-            <p>13</p>
+            <p>0</p>
           </button>
           <button class="likeBtn">
-            <img src="../assets/like-icon-active.png" alt="" />
-            <p>76</p>
+            <img src="../assets/like-icon.png" alt="" />
+            <p>0</p>
           </button>
         </div>
       </div>

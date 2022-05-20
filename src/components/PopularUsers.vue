@@ -114,13 +114,13 @@ export default {
   filters: {
     nameIsTooLong(User) {
       if (User.isFollowed) {
-        if (User.name.length > 7) {
-          return User.name.substr(0, 6) + "...";
+        if (User.name.length > 5) {
+          return User.name.substr(0, 4) + "...";
         }
       }
       if (!User.isFollowed) {
-        if (User.name.length > 10) {
-          return User.name.substr(0, 9) + "...";
+        if (User.name.length > 7) {
+          return User.name.substr(0, 6) + "...";
         }
       }
       return User.name;
