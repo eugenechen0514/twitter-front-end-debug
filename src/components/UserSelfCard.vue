@@ -2,14 +2,14 @@
   <div class="userCard">
     <img
       class="userBackgroundImage"
-      :src="initialCurrentUser.cover"
+      :src="initialCurrentUser.cover | emptyCover"
       width="600px"
       height="200px"
       alt=""
     />
     <img
       class="userImage"
-      :src="initialCurrentUser.avatar"
+      :src="initialCurrentUser.avatar | emptyImage"
       width="140px"
       height="140px"
       alt=""
@@ -28,12 +28,14 @@
             ✖
           </button>
           <p class="title">編輯個人資料</p>
-          <button type="submit" class="save">儲存</button>
+          <button :disabled="isProcessing" type="submit" class="save" >
+            儲存
+          </button>
         </div>
         <div class="userEditModalContent">
           <div class="backgroundImageGroup">
             <img
-              :src="userEditModalCover"
+              :src="userEditModalCover | emptyCover"
               class="modalBackgroundImage"
               alt=""
             />
@@ -54,7 +56,7 @@
             />
           </div>
           <div class="userImageGroup">
-            <img class="modalUserImage" :src="userEditModalAvatar" alt="" />
+            <img class="modalUserImage" :src="userEditModalAvatar | emptyImage" alt="" />
             <label for="modalImageInput">
               <input
                 @change="handleAvatarChange"
@@ -101,7 +103,6 @@
                 error: userEditModalIntroduction.length > 160,
               }"
               id="modalDescription"
-              required
             />
             <div class="descriptionReminder">
               <p
@@ -141,7 +142,10 @@
 <script>
 import usersAPI from "../apis/users";
 import { Toast } from "../utility/helpers";
+import { emptyImageFilter
+ } from "../utility/mixins";
 export default {
+  mixins: [emptyImageFilter],
   props: {
     initialCurrentUser: {
       type: Object,
@@ -157,17 +161,19 @@ export default {
       userEditModalIntroduction: "",
       userEditModalCover: "",
       userEditModalAvatar: "",
+      isProcessing: false
     };
   },
   methods: {
     fetchData() {
       this.userEditModalName = this.initialCurrentUser.name;
-      this.userEditModalIntroduction = this.initialCurrentUser.introduction;
+      this.userEditModalIntroduction = this.initialCurrentUser.introduction? this.initialCurrentUser.introduction : ''
       this.userEditModalCover = this.initialCurrentUser.cover;
       this.userEditModalAvatar = this.initialCurrentUser.avatar;
     },
     openUserEditModal() {
       this.userEditModalIsOpen = true;
+      this.fetchData()
     },
     closeUserEditModal() {
       this.postTweetModalErrorMessage = "";
@@ -182,13 +188,15 @@ export default {
           this.nameErrorMessage = "名稱字數超過50字";
           return;
         }
-        if (!this.userEditModalIntroduction.length > 160) {
+        if (this.userEditModalIntroduction.length > 160) {
           this.descriptionErrorMessage = "自我介紹超過160字";
           return;
         }
 
-        const form = e.target;
-        const formData = new FormData(form);
+        this.isProcessing = true
+
+        const form = e.target
+        const formData = new FormData(form)
 
         for (let [name, value] of formData.entries()) {
           console.log(name + ": " + value);
@@ -200,8 +208,10 @@ export default {
         });
 
         this.userEditModalIsOpen = false;
+        this.isProcessing = false
         this.$router.go(0);
       } catch (error) {
+        this.isProcessing = false
         Toast.fire({
           icon: "error",
           title: "無法保存使用者資訊",
@@ -267,6 +277,7 @@ export default {
   border-radius: 50%;
   object-fit: cover;
   border: 4px solid #ffffff;
+  background-color: #fff;
 }
 
 .userEdit {
@@ -279,6 +290,7 @@ export default {
   font-size: 16px;
   padding: 8px 16px;
   background: #ffffff;
+  cursor: pointer;
 }
 
 .userInformation {
@@ -385,6 +397,10 @@ span {
   line-height: 24px;
 }
 
+.save:disabled:hover {
+  cursor: wait;
+}
+
 .userEditModalContent {
   position: relative;
 }
@@ -447,6 +463,7 @@ span {
   border-radius: 50%;
   object-fit: cover;
   opacity: 0.5;
+  background-color: #fff;
 }
 
 .userCamera {
@@ -477,6 +494,7 @@ span {
 
 .inputDescription {
   margin-top: 32px;
+  min-height: 22px;
 }
 
 .formLabel {
