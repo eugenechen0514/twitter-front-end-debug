@@ -11,6 +11,23 @@
           <span class="infoTweetsNumber">{{ currentTweets.length }}則推文</span>
         </div>
       </div>
+      <!-- tabs -->
+      <ul class="tabs">
+        <li>
+          <router-link
+            class="tweet"
+            :to="{ name: 'user-followers', params: { id: currentUser.id } }"
+            >追隨者</router-link
+          >
+        </li>
+        <li>
+          <router-link
+            class="response"
+            :to="{ name: 'user-followings', params: { id: currentUser.id } }"
+            >正在追隨</router-link
+          >
+        </li>
+      </ul>
       <!-- 跟隨者列表 -->
       <div class="followers" v-for="user in followers" :key="user.followerId">
         <!-- image -->
