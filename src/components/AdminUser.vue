@@ -80,6 +80,7 @@ export default {
 .adminUserImage {
   width: 100px;
   height: 100px;
+  object-fit: cover;
   border: 4px solid #ffffff;
   border-radius: 50%;
   position: absolute;
