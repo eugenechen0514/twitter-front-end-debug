@@ -142,11 +142,11 @@ export default {
       try {
         this.isProcessing = true;
         if (
-          !this.account |
-          !this.password |
-          !this.name |
-          !this.email |
-          !this.passwordCheck
+          !this.account.trim() ||
+          !this.password.trim() ||
+          !this.name.trim() ||
+          !this.email.trim() ||
+          !this.passwordCheck.trim()
         ) {
           this.isProcessing = false;
 

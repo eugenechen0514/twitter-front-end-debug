@@ -32,7 +32,7 @@ const routes = [
   {
     path: '/',
     name: 'root',
-    redirect: '/signin'
+    redirect: '/main'
   },
   {
     path: '/main',
@@ -166,8 +166,7 @@ const routes = [
 
 const router = new VueRouter({
   routes,
-  linkExactActiveClass: 'active',
-  mode: 'hash'
+  linkExactActiveClass: 'active'
 })
 
 

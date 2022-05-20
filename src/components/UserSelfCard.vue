@@ -2,14 +2,14 @@
   <div class="userCard">
     <img
       class="userBackgroundImage"
-      src="https://static.vecteezy.com/system/resources/previews/002/523/012/original/wide-tropical-beach-banner-background-vector.jpg"
+      :src="initialCurrentUser.cover"
       width="600px"
       height="200px"
       alt=""
     />
     <img
       class="userImage"
-      :src="currentUser.image"
+      :src="initialCurrentUser.avatar"
       width="140px"
       height="140px"
       alt=""
@@ -17,8 +17,9 @@
     <button class="userEdit" @click.stop.prevent="openUserEditModal">
       編輯個人資料
     </button>
+    <!-- modal -->
     <div id="userEditModal" v-show="userEditModalIsOpen">
-      <form id="userEditModalWrapper">
+      <form @submit.stop.prevent="userEditModalSave" id="userEditModalWrapper">
         <div class="editHeader">
           <button
             class="closeUserEditModalBtn"
@@ -27,62 +28,82 @@
             ✖
           </button>
           <p class="title">編輯個人資料</p>
-          <button class="save" @click.stop.prevent="userEditModalSave">
+          <button type="submit" class="save" >
             儲存
           </button>
         </div>
         <div class="userEditModalContent">
           <div class="backgroundImageGroup">
             <img
-              :src="modalBackgroundImage"
+              :src="userEditModalCover"
               class="modalBackgroundImage"
               alt=""
             />
-            <img src="../assets/camera.png" class="backgroundCamera" alt="" />
-            <img src="../assets/x.png" class="backgroundX" alt="" />
+            <label for="modalCoverInput">
+              <img src="../assets/camera.png" class="backgroundCamera" alt="" />
+              <input @change="handleCoverChange" type="file" name="cover" id="modalCoverInput" />
+            </label>
+            <img @click.stop.prevent="recoverDefaultCover" src="../assets/x.png" class="backgroundX" alt="" />
           </div>
           <div class="userImageGroup">
-            <img class="modalUserImage" :src="modalUserImage" alt="" />
-            <img src="../assets/camera.png" class="userCamera" alt="" />
+            <img class="modalUserImage" :src="userEditModalAvatar" alt="" />
+            <label for="modalImageInput">
+              <input
+                @change="handleAvatarChange"
+                type="file"
+                name="avatar"
+                id="modalImageInput"
+              />
+              <img src="../assets/camera.png" class="userCamera" alt="" />
+            </label>
           </div>
           <div class="inputName">
             <label for="modalName" class="formLabel">名稱</label>
             <input
-              v-model="modalName"
               type="text"
-              name="modalName"
+              name="name"
               class="formInput"
               :class="{
-                error: modalName.length > 50 || modalName.length === 0,
+                error:
+                  userEditModalName.length > 50 ||
+                  userEditModalName.length === 0,
               }"
               id="modalName"
+              v-model="userEditModalName"
               required
             />
             <div class="nameReminder">
-              <p v-if="modalName.length > 50" class="errorText">字數超出上限</p>
-              <p v-if="modalName.length === 0" class="errorText">不可為空白</p>
-              <span class="nameLength">{{ modalName.length }}/50</span>
+              <p v-if="userEditModalName.length > 50" class="errorText">
+                字數超出上限
+              </p>
+              <p v-if="userEditModalName.length === 0" class="errorText">
+                不可為空白
+              </p>
+              <span class="nameLength">{{ userEditModalName.length }}/50</span>
             </div>
           </div>
           <div class="inputDescription">
             <label for="modalDescription" class="formLabel">自我介紹</label>
             <textarea
-              v-model="modalDescription"
+              v-model="userEditModalIntroduction"
               rows="4"
-              name="modalDescription"
+              name="introduction"
               class="formInput formInputDes"
               :class="{
-                error: modalDescription.length > 160,
+                error: userEditModalIntroduction.length > 160,
               }"
               id="modalDescription"
               required
             />
             <div class="descriptionReminder">
-              <p v-if="modalDescription.length > 160" class="errorText">
+              <p
+                v-if="userEditModalIntroduction.length > 160"
+                class="errorText"
+              >
                 字數超出上限
               </p>
               <span class="descriptionLength"
-                >{{ modalDescription.length }}/160</span
+                >{{ userEditModalIntroduction.length }}/160</span
               >
             </div>
           </div>
@@ -90,65 +111,122 @@
       </form>
     </div>
     <div class="userInformation">
-      <p class="userName">{{ currentUser.name }}</p>
-      <p class="userAccount">@{{ currentUser.account }}</p>
+      <p class="userName">{{ initialCurrentUser.name }}</p>
+      <p class="userAccount">@{{ initialCurrentUser.account }}</p>
       <p class="userDescription">
-        Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet
-        sint.
+        {{ initialCurrentUser.introduction }}
       </p>
       <router-link class="userFollowersCount" to="/user/1/followings"
-        >34個<span>跟隨中</span></router-link
+        >{{ initialCurrentUser.Followings }}個<span>跟隨中</span></router-link
       >
-      //
       <router-link class="userFollowingsCount" to="/user/1/followers"
-        >59個<span>跟隨者</span></router-link
+        >{{ initialCurrentUser.Followers }}個<span>跟隨者</span></router-link
       >
     </div>
   </div>
 </template>
 
 <script>
+import usersAPI from "../apis/users";
+import { Toast } from "../utility/helpers";
 export default {
   props: {
-    currentUser: {
+    initialCurrentUser: {
       type: Object,
       required: true,
     },
   },
   data() {
     return {
-      modalBackgroundImage:
-        "https://static.vecteezy.com/system/resources/previews/002/523/012/original/wide-tropical-beach-banner-background-vector.jpg",
-      modalUserImage: this.currentUser.image,
-      modalName: "ererjj",
-      modalDescription: "erer",
       nameErrorMessage: "",
       descriptionErrorMessage: "",
       userEditModalIsOpen: false,
+      userEditModalName: "",
+      userEditModalIntroduction: "",
+      userEditModalCover: "",
+      userEditModalAvatar: "",
     };
   },
   methods: {
+    fetchData() {
+      this.userEditModalName = this.initialCurrentUser.name;
+      this.userEditModalIntroduction = this.initialCurrentUser.introduction;
+      this.userEditModalCover = this.initialCurrentUser.cover;
+      this.userEditModalAvatar = this.initialCurrentUser.avatar;
+    },
     openUserEditModal() {
       this.userEditModalIsOpen = true;
     },
     closeUserEditModal() {
-      this.tweetText = "";
       this.postTweetModalErrorMessage = "";
       this.userEditModalIsOpen = false;
     },
-    userEditModalSave() {
-      if (!this.modalName) {
-        this.nameErrorMessage = "姓名不可留白";
-        return;
-      } else if (this.modalName.length > 50) {
-        this.nameErrorMessage = "姓名字數超過50字";
-        return;
+    async userEditModalSave(e) {
+      try {
+        if (!this.userEditModalName.trim()) {
+          this.nameErrorMessage = "名稱不可留白";
+          return;
+        } else if (this.userEditModalName.length > 50) {
+          this.nameErrorMessage = "名稱字數超過50字";
+          return;
+        }
+        if (!this.userEditModalIntroduction.length > 160) {
+          this.descriptionErrorMessage = "自我介紹超過160字";
+          return;
+        }
+
+        const form = e.target
+        const formData = new FormData(form)
+
+        for (let [name, value] of formData.entries()) {
+        console.log(name + ': ' + value)
       }
-      if (!this.modalDescription.length > 160) {
-        this.descriptionErrorMessage = "自我介紹超過160字";
-        return;
+
+        await usersAPI.editUser({
+          id: this.initialCurrentUser.id,
+          data: formData
+        });
+
+        this.userEditModalIsOpen = false;
+        this.$router.go(0);
+      } catch (error) {
+        Toast.fire({
+          icon: "error",
+          title: "無法保存使用者資訊",
+        });
       }
-      this.userEditModalIsOpen = false;
+    },
+    handleAvatarChange(e) {
+      const { files } = e.target;
+
+      if (files.length === 0) {
+        // 使用者沒有選擇上傳的檔案
+        this.userEditModalAvatar = "";
+      } else {
+        // 否則產生預覽圖
+        const imageURL = window.URL.createObjectURL(files[0]);
+        this.userEditModalAvatar = imageURL;
+      }
+    },
+    handleCoverChange(e) {
+      const { files } = e.target;
+
+      if (files.length === 0) {
+        // 使用者沒有選擇上傳的檔案
+        this.userEditModalCover = "";
+      } else {
+        // 否則產生預覽圖
+        const imageURL = window.URL.createObjectURL(files[0]);
+        this.userEditModalCover = imageURL;
+      }
+    },
+    recoverDefaultCover() {
+      this.userEditModalCover = this.initialCurrentUser.cover;
+    },
+  },
+  watch: {
+    initialCurrentUser() {
+      this.fetchData();
     },
   },
 };
@@ -166,6 +244,7 @@ export default {
 .userBackgroundImage {
   width: 100%;
   height: 200px;
+  object-fit: cover;
 }
 
 .userImage {
@@ -174,6 +253,7 @@ export default {
   left: 14px;
   z-index: 10;
   border-radius: 50%;
+  object-fit: cover;
   border: 4px solid #ffffff;
 }
 
@@ -218,6 +298,7 @@ export default {
   text-decoration: none;
   color: black;
   font-size: 14px;
+  margin-right: 20px;
 }
 span {
   color: #6c757d;
@@ -239,8 +320,7 @@ span {
   width: 634px;
   height: 610px;
   background-color: #fff;
-  margin-top: 56px;
-  margin-left: 334px;
+  margin: 56px auto;
   border-radius: 14px;
 }
 
@@ -306,6 +386,7 @@ span {
 .modalBackgroundImage {
   width: 100%;
   height: 200px;
+  object-fit: cover;
   opacity: 0.5;
 }
 
@@ -351,6 +432,7 @@ span {
   width: 100%;
   height: 100%;
   border-radius: 50%;
+  object-fit: cover;
   opacity: 0.5;
 }
 
@@ -407,6 +489,7 @@ span {
 
 .formInputDes {
   padding-bottom: 15px;
+  resize: none;
 }
 
 .formInput:focus,
@@ -453,5 +536,10 @@ span {
   font-weight: 500;
   font-size: 12px;
   line-height: 20px;
+}
+
+#modalCoverInput,
+#modalImageInput {
+  display: none;
 }
 </style>

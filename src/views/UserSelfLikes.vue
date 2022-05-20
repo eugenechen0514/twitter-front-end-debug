@@ -1,20 +1,19 @@
 <template>
   <div class="UserSelfContainer">
     <Navbar id="Navbar" />
-    <div class="UserSelfMain">
-      <!-- 最上排標頭和箭頭 -->
+    <div v-show="currentUser.name" class="UserSelfMain">
       <div class="userTitle">
         <router-link to="/main">
           <img class="backIcon" src="../assets/Vector.png" alt="" />
         </router-link>
         <div class="userInfo">
-          <h1 class="infoName">John Doe</h1>
-          <span class="infoTweetsNumber">15推文</span>
+          <h1 class="infoName">{{currentUser.name}}</h1>
+          <span class="infoTweetsNumber">{{currentTweets.length}}推文</span>
         </div>
       </div>
-      <UserSelfCard :currentUser="currentUser"/>
+      <UserSelfCard :initialCurrentUser="currentUser" />
       <UserTabs />
-      <AllTweets :currentTweets="currentTweets" />
+      <AllTweets :initialCurrentTweets="currentTweets" />
     </div>
     <PopularUsers id="PopularUsers" />
   </div>
@@ -25,121 +24,10 @@ import Navbar from "../components/Navbar.vue";
 import PopularUsers from "../components/PopularUsers.vue";
 import UserTabs from "../components/UserTabs.vue";
 import UserSelfCard from "../components/UserSelfCard.vue";
-import AllTweets from "../components/AllTweets.vue"
+import AllTweets from "../components/AllTweets.vue";
+import usersAPI from "./../apis/users";
+import { Toast } from "../utility/helpers";
 
-const dummyData = {
-  currentTweets: [
-    //顯示 isFollowed: true 的user推文  //排序從新到舊
-    {
-      tweet: {
-        id: 1,
-        text: "hello",
-        createAt: "2022/5/9 12:00",
-        commentsCount: 1,
-        likesCount: 1,
-        isLiked: true,
-      },
-      user: {
-        id: 1,
-        name: "awwfuq",
-        account: "awwfuq",
-        image:
-          "https://img.ltn.com.tw/Upload/news/600/2016/04/17/phpFBRDIE.jpg",
-      },
-    },
-    {
-      tweet: {
-        id: 2,
-        text: "hello world",
-        createAt: "2022/5/9 12:00",
-        commentsCount: 1,
-        likesCount: 1,
-        isLiked: false,
-      },
-      user: {
-        id: 2,
-        name: "ohhfuck",
-        account: "ohhfuck",
-        image: "https://cdn2.ettoday.net/images/1027/1027134.jpg",
-      },
-    },
-    {
-      tweet: {
-        id: 3,
-        text: "hello",
-        createAt: "2022/5/9 12:00",
-        commentsCount: 1,
-        likesCount: 1,
-        isLiked: true,
-      },
-      user: {
-        id: 1,
-        name: "awwfuq",
-        account: "awwfuq",
-        image:
-          "https://img.ltn.com.tw/Upload/news/600/2016/04/17/phpFBRDIE.jpg",
-      },
-    },
-    {
-      tweet: {
-        id: 4,
-        text: "hello world",
-        createAt: "2022/5/9 12:00",
-        commentsCount: 1,
-        likesCount: 1,
-        isLiked: false,
-      },
-      user: {
-        id: 2,
-        name: "ohhfuck",
-        account: "ohhfuck",
-        image: "https://cdn2.ettoday.net/images/1027/1027134.jpg",
-      },
-    },
-    {
-      tweet: {
-        id: 5,
-        text: "hello",
-        createAt: "2022/5/9 12:00",
-        commentsCount: 1,
-        likesCount: 1,
-        isLiked: true,
-      },
-      user: {
-        id: 1,
-        name: "awwfuq",
-        account: "awwfuq",
-        image:
-          "https://img.ltn.com.tw/Upload/news/600/2016/04/17/phpFBRDIE.jpg",
-      },
-    },
-    {
-      tweet: {
-        id: 6,
-        text: "hello world",
-        createAt: "2022/5/9 12:00",
-        commentsCount: 1,
-        likesCount: 1,
-        isLiked: false,
-      },
-      user: {
-        id: 2,
-        name: "ohhfuck",
-        account: "ohhfuck",
-        image: "https://cdn2.ettoday.net/images/1027/1027134.jpg",
-      },
-    },
-  ],
-};
-
-const dummyUser = {
-  currentUser: {
-    id: 1,
-    name: "awwfuq",
-    account: "awwfuq",
-    image: "https://img.ltn.com.tw/Upload/news/600/2016/04/17/phpFBRDIE.jpg",
-  },
-};
 
 export default {
   components: {
@@ -147,24 +35,50 @@ export default {
     PopularUsers,
     UserTabs,
     UserSelfCard,
-    AllTweets
+    AllTweets,
   },
-  
+
   data() {
     return {
       currentTweets: [],
-      currentUser: dummyUser.currentUser,
+      currentUser: {
+        Followers: -1,
+        Followings: -1,
+        account: "",
+        avatar: "",
+        cover: "",
+        createdAt: "",
+        email: "",
+        id: -1,
+        introduction: "",
+        name: "",
+        role: "",
+        updatedAt: "",
+      },
     };
   },
 
   methods: {
-    fetchData() {
-      this.currentTweets = dummyData.currentTweets;
+    async fetchData(id) {
+      try {
+        const { data } = await usersAPI.getUser({ id });
+        this.currentUser = data;
+        const response = await usersAPI.getUserLikes({
+          id,
+        });
+        this.currentTweets = response.data
+      } catch (error) {
+        Toast.fire({
+          icon: 'error',
+          title: '無法取得使用者喜歡的內容'
+        })
+      }
     },
   },
 
   created() {
-    this.fetchData();
+    const id = this.$store.state.currentUser.id;
+    this.fetchData(id);
   },
 };
 </script>
@@ -173,7 +87,6 @@ export default {
 .UserSelfContainer {
   width: 100%;
   display: grid;
-  
 }
 
 #Navbar {
@@ -194,8 +107,8 @@ export default {
 .UserSelfMain {
   width: 640px;
   margin-left: 332px;
-  border-left: 1px solid #E6ECF0;
-  border-right: 1px solid #E6ECF0;
+  border-left: 1px solid #e6ecf0;
+  border-right: 1px solid #e6ecf0;
   /* display: flex;
   flex-direction: column;
   align-items: center; */
@@ -208,7 +121,7 @@ export default {
   align-items: center;
   padding-left: 28px;
   height: 74px;
-  border-bottom: 1px solid #E6ECF0;
+  border-bottom: 1px solid #e6ecf0;
 }
 
 .backIcon {
@@ -231,6 +144,7 @@ export default {
   font-weight: 500;
   font-size: 13px;
   line-height: 19px;
-  color: #6C757D
+  color: #6c757d;
 }
 </style>
+

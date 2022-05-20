@@ -121,11 +121,11 @@ export default {
     async submitForm() {
       try {
         if (
-          !this.account ||
-          !this.name ||
-          !this.email ||
-          !this.password ||
-          !this.passwordCheck
+          !this.account.trim() ||
+          !this.name.trim() ||
+          !this.email.trim() ||
+          !this.password.trim() ||
+          !this.passwordCheck.trim()
         ) {
           Toast.fire({
             icon: "warning",

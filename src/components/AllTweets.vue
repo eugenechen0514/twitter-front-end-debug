@@ -238,11 +238,12 @@ export default {
     },
     async replyTweetModalSubmit() {
       try {
-        if (!this.replyText) {
+        if (!this.replyText.trim()) {
           Toast.fire({
             icon: "warning",
             title: "回覆內容不可留白",
           });
+          this.replyText = ''
           return;
         } else if (this.replyText.length > 140) {
           Toast.fire({
