@@ -7,13 +7,13 @@
           <img class="backIcon" src="../assets/Vector.png" alt="" />
         </router-link>
         <div class="userInfo">
-          <h1 class="infoName">John Doe</h1>
-          <span class="infoTweetsNumber">15推文</span>
+          <h1 class="infoName">{{currentUser.name}}</h1>
+          <span class="infoTweetsNumber">{{currentTweets.length}}則推文</span>
         </div>
       </div>
       <UserOtherCard :currentUser="currentUser" />
       <UserOtherTabs :currentUser="currentUser" />
-      <AllTweets :currentTweets="currentTweets" />
+      <AllTweets :initialCurrentTweets="currentTweets" />
     </div>
     <PopularUsers id="PopularUsers" />
   </div>
@@ -28,111 +28,6 @@ import AllTweets from "../components/AllTweets.vue";
 
 import usersAPI from "./../apis/users";
 import { Toast } from "../utility/helpers";
-
-// const dummyData = {
-//   currentTweets: [
-//     //顯示 isFollowed: true 的user推文  //排序從新到舊
-//     {
-//       tweet: {
-//         id: 1,
-//         text: "hello",
-//         createAt: "2022/5/9 12:00",
-//         commentsCount: 1,
-//         likesCount: 1,
-//         isLiked: true,
-//       },
-//       user: {
-//         id: 1,
-//         name: "awwfuq",
-//         account: "awwfuq",
-//         image:
-//           "https://img.ltn.com.tw/Upload/news/600/2016/04/17/phpFBRDIE.jpg",
-//       },
-//     },
-//     {
-//       tweet: {
-//         id: 2,
-//         text: "hello world",
-//         createAt: "2022/5/9 12:00",
-//         commentsCount: 1,
-//         likesCount: 1,
-//         isLiked: false,
-//       },
-//       user: {
-//         id: 2,
-//         name: "ohhfuck",
-//         account: "ohhfuck",
-//         image: "https://cdn2.ettoday.net/images/1027/1027134.jpg",
-//       },
-//     },
-//     {
-//       tweet: {
-//         id: 3,
-//         text: "hello",
-//         createAt: "2022/5/9 12:00",
-//         commentsCount: 1,
-//         likesCount: 1,
-//         isLiked: true,
-//       },
-//       user: {
-//         id: 1,
-//         name: "awwfuq",
-//         account: "awwfuq",
-//         image:
-//           "https://img.ltn.com.tw/Upload/news/600/2016/04/17/phpFBRDIE.jpg",
-//       },
-//     },
-//     {
-//       tweet: {
-//         id: 4,
-//         text: "hello world",
-//         createAt: "2022/5/9 12:00",
-//         commentsCount: 1,
-//         likesCount: 1,
-//         isLiked: false,
-//       },
-//       user: {
-//         id: 2,
-//         name: "ohhfuck",
-//         account: "ohhfuck",
-//         image: "https://cdn2.ettoday.net/images/1027/1027134.jpg",
-//       },
-//     },
-//     {
-//       tweet: {
-//         id: 5,
-//         text: "hello",
-//         createAt: "2022/5/9 12:00",
-//         commentsCount: 1,
-//         likesCount: 1,
-//         isLiked: true,
-//       },
-//       user: {
-//         id: 1,
-//         name: "awwfuq",
-//         account: "awwfuq",
-//         image:
-//           "https://img.ltn.com.tw/Upload/news/600/2016/04/17/phpFBRDIE.jpg",
-//       },
-//     },
-//     {
-//       tweet: {
-//         id: 6,
-//         text: "hello world",
-//         createAt: "2022/5/9 12:00",
-//         commentsCount: 1,
-//         likesCount: 1,
-//         isLiked: false,
-//       },
-//       user: {
-//         id: 2,
-//         name: "ohhfuck",
-//         account: "ohhfuck",
-//         image: "https://cdn2.ettoday.net/images/1027/1027134.jpg",
-//       },
-//     },
-//   ],
-// };
 
 export default {
   components: {
@@ -149,6 +44,7 @@ export default {
       currentUser: {},
     };
   },
+
 
   methods: {
     async fetchData(id) {

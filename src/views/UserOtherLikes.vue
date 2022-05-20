@@ -8,8 +8,8 @@
           <img class="backIcon" src="../assets/Vector.png" alt="" />
         </router-link>
         <div class="userInfo">
-          <h1 class="infoName">John Doe</h1>
-          <span class="infoTweetsNumber">15推文</span>
+          <h1 class="infoName">{{currentUser.name}}</h1>
+          <span class="infoTweetsNumber">{{currentTweets.length}}推文</span>
         </div>
       </div>
       <UserOtherCard :currentUser="currentUser" />

@@ -7,8 +7,8 @@
           <img class="backIcon" src="../assets/Vector.png" alt="" />
         </router-link>
         <div class="userInfo">
-          <h1 class="infoName">John Doe</h1>
-          <span class="infoTweetsNumber">15推文</span>
+          <h1 class="infoName">{{ currentUser.name }}</h1>
+          <span class="infoTweetsNumber">{{ currentTweets.length }}推文</span>
         </div>
       </div>
       <UserOtherCard :currentUser="currentUser" />
@@ -29,8 +29,6 @@ import Comments from "../components/Comments.vue";
 import usersAPI from "./../apis/users";
 import { Toast } from "../utility/helpers";
 
-
-
 export default {
   components: {
     Navbar,
@@ -42,6 +40,7 @@ export default {
   data() {
     return {
       currentRepliedTweets: [],
+      currentTweets: [],
       currentUser: {},
     };
   },
@@ -68,12 +67,27 @@ export default {
         if (data.status === "error") {
           throw new Error(data.message);
         }
-        this.currentUser = {...data};
+        this.currentUser = { ...data };
       } catch (error) {
         console.log("error", error);
         Toast.fire({
           icon: "error",
           title: "無法取得使用者資料，請稍候再試",
+        });
+      }
+    },
+    async fetchTweets(id) {
+      try {
+        const { data } = await usersAPI.getUserTweets({ id });
+        if (data.status === "error") {
+          throw new Error(data.message);
+        }
+        this.currentTweets = data;
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "error",
+          title: "無法取得資料，請稍候再試",
         });
       }
     },
@@ -83,12 +97,14 @@ export default {
     const { id } = this.$route.params;
     this.fetchData(id);
     this.fetchUser(id);
+    this.fetchTweets(id);
   },
 
   beforeRouteUpdate(to, from, next) {
     const { id } = to.params;
     this.fetchData(id);
     this.fetchUser(id);
+    this.fetchTweets(id);
     next();
   },
 };

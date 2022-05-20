@@ -32,15 +32,13 @@
       <p class="userName">{{ currentUser.name }}</p>
       <p class="userAccount">@{{ currentUser.account }}</p>
       <p class="userDescription">
-        Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet
-        sint.
+        {{currentUser.introduction}}
       </p>
-      <router-link class="userFollowersCount" to="/user/1/followings"
-        >34個<span>跟隨中</span></router-link
+      <router-link class="userFollowingsCount" :to="{ name: 'user-followings', params: { id: currentUser.id } }"
+        >{{ currentUser.Followings }} 個<span>跟隨中</span></router-link
       >
-      //
-      <router-link class="userFollowingsCount" to="/user/1/followers"
-        >59個<span>跟隨者</span></router-link
+      <router-link class="userFollowersCount" :to="{ name: 'user-followers', params: { id: currentUser.id } }"
+        >{{ currentUser.Followers }} 個<span>跟隨者</span></router-link
       >
     </div>
   </div>
