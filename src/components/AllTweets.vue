@@ -3,9 +3,9 @@
     <div
       class="singleTweet"
       v-for="tweet in initialCurrentTweets"
-      :key="tweet.id"
+      :key="tweet.id || tweet.TweetId"
     >
-      <router-link :to="{ name: 'user-tweets', params: { id: tweet.User.id } }">
+      <router-link :to="{ name: 'user-tweets', params: { id: tweet.User.id || tweet.TweetId } }">
         <img
           class="singleTweetUserImage"
           :src="tweet.User.avatar | emptyImage"
@@ -16,7 +16,7 @@
         <div class="singleTweetUserNameGroup">
           <router-link
             class="singleTweetUserName"
-            :to="{ name: 'user-tweets', params: { id: tweet.User.id } }"
+            :to="{ name: 'user-tweets', params: { id: tweet.User.id || tweet.TweetId } }"
             >{{ tweet.User.name }}</router-link
           >
           <router-link
@@ -27,40 +27,40 @@
           <p class="singleTweetCreatedAt">・{{ tweet.createdAt | fromNow }}</p>
         </div>
         <p class="singleTweetText">
-          <router-link :to="{ name: 'tweet', params: { id: tweet.id } }">{{
-            tweet.description
+          <router-link :to="{ name: 'tweet', params: { id: tweet.id || tweet.TweetId } }">{{
+            tweet.description || tweet.tweetDescription
           }}</router-link>
         </p>
         <div class="singleTweetBtnGroup">
           <button
             class="singleTweetBtn"
-            @click.stop.prevent="openReplyTweetModal(tweet.id)"
+            @click.stop.prevent="openReplyTweetModal(tweet.id || tweet.TweetId)"
             :disabled="isProcessing"
           >
             <img src="../assets/comment-icon.png" alt="" />
-            <p>{{ tweet.Replies }}</p>
+            <p>{{ tweet.Replies || tweet.tweetRepliesCount }}</p>
           </button>
 
           <button
-            @click.stop.prevent="deleteLike(tweet.id)"
+            @click.stop.prevent="deleteLike(tweet.id || tweet.TweetId)"
             :disabled="isProcessing"
             v-if="tweet.isLiked"
             class="singleTweetBtn"
           >
             <img src="../assets/like-icon-active.png" alt="" />
             <p>
-              {{ tweet.Likes }}
+              {{ tweet.Likes || tweet.tweetLikesCount }}
             </p>
           </button>
           <button
-            @click.stop.prevent="addLike(tweet.id)"
+            @click.stop.prevent="addLike(tweet.id || tweet.TweetId)"
             :disabled="isProcessing"
             v-else
             class="singleTweetBtn"
           >
             <img src="../assets/like-icon.png" alt="" />
             <p>
-              {{ tweet.Likes }}
+              {{ tweet.Likes || tweet.tweetLikesCount }}
             </p>
           </button>
         </div>
@@ -282,7 +282,7 @@ export default {
         this.isProcessing = true;
         await tweetsAPI.addLike({ id });
 
-        const tweet = this.initialCurrentTweets.find((item) => item.id === id);
+        const tweet = this.initialCurrentTweets.find((item) => (item.id || item.TweetId) === id);
         tweet.isLiked = true;
         tweet.Likes++;
         this.isProcessing = false;
@@ -299,7 +299,7 @@ export default {
         this.isProcessing = true;
         await tweetsAPI.deleteLike({ id });
 
-        const tweet = this.initialCurrentTweets.find((item) => item.id === id);
+        const tweet = this.initialCurrentTweets.find((item) => (item.id || item.TweetId) === id);
         tweet.isLiked = false;
         tweet.Likes--;
         this.isProcessing = false;
