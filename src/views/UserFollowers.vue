@@ -11,6 +11,23 @@
           <span class="infoTweetsNumber">{{ currentTweets.length }}則推文</span>
         </div>
       </div>
+      <!-- tabs -->
+      <ul class="tabs">
+        <li>
+          <router-link
+            class="tabsFollowers"
+            :to="{ name: 'user-followers', params: { id: currentUser.id } }"
+            >追隨者</router-link
+          >
+        </li>
+        <li>
+          <router-link
+            class="tabsFollowings"
+            :to="{ name: 'user-followings', params: { id: currentUser.id } }"
+            >正在追隨</router-link
+          >
+        </li>
+      </ul>
       <!-- 跟隨者列表 -->
       <div class="followers" v-for="user in followers" :key="user.followerId">
         <!-- image -->
@@ -183,6 +200,55 @@ export default {
   font-size: 13px;
   line-height: 19px;
   color: #6c757d;
+}
+
+.tabs {
+  display: flex;
+  border-bottom: 1px solid #e6ecf0;
+}
+
+li {
+  padding-bottom: 15px;
+  padding-top: 15px;
+}
+
+.tabsFollowers,
+.tabsFollowings{
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 22px;
+  color: #657786;
+}
+
+.tabsFollowers {
+   padding-left: 45px;
+}
+
+.tabsFollowings {
+  margin-left:70px;
+}
+
+.tabsFollowers.active,
+.tabsFollowings.active {
+  color: #ff6600;
+  position: relative;
+}
+
+.tabsFollowers.active::after,
+.tabsFollowings::after {
+  content: "";
+  position: absolute;
+  bottom: -15px;
+  left: 0px;
+  height: 2px;
+  width: 130px;
+  background-color: #ff6600;
+  border-radius: 100px;
+}
+
+.tabsFollowings::after {
+  left: -27px;
 }
 
 .followers {

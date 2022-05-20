@@ -41,9 +41,19 @@
             />
             <label for="modalCoverInput">
               <img src="../assets/camera.png" class="backgroundCamera" alt="" />
-              <input @change="handleCoverChange" type="file" name="cover" id="modalCoverInput" />
+              <input
+                @change="handleCoverChange"
+                type="file"
+                name="cover"
+                id="modalCoverInput"
+              />
             </label>
-            <img @click.stop.prevent="recoverDefaultCover" src="../assets/x.png" class="backgroundX" alt="" />
+            <img
+              @click.stop.prevent="recoverDefaultCover"
+              src="../assets/x.png"
+              class="backgroundX"
+              alt=""
+            />
           </div>
           <div class="userImageGroup">
             <img class="modalUserImage" :src="userEditModalAvatar | emptyImage" alt="" />
@@ -115,10 +125,14 @@
       <p class="userDescription">
         {{ initialCurrentUser.introduction }}
       </p>
-      <router-link class="userFollowersCount" :to="{name: 'user-followings', params: {id: initialCurrentUser.id}}"
+      <router-link
+        class="userFollowingsCount"
+        :to="{ name: 'user-followings', params: { id: initialCurrentUser.id } }"
         >{{ initialCurrentUser.Followings }}個<span>跟隨中</span></router-link
       >
-      <router-link class="userFollowingsCount" :to="{name: 'user-followers', params: {id: initialCurrentUser.id}}"
+      <router-link
+        class="userFollowersCount"
+        :to="{ name: 'user-followers', params: { id: initialCurrentUser.id } }"
         >{{ initialCurrentUser.Followers }}個<span>跟隨者</span></router-link
       >
     </div>
@@ -185,12 +199,12 @@ export default {
         const formData = new FormData(form)
 
         for (let [name, value] of formData.entries()) {
-        console.log(name + ': ' + value)
-      }
+          console.log(name + ": " + value);
+        }
 
         await usersAPI.editUser({
           id: this.initialCurrentUser.id,
-          data: formData
+          data: formData,
         });
 
         this.userEditModalIsOpen = false;
@@ -302,6 +316,7 @@ export default {
   font-size: 14px;
   line-height: 22px;
   margin-bottom: 8px;
+  min-height: 22px;
 }
 .userFollowersCount,
 .userFollowingsCount {
