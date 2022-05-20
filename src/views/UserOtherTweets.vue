@@ -29,8 +29,6 @@ import AllTweets from "../components/AllTweets.vue";
 import usersAPI from "./../apis/users";
 import { Toast } from "../utility/helpers";
 
-
-
 export default {
   components: {
     Navbar,
@@ -65,7 +63,7 @@ export default {
       try {
         const { data } = await usersAPI.getUser({ id });
         this.currentUser = data;
-        const response = await usersAPI.getUserLikes({
+        const response = await usersAPI.getUserTweets({
           id,
         });
         this.currentTweets = response.data;

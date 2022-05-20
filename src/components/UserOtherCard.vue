@@ -2,7 +2,7 @@
   <div class="userCard">
     <img
       class="userBackgroundImage"
-      :src="currentUser.cover | emptyImage"
+      :src="currentUser.cover | emptyCover"
       width="639px"
       height="200px"
       alt=""
