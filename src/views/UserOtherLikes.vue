@@ -8,13 +8,13 @@
           <img class="backIcon" src="../assets/Vector.png" alt="" />
         </router-link>
         <div class="userInfo">
-          <h1 class="infoName">{{currentUser.name}}</h1>
-          <span class="infoTweetsNumber">{{currentTweets.length}}推文</span>
+          <h1 class="infoName">{{ currentUser.name }}</h1>
+          <span class="infoTweetsNumber">{{ currentTweets.length }}喜歡</span>
         </div>
       </div>
       <UserOtherCard :currentUser="currentUser" />
       <UserOtherTabs :currentUser="currentUser" />
-      <LikesTweets :currentTweets="currentTweets" />
+      <AllTweets :initialCurrentTweets="currentTweets" />
     </div>
     <PopularUsers id="PopularUsers" />
   </div>
@@ -25,11 +25,10 @@ import Navbar from "../components/Navbar.vue";
 import PopularUsers from "../components/PopularUsers.vue";
 import UserOtherTabs from "../components/UserOtherTabs.vue";
 import UserOtherCard from "../components/UserOtherCard.vue";
-import LikesTweets from "../components/LikesTweets.vue";
+import AllTweets from "../components/AllTweets.vue";
 
 import usersAPI from "./../apis/users";
 import { Toast } from "../utility/helpers";
-
 
 export default {
   components: {
@@ -37,45 +36,42 @@ export default {
     PopularUsers,
     UserOtherTabs,
     UserOtherCard,
-    LikesTweets,
+    AllTweets,
   },
 
   data() {
     return {
       currentTweets: [],
-      currentUser: {},
+      currentUser: {
+        Followers: -1,
+        Followings: -1,
+        account: "",
+        avatar: "",
+        cover: "",
+        createdAt: "",
+        email: "",
+        id: -1,
+        introduction: "",
+        name: "",
+        role: "",
+        updatedAt: "",
+      },
     };
   },
 
   methods: {
     async fetchData(id) {
       try {
-        const { data } = await usersAPI.getUserLikes({ id });
-        if (data.status === "error") {
-          throw new Error(data.message);
-        }
-        this.currentTweets = data;
-      } catch (error) {
-        console.log("error", error);
-        Toast.fire({
-          icon: "error",
-          title: "無法取得使用者推文，請稍候再試",
-        });
-      }
-    },
-    async fetchUser(id) {
-      try {
         const { data } = await usersAPI.getUser({ id });
-        if (data.status === "error") {
-          throw new Error(data.message);
-        }
         this.currentUser = data;
-        console.log(data);
+        const response = await usersAPI.getUserLikes({
+          id,
+        });
+        this.currentTweets = response.data;
       } catch (error) {
-        console.log("error", error);
         Toast.fire({
           icon: "error",
-          title: "無法取得使用者資料，請稍候再試",
+          title: "無法取得使用者喜歡的內容",
         });
       }
     },
@@ -84,13 +80,11 @@ export default {
   created() {
     const { id } = this.$route.params;
     this.fetchData(id);
-    this.fetchUser(id);
   },
 
   beforeRouteUpdate(to, from, next) {
     const { id } = to.params;
     this.fetchData(id);
-    this.fetchUser(id);
     next();
   },
 };

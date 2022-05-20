@@ -2,14 +2,14 @@
   <div class="userCard">
     <img
       class="userBackgroundImage"
-      :src="currentUser.cover"
+      :src="currentUser.cover | emptyImage"
       width="639px"
       height="200px"
       alt=""
     />
     <img
       class="userImage"
-      :src="currentUser.avatar"
+      :src="currentUser.avatar | emptyImage"
       width="140px"
       height="140px"
       alt=""
@@ -37,19 +37,22 @@
       <router-link
         class="userFollowingsCount"
         :to="{ name: 'user-followings', params: { id: currentUser.id } }"
-        >{{ currentUser.Followings }} 個<span>跟隨中</span></router-link
+        >{{ currentUser.Followings }}個<span>跟隨中</span></router-link
       >
       <router-link
         class="userFollowersCount"
         :to="{ name: 'user-followers', params: { id: currentUser.id } }"
-        >{{ currentUser.Followers }} 個<span>跟隨者</span></router-link
+        >{{ currentUser.Followers }}  個<span>跟隨者</span></router-link
       >
     </div>
   </div>
 </template>
 
 <script>
+import { emptyImageFilter } from "../utility/mixins";
+
 export default {
+  mixins: [emptyImageFilter],
   props: {
     currentUser: {
       type: Object,
