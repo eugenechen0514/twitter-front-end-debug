@@ -32,12 +32,16 @@
       <p class="userName">{{ currentUser.name }}</p>
       <p class="userAccount">@{{ currentUser.account }}</p>
       <p class="userDescription">
-        {{currentUser.introduction}}
+        {{ currentUser.introduction }}
       </p>
-      <router-link class="userFollowingsCount" :to="{ name: 'user-followings', params: { id: currentUser.id } }"
+      <router-link
+        class="userFollowingsCount"
+        :to="{ name: 'user-followings', params: { id: currentUser.id } }"
         >{{ currentUser.Followings }} 個<span>跟隨中</span></router-link
       >
-      <router-link class="userFollowersCount" :to="{ name: 'user-followers', params: { id: currentUser.id } }"
+      <router-link
+        class="userFollowersCount"
+        :to="{ name: 'user-followers', params: { id: currentUser.id } }"
         >{{ currentUser.Followers }} 個<span>跟隨者</span></router-link
       >
     </div>
@@ -58,10 +62,14 @@ export default {
 
 <style scoped>
 .userCard {
-  height: 375px;
+  min-height: 375px;
   /* border: 1px solid black; */
   position: relative;
   margin-bottom: 31px;
+}
+
+.userBackgroundImage {
+  object-fit: cover;
 }
 
 .userImage {
@@ -71,6 +79,7 @@ export default {
   z-index: 10;
   border-radius: 50%;
   border: 4px solid #ffffff;
+  object-fit: cover;
 }
 
 .userEdit {
@@ -108,6 +117,7 @@ export default {
   font-size: 14px;
   line-height: 22px;
   margin-bottom: 8px;
+  min-height: 22px;
 }
 
 .userFollowersCount,
