@@ -28,7 +28,7 @@
         </div>
         <div class="commentFor">
           <p>
-            回覆 <span>@{{ comment.replyUserAccount }}</span>
+            回覆 <span>@{{ comment.replyAccount }}</span>
           </p>
         </div>
         <div class="commentText">
@@ -151,5 +151,9 @@ export default {
 
 .commentLikeBtnGroup button:hover {
   cursor: pointer;
+}
+
+.commentBtn {
+  padding: 0;
 }
 </style>

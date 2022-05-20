@@ -3,32 +3,32 @@
     <Navbar id="Navbar" />
     <div class="UserFollowersMain">
       <div class="userTitle">
-        <router-link to="/user/self/tweets">
+        <router-link :to="{ name: 'user-tweets', params: currentUser.id }">
           <img class="backIcon" src="../assets/Vector.png" alt="" />
         </router-link>
         <div class="userInfo">
-          <h1 class="infoName">John Doe</h1>
-          <span class="infoTweetsNumber">15推文</span>
+          <h1 class="infoName">{{ currentUser.name }}</h1>
+          <span class="infoTweetsNumber">{{ currentTweets.length }}則推文</span>
         </div>
       </div>
       <!-- 跟隨者列表 -->
-      <div class="followers" v-for="user in followers" :key="user.user.id">
+      <div class="followers" v-for="user in followers" :key="user.followerId">
         <!-- image -->
         <router-link to="">
-          <img :src="user.user.image" class="followersImage" alt="" />
+          <img :src="user.followerAvatar" class="followersImage" alt="" />
         </router-link>
         <!-- Content -->
         <div class="followersContent">
           <div class="followersInfo">
             <router-link to="" class="followersName">{{
-              user.user.name
+              user.followerName
             }}</router-link>
             <button class="followersFollowedBtn" v-if="user.isFollowed">
               正在跟隨
             </button>
             <button class="followersFollowBtn" v-else>跟隨</button>
           </div>
-          <p class="followersText">rlkjkflgdmflkgjdlkf</p>
+          <p class="followersText">{{ user.followerIntroduction }}</p>
         </div>
       </div>
     </div>
@@ -40,86 +40,8 @@
 import Navbar from "../components/Navbar.vue";
 import PopularUsers from "../components/PopularUsers.vue";
 
-const dummyData = {
-  followers: [
-    {
-      user: {
-        id: 1,
-        name: "awwfuqqqqqq",
-        account: "awwfuqqqqqq",
-        image:
-          "https://img.ltn.com.tw/Upload/news/600/2016/04/17/phpFBRDIE.jpg",
-      },
-      isFollowed: true,
-    },
-    {
-      user: {
-        id: 2,
-        name: "ohhfuckkkkkk",
-        account: "ohhfuckkkkkkkk",
-        image: "https://cdn2.ettoday.net/images/1027/1027134.jpg",
-      },
-      isFollowed: false,
-    },
-    {
-      user: {
-        id: 3,
-        name: "awwfuq",
-        account: "awwfuq",
-        image:
-          "https://img.ltn.com.tw/Upload/news/600/2016/04/17/phpFBRDIE.jpg",
-      },
-      isFollowed: true,
-    },
-    {
-      user: {
-        id: 4,
-        name: "ohhfuck",
-        account: "ohhfuck",
-        image: "https://cdn2.ettoday.net/images/1027/1027134.jpg",
-      },
-      isFollowed: false,
-    },
-    {
-      user: {
-        id: 5,
-        name: "awwfuq",
-        account: "awwfuq",
-        image:
-          "https://img.ltn.com.tw/Upload/news/600/2016/04/17/phpFBRDIE.jpg",
-      },
-      isFollowed: true,
-    },
-    {
-      user: {
-        id: 6,
-        name: "ohhfuck",
-        account: "ohhfuck",
-        image: "https://cdn2.ettoday.net/images/1027/1027134.jpg",
-      },
-      isFollowed: false,
-    },
-    {
-      user: {
-        id: 7,
-        name: "awwfuq",
-        account: "awwfuq",
-        image:
-          "https://img.ltn.com.tw/Upload/news/600/2016/04/17/phpFBRDIE.jpg",
-      },
-      isFollowed: true,
-    },
-    {
-      user: {
-        id: 8,
-        name: "ohhfuck",
-        account: "ohhfuck",
-        image: "https://cdn2.ettoday.net/images/1027/1027134.jpg",
-      },
-      isFollowed: false,
-    },
-  ],
-};
+import usersAPI from "./../apis/users";
+import { Toast } from "../utility/helpers";
 
 export default {
   components: {
@@ -129,15 +51,72 @@ export default {
   data() {
     return {
       followers: [],
+      currentTweets: [],
+      currentUser: {},
     };
   },
-  methods: {
-    fetchData() {
-      this.followers = dummyData.followers;
-    },
-  },
+
   created() {
-    this.fetchData();
+    const { id } = this.$route.params;
+    this.fetchFollowers(id);
+    this.fetchUser(id);
+    this.fetchTweets(id);
+  },
+  beforeRouteUpdate(to, from, next) {
+    const { id } = to.params;
+    this.fetchFollowers(id);
+    this.fetchUser(id);
+    this.fetchTweets(id);
+    next();
+  },
+
+  methods: {
+    async fetchFollowers(id) {
+      try {
+        const { data } = await usersAPI.getUserFollowers({ id });
+        if (data.status === "error") {
+          throw new Error(data.message);
+        }
+        this.followers = data;
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "error",
+          title: "無法取得資料，請稍候再試",
+        });
+      }
+    },
+    async fetchUser(id) {
+      try {
+        const { data } = await usersAPI.getUser({ id });
+        if (data.status === "error") {
+          throw new Error(data.message);
+        }
+        this.currentUser = data;
+        console.log(data);
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "error",
+          title: "無法取得資料，請稍候再試",
+        });
+      }
+    },
+    async fetchTweets(id) {
+      try {
+        const { data } = await usersAPI.getUserTweets({ id });
+        if (data.status === "error") {
+          throw new Error(data.message);
+        }
+        this.currentTweets = data;
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "error",
+          title: "無法取得資料，請稍候再試",
+        });
+      }
+    },
   },
 };
 </script>
@@ -246,6 +225,7 @@ export default {
   color: #fff;
   font-size: 16px;
   font-weight: 400;
+  cursor: pointer;
 }
 
 .followersFollowBtn {
@@ -257,6 +237,7 @@ export default {
   color: #ff6600;
   font-size: 16px;
   font-weight: 400;
+  cursor: pointer;
 }
 </style>
 

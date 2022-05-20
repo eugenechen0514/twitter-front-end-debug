@@ -3,32 +3,36 @@
     <Navbar id="Navbar" />
     <div class="UserFollowingsMain">
       <div class="userTitle">
-        <router-link to="/user/self/tweets">
+        <router-link :to="{ name: 'user-tweets', params: currentUser.id }">
           <img class="backIcon" src="../assets/Vector.png" alt="" />
         </router-link>
         <div class="userInfo">
-          <h1 class="infoName">John Doe</h1>
-          <span class="infoTweetsNumber">15推文</span>
+          <h1 class="infoName">{{ currentUser.name }}</h1>
+          <span class="infoTweetsNumber">{{ currentTweets.length }}則推文</span>
         </div>
       </div>
       <!-- 跟隨者列表 -->
-      <div class="followings" v-for="user in followings" :key="user.user.id">
+      <div
+        class="followings"
+        v-for="user in followings"
+        :key="user.followingId"
+      >
         <!-- image -->
         <router-link to="">
-          <img :src="user.user.image" class="followingsImage" alt="" />
+          <img :src="user.followingAvatar" class="followingsImage" alt="" />
         </router-link>
         <!-- Content -->
         <div class="followingsContent">
           <div class="followingsInfo">
             <router-link to="" class="followingsName">{{
-              user.user.name
+              user.followingName
             }}</router-link>
             <button class="followingsFollowedBtn" v-if="user.isFollowed">
               正在跟隨
             </button>
             <button class="followingsFollowBtn" v-else>跟隨</button>
           </div>
-          <p class="followingsText">rlkjkflgdmflkgjdlkf</p>
+          <p class="followingsText">{{ user.followingIntroduction }}</p>
         </div>
       </div>
     </div>
@@ -40,86 +44,8 @@
 import Navbar from "../components/Navbar.vue";
 import PopularUsers from "../components/PopularUsers.vue";
 
-const dummyData = {
-  followings: [
-    {
-      user: {
-        id: 1,
-        name: "awwfuqqqqqq",
-        account: "awwfuqqqqqq",
-        image:
-          "https://img.ltn.com.tw/Upload/news/600/2016/04/17/phpFBRDIE.jpg",
-      },
-      isFollowed: true,
-    },
-    {
-      user: {
-        id: 2,
-        name: "ohhfuckkkkkk",
-        account: "ohhfuckkkkkkkk",
-        image: "https://cdn2.ettoday.net/images/1027/1027134.jpg",
-      },
-      isFollowed: false,
-    },
-    {
-      user: {
-        id: 3,
-        name: "awwfuq",
-        account: "awwfuq",
-        image:
-          "https://img.ltn.com.tw/Upload/news/600/2016/04/17/phpFBRDIE.jpg",
-      },
-      isFollowed: true,
-    },
-    {
-      user: {
-        id: 4,
-        name: "ohhfuck",
-        account: "ohhfuck",
-        image: "https://cdn2.ettoday.net/images/1027/1027134.jpg",
-      },
-      isFollowed: false,
-    },
-    {
-      user: {
-        id: 5,
-        name: "awwfuq",
-        account: "awwfuq",
-        image:
-          "https://img.ltn.com.tw/Upload/news/600/2016/04/17/phpFBRDIE.jpg",
-      },
-      isFollowed: true,
-    },
-    {
-      user: {
-        id: 6,
-        name: "ohhfuck",
-        account: "ohhfuck",
-        image: "https://cdn2.ettoday.net/images/1027/1027134.jpg",
-      },
-      isFollowed: false,
-    },
-    {
-      user: {
-        id: 7,
-        name: "awwfuq",
-        account: "awwfuq",
-        image:
-          "https://img.ltn.com.tw/Upload/news/600/2016/04/17/phpFBRDIE.jpg",
-      },
-      isFollowed: true,
-    },
-    {
-      user: {
-        id: 8,
-        name: "ohhfuck",
-        account: "ohhfuck",
-        image: "https://cdn2.ettoday.net/images/1027/1027134.jpg",
-      },
-      isFollowed: false,
-    },
-  ],
-};
+import usersAPI from "./../apis/users";
+import { Toast } from "../utility/helpers";
 
 export default {
   components: {
@@ -129,15 +55,71 @@ export default {
   data() {
     return {
       followings: [],
+      currentTweets: [],
+      currentUser: {},
     };
   },
-  methods: {
-    fetchData() {
-      this.followings = dummyData.followings;
-    },
+  beforeRouteUpdate(to, from, next) {
+    const { id } = to.params;
+    this.fetchFollowings(id);
+    this.fetchUser(id);
+    this.fetchTweets(id);
+    next();
   },
   created() {
-    this.fetchData();
+    const { id } = this.$route.params;
+    this.fetchFollowings(id);
+    this.fetchUser(id);
+    this.fetchTweets(id);
+  },
+
+  methods: {
+    async fetchFollowings(id) {
+      try {
+        const { data } = await usersAPI.getUserFollowings({ id });
+        if (data.status === "error") {
+          throw new Error(data.message);
+        }
+        this.followings = data;
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "error",
+          title: "無法取得資料，請稍候再試",
+        });
+      }
+    },
+    async fetchUser(id) {
+      try {
+        const { data } = await usersAPI.getUser({ id });
+        if (data.status === "error") {
+          throw new Error(data.message);
+        }
+        this.currentUser = data;
+        console.log(data);
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "error",
+          title: "無法取得資料，請稍候再試",
+        });
+      }
+    },
+    async fetchTweets(id) {
+      try {
+        const { data } = await usersAPI.getUserTweets({ id });
+        if (data.status === "error") {
+          throw new Error(data.message);
+        }
+        this.currentTweets = data;
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "error",
+          title: "無法取得資料，請稍候再試",
+        });
+      }
+    },
   },
 };
 </script>
